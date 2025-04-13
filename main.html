@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TrackTitan - Dashboard</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap");
+
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(270deg, #e0f7fa, #e3f2fd, #ede7f6, #f3e5f5);
+        background-size: 800% 800%;
+        animation: professionalGradient 30s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      @keyframes professionalGradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .logout-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        font-weight: bold;
+      }
+
+      .logout-btn:hover {
+        background: #c0392b;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 1;
+        padding: 60px 20px;
+        gap: 40px;
+      }
+
+      .row {
+        display: flex;
+        gap: 50px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .box {
+        width: 280px;
+        height: 180px;
+        background: linear-gradient(135deg, #42a5f5, #478ed1);
+        border-radius: 25px;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        font-weight: 700;
+        color: #fff;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.4s ease;
+      }
+
+      .box:hover {
+        transform: scale(1.08);
+        background: linear-gradient(135deg, #29b6f6, #1565c0);
+        color: #f0f8ff;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Footer Styles */
+      footer {
+        background: #0d1b2a;
+        color: #fff;
+        padding: 50px 0 20px;
+        margin-top: auto;
+      }
+
+      .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        gap: 30px;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .footer-section h3 {
+        color: #42a5f5;
+        margin-bottom: 20px;
+        font-size: 18px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-section h3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: #26c6da;
+      }
+
+      .footer-section p, 
+      .footer-section a {
+        color: #b3e5fc;
+        margin-bottom: 10px;
+        display: block;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: #42a5f5;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .social-links a {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+
+      .social-links a:hover {
+        background: #42a5f5;
+        transform: translateY(-3px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 30px;
+        margin-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 14px;
+        color: #b3e5fc;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        #name {
+          text-align: center;
+        }
+
+        .row {
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .footer-container {
+          flex-direction: column;
+          padding: 0 30px;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <a href="main.html"><img src="img.png" id="img" /></a>
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <div class="profile-container">
+        <div class="profile-icon" id="profileCircle">U</div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <p><strong>Name:</strong> <span id="profileName">User Name</span></p>
+          <p><strong>Email:</strong> <span id="profileEmail">user@example.com</span></p>
+          <p><strong>Age:</strong> <span id="profileAge">-</span></p>
+          <p><strong>Role:</strong> <span id="profileRole">Student</span></p>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="box" onclick="location.href='Intermidiat.html'">
+          🎯 Explore Careers
+        </div>
+        <div class="box" onclick="location.href='road.html'">
+          🗺️ Your Roadmap
+        </div>
+      </div>
+      <div class="row">
+        <div class="box" onclick="handleExtraFeature('careerJobs')">
+          💼 Career Oppurtunity
+        </div>
+        <div class="box" onclick="handleExtraFeature('resume')">📝 Resume</div>
+      </div>
+
+      <div class="box" onclick="handleExtraFeature('exam')">📝About Exam</div>
+    </div>
+
+    </div>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>About TrackTitan</h3>
+          <p>Your personalized career navigation system helping students and professionals find their ideal career paths through AI-powered recommendations.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="main.html">Home</a>
+          <a href="Intermidiat.html">Explore Careers</a>
+          <a href="road.html">Roadmap</a>
+          <a href="career_jobfinal.html">Career Jobs</a>
+          <a href="resume.html">Resume Builder</a>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-map-marker-alt"></i> 123 Career St, Tech City</p>
+          <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+          <p><i class="fas fa-envelope"></i> support@tracktitan.com</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Newsletter</h3>
+          <p>Subscribe to get career tips and updates</p>
+          <form id="newsletterForm">
+            <input type="email" placeholder="Your Email" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none;">
+            <button type="submit" style="background: #42a5f5; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 TrackTitan. All rights reserved. | <a href="#" style="color: #42a5f5;">Privacy Policy</a> | <a href="#" style="color: #42a5f5;">Terms of Service</a></p>
+      </div>
+    </footer>
+
+    <script>
+      // Check for user data when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        
+        if (!user || !user.isLoggedIn) {
+          // Redirect to registration if no user found or not logged in
+          <!-- window.location.href = "registation.html"; -->
+          return;
+        }
+    
+        // Set profile information
+        const initials = user.name
+          .split(" ")
+          .map((word) => word[0])
+          .join("")
+          .toUpperCase();
+    
+        document.getElementById("profileCircle").textContent = initials;
+        document.getElementById("profileName").textContent = user.name;
+        document.getElementById("profileEmail").textContent = user.email;
+        document.getElementById("profileAge").textContent = user.age || "Not specified";
+        document.getElementById("profileRole").textContent = user.role || "Student";
+      });
+    
+      function handleExtraFeature(type) {
+        if (type === "careerJobs") {
+          window.location.href = "career_jobfinal.html";
+        } else if (type === "resume") {
+          window.location.href = "resume.html";
+        }
+        else if (type === "exam") {
+          window.location.href = "exam.html";
+        }
+        
+      }
+    
+      // Logout function
+      
+      function logout() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          user.isLoggedIn = false;
+          localStorage.setItem("trackTitansUser", JSON.stringify(user));
+        }
+        window.location.href = "registation.html";
+      }
+    </script>
+  </body>
+</html>

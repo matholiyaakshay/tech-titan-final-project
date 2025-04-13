@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Architecture Career Quiz</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        background-size: 300% 300%;
+        animation: bgShift 15s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1px 50px;
+        background-color: #2c3e50;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Playfair Display", serif;
+        letter-spacing: 1px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        animation: fadeIn 1s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        color: #8e44ad;
+        font-size: 32px;
+        margin-bottom: 30px;
+        font-family: "Playfair Display", serif;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container {
+        margin-top: 20px;
+      }
+
+      .subject-selection label,
+      .career-info label {
+        display: block;
+        margin: 15px 0;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #34495e;
+        padding-left: 10px;
+        border-left: 4px solid transparent;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 12px;
+        transform: scale(1.2);
+      }
+
+      .question-block {
+        margin-bottom: 30px;
+        background: #f8f9fa;
+        padding: 20px 25px;
+        border-left: 5px solid #9b59b6;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #8e44ad;
+      }
+
+      .question-block label {
+        margin-left: 15px;
+        display: block;
+        font-size: 16px;
+        padding-left: 15px;
+        font-weight: 500;
+        color: #2c3e50;
+      }
+
+      .result {
+        margin-top: 25px;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        letter-spacing: 0.5px;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .career-info {
+        margin-top: 30px;
+        padding: 30px;
+        background: #f5eef8;
+        border-radius: 15px;
+        border-left: 5px solid #9b59b6;
+        animation: fadeIn 0.5s ease-in-out;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        color: #8e44ad;
+        font-size: 24px;
+        font-family: "Playfair Display", serif;
+        border-bottom: 2px solid #d2b4de;
+        padding-bottom: 10px;
+      }
+
+      .result-container p {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #34495e;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: bold;
+        color: #8e44ad;
+        border-left: 4px solid #8e44ad;
+      }
+
+      .highlight {
+        color: #8e44ad;
+        font-weight: bold;
+      }
+
+      .improvement-suggestions {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff8e1;
+        border-left: 5px solid #ffa000;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .improvement-suggestions h4 {
+        color: #ff6f00;
+        margin-top: 0;
+        font-size: 20px;
+        border-bottom: 2px solid #ffe082;
+        padding-bottom: 8px;
+      }
+
+      .improvement-suggestions ul {
+        margin: 10px 0 0 20px;
+        padding: 0;
+      }
+
+      .improvement-suggestions li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+
+      .career-options {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #d2b4de;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 25px;
+          margin: 20px;
+        }
+        button {
+          width: 100%;
+          padding: 18px;
+        }
+        .navbar {
+          padding: 1px 20px;
+        }
+        .navbar h3 {
+          font-size: 24px;
+        }
+        .question-block {
+          padding: 15px;
+        }
+        .improvement-suggestions {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #e74c3c">Arch</span>
+          <span style="color: #3498db">Career</span>
+        </h3>
+      </div>
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>Bachelor of Architecture - Career Assessment</h2>
+
+      <div class="subject-selection">
+        <label
+          ><input type="checkbox" value="Design Theory" /> Design Theory</label
+        >
+        <label
+          ><input type="checkbox" value="Building Technology" /> Building
+          Technology</label
+        >
+        <label
+          ><input type="checkbox" value="History of Architecture" /> History of
+          Architecture</label
+        >
+        <label
+          ><input type="checkbox" value="Environmental Systems" /> Environmental
+          Systems</label
+        >
+        <label
+          ><input type="checkbox" value="Structural Design" /> Structural
+          Design</label
+        >
+        <label
+          ><input type="checkbox" value="Urban Planning" /> Urban
+          Planning</label
+        >
+        <button onclick="startQuiz()">Begin Assessment</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const quizData = {
+        "Design Theory": [
+          {
+            question:
+              "Which principle emphasizes the relationship between parts and the whole in design?",
+            options: ["Scale", "Proportion", "Hierarchy", "Balance"],
+            answer: "Proportion",
+          },
+          {
+            question: "The Golden Ratio is approximately equal to:",
+            options: ["1.414", "1.618", "2.718", "3.142"],
+            answer: "1.618",
+          },
+          {
+            question:
+              "Which design approach focuses on minimalism and functionality?",
+            options: [
+              "Brutalism",
+              "Bauhaus",
+              "Deconstructivism",
+              "Postmodernism",
+            ],
+            answer: "Bauhaus",
+          },
+          {
+            question:
+              "The concept of 'Form follows function' is associated with:",
+            options: [
+              "Frank Lloyd Wright",
+              "Louis Sullivan",
+              "Le Corbusier",
+              "Mies van der Rohe",
+            ],
+            answer: "Louis Sullivan",
+          },
+          {
+            question: "Which element is NOT part of the design triad?",
+            options: ["Point", "Line", "Plane", "Texture"],
+            answer: "Texture",
+          },
+        ],
+        "Building Technology": [
+          {
+            question: "Which material is known for its high tensile strength?",
+            options: ["Concrete", "Steel", "Wood", "Masonry"],
+            answer: "Steel",
+          },
+          {
+            question: "The R-value measures:",
+            options: [
+              "Thermal resistance",
+              "Sound absorption",
+              "Load capacity",
+              "Fire rating",
+            ],
+            answer: "Thermal resistance",
+          },
+          {
+            question: "Which foundation type is best for expansive soils?",
+            options: [
+              "Slab-on-grade",
+              "Pier and beam",
+              "Mat foundation",
+              "Pile foundation",
+            ],
+            answer: "Pier and beam",
+          },
+          {
+            question:
+              "The minimum width for a residential stair tread is typically:",
+            options: ["9 inches", "10 inches", "11 inches", "12 inches"],
+            answer: "10 inches",
+          },
+          {
+            question: "Which roofing material has the longest lifespan?",
+            options: [
+              "Asphalt shingles",
+              "Metal roofing",
+              "Clay tiles",
+              "Wood shakes",
+            ],
+            answer: "Clay tiles",
+          },
+        ],
+        "History of Architecture": [
+          {
+            question:
+              "The Parthenon is an example of which architectural order?",
+            options: ["Doric", "Ionic", "Corinthian", "Composite"],
+            answer: "Doric",
+          },
+          {
+            question: "Which architect designed the Fallingwater house?",
+            options: [
+              "Frank Lloyd Wright",
+              "Le Corbusier",
+              "Mies van der Rohe",
+              "Louis Kahn",
+            ],
+            answer: "Frank Lloyd Wright",
+          },
+          {
+            question: "The Gothic style is characterized by:",
+            options: [
+              "Flying buttresses",
+              "Domes",
+              "Flat roofs",
+              "Symmetrical facades",
+            ],
+            answer: "Flying buttresses",
+          },
+          {
+            question:
+              "Which movement reacted against modernist architecture in the late 20th century?",
+            options: [
+              "Brutalism",
+              "Postmodernism",
+              "Deconstructivism",
+              "High-tech",
+            ],
+            answer: "Postmodernism",
+          },
+          {
+            question: "The architect of the Sydney Opera House is:",
+            options: [
+              "Jørn Utzon",
+              "Oscar Niemeyer",
+              "I.M. Pei",
+              "Renzo Piano",
+            ],
+            answer: "Jørn Utzon",
+          },
+        ],
+        "Environmental Systems": [
+          {
+            question: "What does LEED stand for?",
+            options: [
+              "Low Energy Efficient Design",
+              "Leadership in Energy and Environmental Design",
+              "Landscape and Environmental Engineering Development",
+              "Long-term Ecological and Environmental Development",
+            ],
+            answer: "Leadership in Energy and Environmental Design",
+          },
+          {
+            question:
+              "Which passive solar design element stores thermal energy?",
+            options: [
+              "Trombe wall",
+              "Light shelf",
+              "Solar chimney",
+              "Green roof",
+            ],
+            answer: "Trombe wall",
+          },
+          {
+            question: "The U-factor measures:",
+            options: [
+              "Thermal transmittance",
+              "Solar heat gain",
+              "Air infiltration",
+              "Visible light transmission",
+            ],
+            answer: "Thermal transmittance",
+          },
+          {
+            question: "Which material has the highest embodied energy?",
+            options: ["Brick", "Concrete", "Aluminum", "Wood"],
+            answer: "Aluminum",
+          },
+          {
+            question:
+              "A building's orientation for optimal solar gain in the northern hemisphere is:",
+            options: [
+              "North-facing",
+              "East-facing",
+              "South-facing",
+              "West-facing",
+            ],
+            answer: "South-facing",
+          },
+        ],
+        "Structural Design": [
+          {
+            question: "Which structural system uses triangular units?",
+            options: ["Space frame", "Truss", "Cable net", "Vault"],
+            answer: "Truss",
+          },
+          {
+            question: "The point where a structure will fail first is called:",
+            options: [
+              "Critical joint",
+              "Failure plane",
+              "Weakest link",
+              "Pivot point",
+            ],
+            answer: "Critical joint",
+          },
+          {
+            question: "Which material has the best strength-to-weight ratio?",
+            options: ["Steel", "Concrete", "Wood", "Carbon fiber"],
+            answer: "Carbon fiber",
+          },
+          {
+            question: "The bending stress in a beam is maximum at:",
+            options: [
+              "The neutral axis",
+              "The top surface",
+              "The bottom surface",
+              "The supports",
+            ],
+            answer: "The top surface",
+          },
+          {
+            question:
+              "Which foundation type transfers load through skin friction?",
+            options: [
+              "Spread footing",
+              "Mat foundation",
+              "Pile foundation",
+              "Caisson",
+            ],
+            answer: "Pile foundation",
+          },
+        ],
+        "Urban Planning": [
+          {
+            question: "The concept of 'Garden City' was proposed by:",
+            options: [
+              "Le Corbusier",
+              "Ebenezer Howard",
+              "Daniel Burnham",
+              "Frederick Law Olmsted",
+            ],
+            answer: "Ebenezer Howard",
+          },
+          {
+            question: "Which zoning type allows mixed uses?",
+            options: ["Euclidean", "Form-based", "Performance", "Incentive"],
+            answer: "Form-based",
+          },
+          {
+            question: "The '15-minute city' concept emphasizes:",
+            options: [
+              "High-density development",
+              "Access to daily needs within 15 minutes",
+              "15-story building limit",
+              "15% green space requirement",
+            ],
+            answer: "Access to daily needs within 15 minutes",
+          },
+          {
+            question:
+              "Which urban theorist wrote 'The Death and Life of Great American Cities'?",
+            options: [
+              "Jane Jacobs",
+              "Robert Moses",
+              "Kevin Lynch",
+              "Lewis Mumford",
+            ],
+            answer: "Jane Jacobs",
+          },
+          {
+            question: "Transit-oriented development (TOD) focuses on:",
+            options: [
+              "Highway expansion",
+              "Public transportation hubs",
+              "Suburban sprawl",
+              "Gated communities",
+            ],
+            answer: "Public transportation hubs",
+          },
+        ],
+      };
+
+      const improvementResources = {
+        "Design Theory": [
+          "Read 'Form, Space, and Order' by Francis D.K. Ching",
+          "Study principles of Bauhaus design",
+          "Practice sketching and conceptual design exercises",
+          "Explore works of Louis Sullivan and Frank Lloyd Wright",
+          "Analyze famous buildings to understand their design principles",
+        ],
+        "Building Technology": [
+          "Review material properties and construction techniques",
+          "Study building codes and standards (like NBC)",
+          "Learn about different foundation systems and their applications",
+          "Explore sustainable building materials and techniques",
+          "Visit construction sites or watch construction process videos",
+        ],
+        "History of Architecture": [
+          "Read 'A Global History of Architecture' by Francis D.K. Ching",
+          "Study different architectural movements and their characteristics",
+          "Visit architectural landmarks or take virtual tours",
+          "Create a timeline of significant architectural developments",
+          "Compare architectural styles from different periods and regions",
+        ],
+        "Environmental Systems": [
+          "Learn about LEED certification requirements and green building standards",
+          "Study passive solar design principles and bioclimatic architecture",
+          "Understand thermal performance of different building materials",
+          "Explore case studies of sustainable buildings",
+          "Experiment with energy modeling software like Ecotect",
+        ],
+        "Structural Design": [
+          "Review structural analysis fundamentals (forces, moments, etc.)",
+          "Study different structural systems (trusses, frames, arches, etc.)",
+          "Learn about material strength properties and failure modes",
+          "Practice solving structural problems and calculations",
+          "Use structural analysis software to model simple structures",
+        ],
+        "Urban Planning": [
+          "Read 'The Death and Life of Great American Cities' by Jane Jacobs",
+          "Study different urban planning models and their impacts",
+          "Learn about zoning laws and land use regulations",
+          "Analyze successful urban spaces and what makes them work",
+          "Create small-scale urban design proposals for your local area",
+        ],
+      };
+
+      const careerMap = {
+        "Design Theory": ["Design Architect", "Interior Designer"],
+        "Building Technology": ["Construction Manager", "Building Scientist"],
+        "History of Architecture": [
+          "Architectural Historian",
+          "Preservation Architect",
+        ],
+        "Environmental Systems": [
+          "Sustainable Designer",
+          "Environmental Consultant",
+        ],
+        "Structural Design": ["Structural Engineer", "Facade Engineer"],
+        "Urban Planning": ["Urban Designer", "City Planner"],
+      };
+
+      const careerDetails = {
+        "Design Architect": {
+          overview: "Focuses on aesthetic and conceptual aspects of buildings",
+          companies: ["Zaha Hadid Architects", "BIG", "Foster + Partners"],
+          jobs: "85%",
+          salary: "₹8–25 LPA",
+          skills: "Creativity, visualization, conceptual thinking",
+        },
+        "Interior Designer": {
+          overview: "Designs functional and aesthetic interior spaces",
+          companies: ["Gensler", "HOK", "Perkins&Will"],
+          jobs: "90%",
+          salary: "₹5–18 LPA",
+          skills: "Space planning, material selection, color theory",
+        },
+        "Construction Manager": {
+          overview:
+            "Oversees construction projects from planning to completion",
+          companies: [
+            "Turner Construction",
+            "L&T Construction",
+            "Shapoorji Pallonji",
+          ],
+          jobs: "95%",
+          salary: "₹10–30 LPA",
+          skills: "Project management, budgeting, scheduling",
+        },
+        "Building Scientist": {
+          overview: "Researches and applies building physics principles",
+          companies: ["Building Science Corp", "Arup", "WSP"],
+          jobs: "80%",
+          salary: "₹12–28 LPA",
+          skills: "Physics, material science, energy modeling",
+        },
+        "Architectural Historian": {
+          overview: "Studies and documents architectural heritage",
+          companies: ["Getty Conservation Institute", "INTACH", "Universities"],
+          jobs: "60%",
+          salary: "₹6–15 LPA",
+          skills: "Research, documentation, analysis",
+        },
+        "Preservation Architect": {
+          overview: "Restores and adapts historic structures",
+          companies: [
+            "Conservation firms",
+            "Government agencies",
+            "Non-profits",
+          ],
+          jobs: "70%",
+          salary: "₹7–20 LPA",
+          skills: "Historic materials, conservation techniques",
+        },
+        "Sustainable Designer": {
+          overview: "Creates environmentally responsible designs",
+          companies: [
+            "Terri Meyer Boake",
+            "William McDonough",
+            "Sustainability consultancies",
+          ],
+          jobs: "90%",
+          salary: "₹10–35 LPA",
+          skills: "LEED certification, passive design, energy analysis",
+        },
+        "Environmental Consultant": {
+          overview: "Advises on environmental impact and compliance",
+          companies: ["ERM", "AECOM", "Environmental agencies"],
+          jobs: "85%",
+          salary: "₹9–25 LPA",
+          skills: "Regulations, impact assessment, sustainability",
+        },
+        "Structural Engineer": {
+          overview: "Designs structural systems for buildings",
+          companies: ["SOM", "Arup", "Buro Happold"],
+          jobs: "95%",
+          salary: "₹12–40 LPA",
+          skills: "Structural analysis, material behavior, codes",
+        },
+        "Facade Engineer": {
+          overview: "Specializes in building envelope design",
+          companies: ["Permasteelisa", "Enclos", "Facade consultancies"],
+          jobs: "85%",
+          salary: "₹15–35 LPA",
+          skills: "Material performance, weatherproofing, thermal analysis",
+        },
+        "Urban Designer": {
+          overview: "Plans and designs urban spaces and systems",
+          companies: ["Gehl Architects", "Sasaki", "Urban planning firms"],
+          jobs: "80%",
+          salary: "₹10–30 LPA",
+          skills: "GIS, public space design, zoning",
+        },
+        "City Planner": {
+          overview: "Develops plans for community development",
+          companies: [
+            "Municipal governments",
+            "Planning agencies",
+            "Consultancies",
+          ],
+          jobs: "75%",
+          salary: "₹8–22 LPA",
+          skills: "Policy, regulations, community engagement",
+        },
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject area.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3 style="color: #8e44ad; border-bottom: 2px solid #d2b4de; padding-bottom: 10px;">${subject} Assessment</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected && selected.value === q.answer) correct++;
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML =
+          "<h3 style='color: #8e44ad;'>Assessment Results</h3>";
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          const scoreColor =
+            score >= 80 ? "#27ae60" : score >= 60 ? "#f39c12" : "#e74c3c";
+          resultContainer.innerHTML += `
+            <p><strong>${subject}:</strong> 
+              <span style="color: ${scoreColor}">${score.toFixed(2)}%</span>
+              ${score >= 80 ? "👍" : score >= 60 ? "👌" : "👎"}
+            </p>`;
+        }
+
+        // Show improvement suggestions for subjects below 80%
+        const weakSubjects = Object.entries(subjectScores)
+          .filter(([_, score]) => score < 80)
+          .map(([subject]) => subject);
+
+        if (weakSubjects.length > 0) {
+          let suggestionsHTML = `
+          <div class="improvement-suggestions">
+            <h4>Improvement Suggestions for Weaker Areas</h4>
+            <p>Here are some resources to help you improve in subjects where you scored below 80%:</p>
+          `;
+
+          weakSubjects.forEach((subject) => {
+            suggestionsHTML += `
+              <div style="margin-top: 15px;">
+                <p style="font-weight: 600; color: #8e44ad;">${subject}:</p>
+                <ul style="margin-top: 8px;">`;
+
+            improvementResources[subject].forEach((resource) => {
+              suggestionsHTML += `<li>${resource}</li>`;
+            });
+
+            suggestionsHTML += `
+                </ul>
+              </div>`;
+          });
+
+          suggestionsHTML += `
+            <p style="margin-top: 15px; font-style: italic;">
+              Consistent practice with these resources will help you strengthen your knowledge in these areas.
+            </p>
+          </div>`;
+          resultContainer.innerHTML += suggestionsHTML;
+        }
+
+        const strongSubjects = Object.entries(subjectScores)
+          .filter(([_, score]) => score >= 80)
+          .map(([subject]) => subject);
+
+        // Only show career options if there are strong subjects
+        if (strongSubjects.length > 0) {
+          resultContainer.innerHTML += `
+          <div class="career-options">
+            <h4 style="color: #8e44ad; margin-bottom: 15px;">Career Path Suggestions</h4>
+            <p>Based on your strong performance in these subjects, here are potential career paths:</p>
+            <button onclick="showCareerSuggestions('above80')" style="margin-top: 15px;">
+              View Recommended Careers
+            </button>
+            <div class="career-info" id="careerInfo"></div>
+          </div>
+          `;
+        } else {
+          resultContainer.innerHTML += `
+          <div class="career-options">
+            <h4 style="color: #8e44ad;">Career Guidance</h4>
+            <p>We recommend focusing on improving your foundational knowledge before exploring specific career paths.</p>
+            <p>Use the improvement suggestions above to strengthen your weaker areas, then retake the assessment.</p>
+          </div>
+          `;
+        }
+      }
+
+      function showCareerSuggestions(mode) {
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = `
+          <h4 style="color: #8e44ad; margin-top: 20px;">Potential Architecture Career Paths</h4>
+          <p>Select a career to view more details:</p>
+        `;
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `
+            <label style="display: block; margin: 10px 0;">
+              <input type="radio" name="career" value="${career}" style="margin-right: 10px;">
+              <span style="font-weight: 600;">${career}</span>
+            </label>`;
+        });
+
+        careerInfoDiv.innerHTML += `
+          <button onclick="showCareerDetails()" style="margin-top: 15px;">
+            View Career Details
+          </button>
+        `;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+        <div style="margin-top: 25px; background: #f5eef8; padding: 20px; border-radius: 10px;">
+          <h4 style="color: #8e44ad; border-bottom: 2px solid #d2b4de; padding-bottom: 8px;">${career}</h4>
+          
+          <div style="margin-top: 15px;">
+            <p><strong style="color: #8e44ad;">Overview:</strong><br> ${
+              details.overview
+            }</p>
+            
+            <p style="margin-top: 10px;"><strong style="color: #8e44ad;">Top Companies/Organizations:</strong><br> 
+            ${details.companies.join(", ")}</p>
+            
+            <p style="margin-top: 10px;"><strong style="color: #8e44ad;">Job Market Outlook:</strong> ${
+              details.jobs
+            }</p>
+            
+            <p style="margin-top: 10px;"><strong style="color: #8e44ad;">Typical Salary Range:</strong> ${
+              details.salary
+            }</p>
+            
+            <p style="margin-top: 10px;"><strong style="color: #8e44ad;">Key Skills Needed:</strong><br> 
+            ${details.skills}</p>
+          </div>
+        </div>
+      `;
+      }
+    </script>
+  </body>
+</html>

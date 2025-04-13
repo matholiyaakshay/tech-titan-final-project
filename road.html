@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Career Roadmap Planner</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+        background-size: 300% 300%;
+        animation: bgShift 15s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 60px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: 100px auto 40px;
+        background: #ffffff;
+        padding: 35px 30px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.2s ease;
+        flex: 1;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        color: #4a148c;
+        font-size: 28px;
+        margin-bottom: 25px;
+      }
+
+      label {
+        font-weight: 600;
+        display: block;
+        margin-top: 18px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      select {
+        padding: 12px 14px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1.5px solid #ccc;
+        font-size: 16px;
+        background-color: #f9f9f9;
+        transition: border 0.3s;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #7b1fa2;
+      }
+
+      button {
+        margin-top: 25px;
+        padding: 14px;
+        width: 100%;
+        background: linear-gradient(135deg, #ab47bc, #7e57c2);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #7e57c2, #ab47bc);
+        transform: scale(1.02);
+      }
+
+      .roadmap {
+        margin-top: 30px;
+        background: #f3e5f5;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .roadmap h3 {
+        margin-top: 0;
+        color: #6a1b9a;
+        font-size: 22px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #ce93d8;
+        margin-bottom: 20px;
+      }
+
+      .roadmap ol {
+        padding-left: 0;
+        list-style-type: none;
+        counter-reset: roadmap-counter;
+      }
+
+      .roadmap li {
+        position: relative;
+        padding: 15px 15px 15px 60px;
+        margin-bottom: 15px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        counter-increment: roadmap-counter;
+      }
+
+      .roadmap li:before {
+        content: counter(roadmap-counter);
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(135deg, #7e57c2, #ab47bc);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .roadmap li:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .roadmap li:last-child {
+        margin-bottom: 0;
+      }
+
+      .error {
+        color: #d32f2f;
+        font-weight: 500;
+        font-size: 15px;
+      }
+      .logout-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        font-weight: bold;
+      }
+
+      .logout-btn:hover {
+        background: #c0392b;
+      }
+
+      /* Footer Styles */
+      footer {
+        background: #0d1b2a;
+        color: #fff;
+        padding: 30px 0;
+      }
+
+      .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        gap: 20px;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 200px;
+        padding: 10px;
+      }
+
+      .footer-section h3 {
+        color: #42a5f5;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .footer-section p, 
+      .footer-section a {
+        color: #b3e5fc;
+        margin-bottom: 8px;
+        display: block;
+        text-decoration: none;
+      }
+
+      .footer-section a:hover {
+        color: #42a5f5;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 14px;
+        color: #b3e5fc;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 10px 20px;
+        }
+
+        #img {
+          height: 50px;
+        }
+
+        .navbar h3 {
+          font-size: 24px;
+        }
+
+        .container {
+          padding: 25px;
+          margin-top: 90px;
+        }
+
+        .footer-container {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .navbar {
+          padding: 8px 15px;
+        }
+
+        #img {
+          height: 40px;
+        }
+
+        .navbar h3 {
+          font-size: 20px;
+        }
+
+        .profile-icon {
+          width: 36px;
+          height: 36px;
+          font-size: 16px;
+        }
+
+        .container {
+          padding: 20px;
+          margin-top: 80px;
+        }
+
+        h2 {
+          font-size: 24px;
+        }
+
+        .roadmap li {
+          padding: 12px 12px 12px 50px;
+          font-size: 14px;
+        }
+
+        .roadmap li:before {
+          width: 25px;
+          height: 25px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <a href="main.html"><img src="img.png" id="img" alt="Track Titan Logo" /></a>
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <div class="profile-container">
+        <div class="profile-icon" id="profileCircle">U</div>
+        <div class="profile-dropdown">
+          <p><strong>Name:</strong> <span id="profileName">User Name</span></p>
+          <p><strong>Email:</strong> <span id="profileEmail">user@example.com</span></p>
+          <p><strong>Role:</strong> <span id="profileRole">Student</span></p>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>🎓 Career Roadmap Planner</h2>
+
+      <label for="stream">📘 Select your Stream:</label>
+      <select id="stream" onchange="showCareerOptions()">
+        <option value="">-- Choose Stream --</option>
+        <option value="science">Science (PCM/PCB)</option>
+        <option value="commerce">Commerce</option>
+        <option value="arts">Arts/Humanities</option>
+        <option value="vocational">Vocational Courses</option>
+        <option value="professional">Professional Fields</option>
+        <option value="emerging">Emerging Careers</option>
+      </select>
+
+      <div id="careerOptions" style="display: none; margin-top: 20px">
+        <label for="career">🌟 Select your Career Path:</label>
+        <select id="career">
+          <option value="">-- Select Career --</option>
+        </select>
+      </div>
+
+      <button onclick="showRoadmap()">Show My Roadmap</button>
+
+      <div class="roadmap" id="roadmapOutput" style="display: none"></div>
+    </div>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>About TrackTitan</h3>
+          <p>Your personalized career navigation system helping students find their ideal career paths.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="main.html">Home</a>
+          <a href="std-10.html">Standard 10</a>
+          <a href="career12.html">Standard 12</a>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p>Email: support@tracktitan.com</p>
+          <p>Phone: +1 (555) 123-4567</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 TrackTitan. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Update profile info if user is logged in
+      document.addEventListener('DOMContentLoaded', function() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+          document.getElementById('profileCircle').textContent = initials;
+          document.getElementById('profileName').textContent = user.name;
+          document.getElementById('profileEmail').textContent = user.email;
+          document.getElementById('profileRole').textContent = user.role || 'Student';
+        }
+      });
+
+      const careerOptions = {
+        science: [
+          { value: "btech", name: "B.Tech (Engineering)" },
+          { value: "mbbs", name: "MBBS (Medical)" },
+          { value: "bds", name: "BDS (Dental)" },
+          { value: "pharmacy", name: "Pharmacy" },
+          { value: "bsc", name: "B.Sc (Pure Sciences)" },
+          { value: "bca", name: "BCA (Computer Applications)" },
+          { value: "aero", name: "Aeronautical Engineering" },
+          { value: "biotech", name: "Biotechnology" },
+        ],
+        commerce: [
+          { value: "ca", name: "Chartered Accountancy (CA)" },
+          { value: "cs", name: "Company Secretary (CS)" },
+          { value: "cfa", name: "CFA (Finance)" },
+          { value: "bba", name: "BBA (Business Administration)" },
+          { value: "bcom", name: "B.Com (Commerce)" },
+          { value: "economics", name: "Economics" },
+          { value: "banking", name: "Banking & Insurance" },
+        ],
+        arts: [
+          { value: "law", name: "Law (LLB)" },
+          { value: "psychology", name: "Psychology" },
+          { value: "journalism", name: "Journalism & Mass Comm" },
+          { value: "ba", name: "BA (Arts/Humanities)" },
+          { value: "history", name: "History & Political Science" },
+          { value: "languages", name: "Languages & Literature" },
+          { value: "social_work", name: "Social Work" },
+        ],
+        vocational: [
+          { value: "hotel_mgmt", name: "Hotel Management" },
+          { value: "fashion", name: "Fashion Design" },
+          { value: "animation", name: "Animation & Multimedia" },
+          { value: "culinary", name: "Culinary Arts" },
+          { value: "aviation", name: "Aviation & Hospitality" },
+          { value: "web_dev", name: "Web Development" },
+          { value: "cyber", name: "Cybersecurity" },
+        ],
+        professional: [
+          { value: "defense", name: "Defense Services" },
+          { value: "civil_services", name: "Civil Services (UPSC)" },
+          { value: "teaching", name: "Teaching (B.Ed)" },
+          { value: "sports", name: "Sports Management" },
+          { value: "agriculture", name: "Agriculture Science" },
+          { value: "forestry", name: "Forestry" },
+        ],
+        emerging: [
+          { value: "ai", name: "AI & Machine Learning" },
+          { value: "data_science", name: "Data Science" },
+          { value: "robotics", name: "Robotics" },
+          { value: "environment", name: "Environmental Science" },
+          { value: "gaming", name: "Gaming & Esports" },
+          { value: "digital_marketing", name: "Digital Marketing" },
+          { value: "blockchain", name: "Blockchain Technology" },
+        ],
+      };
+
+      const roadmaps = {
+        btech: [
+          "Choose Science stream with Maths (after 10th)",
+          "Prepare for JEE Main/Advanced or state CET (during 11th-12th)",
+          "Secure admission to a B.Tech program (4 years)",
+          "Select specialization (e.g., Computer Science, Mechanical, Electrical)",
+          "Engage in internships and projects (2nd/3rd year)",
+          "Complete final-year project and pursue campus placements",
+          "Get a job or pursue M.Tech/MS/MBA",
+        ],
+        mbbs: [
+          "Choose Science stream with Biology (after 10th)",
+          "Prepare for NEET (during 11th-12th)",
+          "Crack NEET and secure admission to MBBS (5.5 years)",
+          "Complete MBBS with internship",
+          "Appear for NEET PG for specialization (MD/MS - 3 years)",
+          "Start practicing as a doctor or pursue super-specialization",
+        ],
+        bds: [
+          "Choose Science stream with Biology (after 10th)",
+          "Prepare for NEET (during 11th-12th)",
+          "Secure admission to BDS program (4 years + 1 year internship)",
+          "Complete BDS and register with Dental Council",
+          "Consider MDS for specialization (3 years)",
+          "Start dental practice or join hospital/clinic",
+        ],
+        pharmacy: [
+          "Choose Science stream (after 10th)",
+          "Prepare for state-level pharmacy entrance exams",
+          "Get into B.Pharm/D.Pharm program (4 years/2 years)",
+          "Complete internships during course",
+          "Register with Pharmacy Council",
+          "Work in pharmaceutical companies, hospitals or retail",
+        ],
+        bsc: [
+          "Choose Science stream (after 10th)",
+          "Select B.Sc program in Physics, Chemistry, Mathematics or Biology",
+          "Focus on practicals and research projects",
+          "Consider industrial training or certifications",
+          "Complete B.Sc (3 years) and apply for jobs",
+          "Pursue M.Sc/PhD for research careers",
+        ],
+        bca: [
+          "Choose any stream after 10th (Science preferred)",
+          "Get into BCA program (3 years)",
+          "Learn programming languages and software development",
+          "Complete internships in IT companies",
+          "Build portfolio of projects",
+          "Pursue jobs or MCA for higher studies",
+        ],
+        aero: [
+          "Choose Science stream with Maths (after 10th)",
+          "Prepare for JEE or specialized aeronautical entrance exams",
+          "Get into B.Tech Aeronautical Engineering (4 years)",
+          "Complete internships with aviation/aerospace companies",
+          "Consider certifications from DGCA or international bodies",
+          "Start career in aerospace, defense or aviation industry",
+        ],
+        biotech: [
+          "Choose Science stream with Biology (after 10th)",
+          "Get into B.Tech/B.Sc Biotechnology program",
+          "Focus on lab work and research projects",
+          "Complete internships in biotech/pharma companies",
+          "Consider specialization in genetic engineering, bioinformatics etc.",
+          "Pursue jobs in research, healthcare or agriculture sectors",
+        ],
+        ca: [
+          "Choose Commerce stream after 10th",
+          "Register for CA Foundation after 12th",
+          "Clear CA Foundation Exam",
+          "Register for CA Intermediate",
+          "Complete 3 years of Articleship training",
+          "Clear CA Final Exam",
+          "Get certified and apply for jobs or open practice",
+        ],
+        cs: [
+          "Choose Commerce stream after 10th",
+          "Register for CS Foundation after 12th",
+          "Clear CS Foundation Exam",
+          "Register for CS Executive Program",
+          "Complete practical training (21 months)",
+          "Clear CS Professional Program",
+          "Get certified and apply for corporate secretary roles",
+        ],
+        cfa: [
+          "Choose Commerce/Science stream after 10th",
+          "Complete graduation in any discipline",
+          "Register for CFA Level 1",
+          "Clear all three CFA levels (minimum 2.5 years)",
+          "Gain 4 years of relevant work experience",
+          "Become CFA charterholder and pursue finance careers",
+        ],
+        bba: [
+          "Choose any stream after 10th (Commerce preferred)",
+          "Prepare for BBA entrance exams (if required)",
+          "Get into BBA program (3 years)",
+          "Specialize in Marketing/Finance/HR etc.",
+          "Complete internships during college",
+          "Consider MBA after graduation for better prospects",
+          "Start career in business administration or management",
+        ],
+        bcom: [
+          "Choose Commerce stream after 10th",
+          "Get into B.Com program (3 years)",
+          "Consider professional certifications like CMA, ACCA",
+          "Complete internships in accounting/finance firms",
+          "Build practical accounting skills",
+          "Pursue jobs in accounting, banking or finance sectors",
+        ],
+        economics: [
+          "Choose Commerce/Arts/Science stream after 10th",
+          "Get into B.A/B.Sc Economics program",
+          "Focus on statistical and analytical skills",
+          "Complete research projects and internships",
+          "Consider MA Economics or MBA for higher studies",
+          "Pursue careers in banking, analytics or policy-making",
+        ],
+        banking: [
+          "Choose Commerce stream after 10th",
+          "Complete graduation in Commerce/Economics",
+          "Prepare for banking exams (IBPS, SBI PO etc.)",
+          "Complete banking certifications if required",
+          "Start with probationary officer or clerk positions",
+          "Progress through banking hierarchy with experience",
+        ],
+        law: [
+          "Choose any stream after 10th (Arts/Commerce preferred)",
+          "Prepare for CLAT for integrated law programs (5 years)",
+          "Or complete graduation (3 years) then pursue LLB (3 years)",
+          "Complete internship during law school",
+          "Register with State Bar Council after graduation",
+          "Appear for All India Bar Examination (AIBE)",
+          "Start practice or join law firms/corporate legal departments",
+        ],
+        psychology: [
+          "Choose any stream after 10th (Science/Humanities preferred)",
+          "Get into BA/BSc Psychology program (3 years)",
+          "Pursue MA/MSc in Psychology (2 years)",
+          "Complete M.Phil/PhD if aiming for clinical practice",
+          "Register with Rehabilitation Council of India if required",
+          "Start practice or join hospitals/educational institutions",
+        ],
+        journalism: [
+          "Choose any stream after 10th",
+          "Get into BJMC or Mass Communication program (3 years)",
+          "Build portfolio through college media/internships",
+          "Develop multimedia skills (writing, video, digital)",
+          "Start with entry-level media jobs or freelance",
+          "Progress to senior reporting/editing roles",
+        ],
+        ba: [
+          "Choose Humanities/Arts stream after 10th",
+          "Select BA program (3 years) in preferred subject",
+          "Choose specialization (English, History, Sociology etc.)",
+          "Participate in extracurricular activities",
+          "Consider MA after graduation for specialization",
+          "Prepare for competitive exams if aiming for civil services",
+        ],
+        history: [
+          "Choose Humanities stream after 10th",
+          "Get into BA History program",
+          "Focus on research and analytical skills",
+          "Consider archaeology/museum studies specialization",
+          "Complete internships at historical organizations",
+          "Pursue MA/PhD for academic or research careers",
+        ],
+        languages: [
+          "Choose Humanities stream after 10th",
+          "Get into BA program in English/Foreign Languages",
+          "Develop translation/interpretation skills",
+          "Consider certifications in specialized languages",
+          "Complete internships with publishing/translation firms",
+          "Pursue careers in translation, teaching or content creation",
+        ],
+        social_work: [
+          "Choose any stream after 10th",
+          "Get into BSW program (3 years)",
+          "Complete fieldwork and community projects",
+          "Consider specialization in specific social issues",
+          "Register with professional social work organizations",
+          "Work with NGOs, government or international organizations",
+        ],
+        hotel_mgmt: [
+          "Choose any stream after 10th",
+          "Get into BHM or diploma in Hotel Management",
+          "Complete industrial training in hotels/resorts",
+          "Develop customer service and operational skills",
+          "Start with entry-level positions in hospitality industry",
+          "Progress to management roles with experience",
+        ],
+        fashion: [
+          "Choose any stream after 10th",
+          "Prepare for NIFT or other design entrance exams",
+          "Get into B.Des Fashion Design (4 years)",
+          "Build strong portfolio through projects",
+          "Complete internships with designers/fashion houses",
+          "Start career as fashion designer or start own label",
+        ],
+        animation: [
+          "Choose any stream after 10th",
+          "Get into animation degree/diploma program",
+          "Master industry software (Maya, Blender, Adobe Suite)",
+          "Build demo reel with original work",
+          "Complete internships with animation studios",
+          "Start as junior animator and progress to senior roles",
+        ],
+        culinary: [
+          "Choose any stream after 10th",
+          "Get into culinary arts diploma/degree program",
+          "Complete apprenticeships in professional kitchens",
+          "Obtain food safety certifications",
+          "Start as commis chef and progress through kitchen hierarchy",
+          "Consider specializing in specific cuisines or pastry arts",
+        ],
+        aviation: [
+          "Choose any stream after 10th (Science preferred)",
+          "Get into aviation diploma/degree program",
+          "Complete required certifications (DGCA for pilots)",
+          "Gain practical experience through internships",
+          "Start with entry-level airline/airport positions",
+          "Progress to senior roles with experience and training",
+        ],
+        web_dev: [
+          "Choose any stream after 10th",
+          "Learn HTML, CSS, JavaScript fundamentals",
+          "Get certifications in frontend/backend technologies",
+          "Build portfolio with real projects",
+          "Complete internships or freelance work",
+          "Start as junior developer and progress to senior roles",
+        ],
+        cyber: [
+          "Choose Science stream after 10th",
+          "Get into cybersecurity degree/diploma program",
+          "Obtain certifications (CEH, CISSP, CompTIA Security+)",
+          "Participate in bug bounty programs and CTFs",
+          "Complete internships in security firms",
+          "Start as security analyst and progress to architect roles",
+        ],
+        defense: [
+          "Choose Science stream after 10th",
+          "Prepare for NDA after 12th or CDS after graduation",
+          "Clear written exams, SSB interview and medical tests",
+          "Complete military training at respective academies",
+          "Progress through military ranks with experience",
+          "Consider specialized training in chosen service branch",
+        ],
+        civil_services: [
+          "Choose any stream after 10th (Humanities helpful)",
+          "Complete graduation in any discipline",
+          "Prepare for UPSC Civil Services Exam (1-2 years)",
+          "Clear Prelims, Mains and Interview stages",
+          "Get selected for IAS/IPS/IFS roles",
+          "Complete foundation course and probation period",
+        ],
+        teaching: [
+          "Choose any stream after 10th",
+          "Complete graduation in chosen subject",
+          "Pursue B.Ed (2 years) or D.El.Ed (2 years)",
+          "Clear Teacher Eligibility Tests (TET/CTET)",
+          "Start as assistant teacher and progress with experience",
+          "Consider M.Ed for higher positions in education",
+        ],
+        sports: [
+          "Continue sports training alongside academics",
+          "Represent school/state/national level competitions",
+          "Consider sports scholarships for higher education",
+          "Get certified as coach/referee if interested",
+          "Pursue sports management degrees for non-playing roles",
+          "Transition to coaching, administration or commentary",
+        ],
+        agriculture: [
+          "Choose Science stream after 10th",
+          "Get into B.Sc Agriculture (4 years)",
+          "Complete practical training at farms/research stations",
+          "Consider specialization in agronomy/horticulture etc.",
+          "Start own agri-business or join government/private sector",
+          "Pursue MSc/PhD for research careers",
+        ],
+        forestry: [
+          "Choose Science stream after 10th",
+          "Get into B.Sc Forestry (4 years)",
+          "Complete fieldwork and research projects",
+          "Consider specialization in wildlife/conservation",
+          "Work with forest department or environmental NGOs",
+          "Pursue higher studies for research positions",
+        ],
+        ai: [
+          "Choose Science stream with Maths after 10th",
+          "Get into B.Tech/B.Sc in AI/Computer Science",
+          "Learn Python, ML algorithms and data structures",
+          "Complete projects demonstrating AI applications",
+          "Intern with AI research labs or tech companies",
+          "Pursue MS/PhD for advanced research roles",
+        ],
+        data_science: [
+          "Choose Science stream with Maths after 10th",
+          "Get into B.Tech/B.Sc in Data Science or related field",
+          "Master statistics, programming and visualization tools",
+          "Complete internships analyzing real-world datasets",
+          "Build portfolio of data projects",
+          "Start as data analyst and progress to scientist roles",
+        ],
+        robotics: [
+          "Choose Science stream with Maths after 10th",
+          "Get into B.Tech in Robotics/Mechanical/Electrical Engg",
+          "Participate in robotics competitions and projects",
+          "Learn CAD, embedded systems and programming",
+          "Intern with robotics companies or research labs",
+          "Pursue MS/PhD for advanced robotics careers",
+        ],
+        environment: [
+          "Choose Science stream after 10th",
+          "Get into B.Sc Environmental Science (3 years)",
+          "Complete fieldwork and research projects",
+          "Obtain certifications in sustainability practices",
+          "Work with environmental agencies or corporations",
+          "Pursue MSc/PhD for specialized research roles",
+        ],
+        gaming: [
+          "Choose any stream after 10th",
+          "Get into game design/development degree program",
+          "Learn game engines (Unity, Unreal) and programming",
+          "Build portfolio with original game projects",
+          "Intern with game studios or indie developers",
+          "Start as junior developer and progress to lead roles",
+        ],
+        digital_marketing: [
+          "Choose any stream after 10th",
+          "Get certifications in SEO, SEM, social media marketing",
+          "Build practical experience through internships/freelance",
+          "Develop analytics and content creation skills",
+          "Start with entry-level digital marketing roles",
+          "Progress to strategy and management positions",
+        ],
+        blockchain: [
+          "Choose Science stream with Maths after 10th",
+          "Get into Computer Science or related degree",
+          "Learn cryptography and distributed systems",
+          "Complete blockchain development certifications",
+          "Build projects demonstrating smart contracts/DApps",
+          "Start as blockchain developer in tech/finance firms",
+        ],
+      };
+
+      function showCareerOptions() {
+        const stream = document.getElementById("stream").value;
+        const careerSelect = document.getElementById("career");
+        const careerOptionsDiv = document.getElementById("careerOptions");
+
+        // Clear previous options
+        careerSelect.innerHTML =
+          '<option value="">-- Select Career --</option>';
+
+        if (stream) {
+          // Show career options div
+          careerOptionsDiv.style.display = "block";
+
+          // Add new options based on selected stream
+          careerOptions[stream].forEach((career) => {
+            const option = document.createElement("option");
+            option.value = career.value;
+            option.textContent = career.name;
+            careerSelect.appendChild(option);
+          });
+        } else {
+          // Hide career options div if no stream selected
+          careerOptionsDiv.style.display = "none";
+        }
+      }
+
+      function showRoadmap() {
+        const selectedCareer = document.getElementById("career").value;
+        const output = document.getElementById("roadmapOutput");
+
+        if (selectedCareer) {
+          const roadmap = roadmaps[selectedCareer];
+          output.innerHTML =
+            "<h3>Your Career Roadmap:</h3><ol>" +
+            roadmap.map((step) => `<li>${step}</li>`).join("") +
+            "</ol>";
+          output.style.display = "block";
+        } else {
+          output.innerHTML =
+            "<p class='error'>⚠️ Please select a career path.</p>";
+          output.style.display = "block";
+        }
+      }
+       
+      function logout() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          user.isLoggedIn = false;
+          localStorage.setItem("trackTitansUser", JSON.stringify(user));
+        }
+        window.location.href = "registation.html";
+      }
+    </script>
+  </body>
+</html>

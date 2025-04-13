@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Resume Generator with AI Scoring & Interview Prep</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        padding: 0px;
+      }
+      h1,
+      h2,
+      h3 {
+        text-align: center;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name1 {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .logout-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        font-weight: bold;
+      }
+
+      .logout-btn:hover {
+        background: #c0392b;
+      }
+      form {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      #resume {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+      table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #444;
+        padding: 10px;
+        text-align: left;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .score-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      .score-card {
+        flex: 1;
+        min-width: 200px;
+        padding: 15px;
+        margin: 5px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .score-value {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+      .score-bar {
+        height: 10px;
+        background: #e0e0e0;
+        border-radius: 5px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+      .score-progress {
+        height: 100%;
+        background: #4caf50;
+      }
+      .feedback-section {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+      .feedback-tabs {
+        display: flex;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+      .feedback-tab {
+        padding: 10px 15px;
+        cursor: pointer;
+        background: #e9ecef;
+        margin-right: 5px;
+        border-radius: 5px 5px 0 0;
+        margin-bottom: 5px;
+      }
+      .feedback-tab.active {
+        background: #007bff;
+        color: white;
+      }
+      .feedback-content {
+        display: none;
+      }
+      .feedback-content.active {
+        display: block;
+      }
+      .loading {
+        text-align: center;
+        padding: 20px;
+      }
+      .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 4px solid #007bff;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .ai-button {
+        background: #28a745;
+        margin-left: 10px;
+      }
+      .ai-button:hover {
+        background: #218838;
+      }
+      .interview-button {
+        background: #6f42c1;
+      }
+      .interview-button:hover {
+        background: #5a2d9a;
+      }
+      .suggestion-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      .error-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+      }
+      .required-field {
+        border-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <a href="main.html"><img src="img.png" id="img" /></a>
+      </div>
+      <div id="name1">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <div class="profile-container">
+        <div class="profile-icon" id="profileCircle">U</div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <p><strong>Name:</strong> <span id="profileName">User Name</span></p>
+          <p>
+            <strong>Email:</strong>
+            <span id="profileEmail">user@example.com</span>
+          </p>
+          <p><strong>Age:</strong> <span id="profileAge">-</span></p>
+          <p><strong>Role:</strong> <span id="profileRole">Student</span></p>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <h1>Resume Generator with AI Scoring & Interview Prep</h1>
+    <form id="resumeForm">
+      <label>Full Name <span class="required">*</span></label>
+      <input type="text" id="name" placeholder="e.g., Rohan Patel" required />
+      <div id="name-error" class="error-message">
+        Please enter your full name
+      </div>
+
+      <label>Email <span class="required">*</span></label>
+      <input
+        type="email"
+        id="email"
+        placeholder="e.g., rohanpatel@gmail.com"
+        required
+      />
+      <div id="email-error" class="error-message">
+        Please enter a valid email address
+      </div>
+
+      <label>Phone <span class="required">*</span></label>
+      <input
+        type="text"
+        id="phone"
+        placeholder="e.g., +91 98765 43210"
+        required
+      />
+      <div id="phone-error" class="error-message">
+        Please enter your phone number
+      </div>
+
+      <label>Address</label>
+      <input
+        type="text"
+        id="address"
+        placeholder="e.g., 101, New Colony, Ahmedabad"
+      />
+
+      <label>Career Objective</label>
+      <textarea
+        id="objective"
+        rows="3"
+        placeholder="e.g., To work in a growth-oriented company where I can utilize my technical and soft skills."
+      ></textarea>
+
+      <label>Class 10 Education</label>
+      <input type="text" id="edu10" placeholder="e.g., DPS, CBSE, 85%, 2018" />
+
+      <label>Class 12 Education</label>
+      <input type="text" id="edu12" placeholder="e.g., DPS, CBSE, 88%, 2020" />
+
+      <label>Graduation</label>
+      <input
+        type="text"
+        id="eduGrad"
+        placeholder="e.g., B.Tech CSE, Nirma University, 2024"
+      />
+
+      <label>Skills</label>
+      <input
+        type="text"
+        id="skills"
+        placeholder="e.g., HTML, CSS, JavaScript, Python"
+      />
+
+      <label>Projects</label>
+      <textarea
+        id="projects"
+        rows="3"
+        placeholder="e.g., Smart Dustbin using IoT, Quiz Web App with JS"
+      ></textarea>
+
+      <label>Experience</label>
+      <textarea
+        id="experience"
+        rows="3"
+        placeholder="e.g., Interned at WebTech Pvt. Ltd., July-Sep 2023"
+      ></textarea>
+
+      <label>Languages Known</label>
+      <input
+        type="text"
+        id="languages"
+        placeholder="e.g., English, Hindi, Gujarati"
+      />
+
+      <button type="button" onclick="validateAndGenerateResume()">
+        Generate Resume
+      </button>
+    </form>
+
+    <div id="resume" style="display: none"></div>
+
+    <div id="scoring-section" style="display: none">
+      <h2>Resume Analysis</h2>
+      <div class="score-container">
+        <div class="score-card">
+          <h3>Content Quality</h3>
+          <div class="score-value" id="content-score">0</div>
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              id="content-progress"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+        <div class="score-card">
+          <h3>ATS Optimization</h3>
+          <div class="score-value" id="ats-score">0</div>
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              id="ats-progress"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+        <div class="score-card">
+          <h3>Skills Relevance</h3>
+          <div class="score-value" id="skills-score">0</div>
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              id="skills-progress"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+        <div class="score-card">
+          <h3>Overall Score</h3>
+          <div class="score-value" id="overall-score">0</div>
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              id="overall-progress"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-section">
+        <h3>AI Feedback</h3>
+        <div class="feedback-tabs">
+          <div class="feedback-tab active" onclick="switchTab('strengths')">
+            Strengths
+          </div>
+          <div class="feedback-tab" onclick="switchTab('weaknesses')">
+            Weaknesses
+          </div>
+          <div class="feedback-tab" onclick="switchTab('improvements')">
+            Improvements
+          </div>
+          <div class="feedback-tab" onclick="switchTab('ats-tips')">
+            ATS Tips
+          </div>
+          <div class="feedback-tab" onclick="switchTab('interview')">
+            Interview Prep
+          </div>
+        </div>
+        <div id="strengths" class="feedback-content active"></div>
+        <div id="weaknesses" class="feedback-content"></div>
+        <div id="improvements" class="feedback-content"></div>
+        <div id="ats-tips" class="feedback-content"></div>
+        <div id="interview" class="feedback-content"></div>
+        <div id="loading" class="loading" style="display: none">
+          <div class="spinner"></div>
+          <p>Analyzing your resume...</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px">
+      <button onclick="downloadPDF()">Download PDF</button>
+      <button class="ai-button" onclick="analyzeResume()">
+        Get AI Feedback
+      </button>
+      <button class="interview-button" onclick="generateInterviewPrep()">
+        Interview Preparation
+      </button>
+    </div>
+
+    <script>
+      // Store resume data for analysis
+      let currentResumeData = {};
+
+      // Form validation
+      function validateForm() {
+        let isValid = true;
+
+        // Validate name
+        const name = document.getElementById("name").value;
+        if (!name) {
+          document.getElementById("name-error").style.display = "block";
+          document.getElementById("name").classList.add("required-field");
+          isValid = false;
+        } else {
+          document.getElementById("name-error").style.display = "none";
+          document.getElementById("name").classList.remove("required-field");
+        }
+
+        // Validate email
+        const email = document.getElementById("email").value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          document.getElementById("email-error").style.display = "block";
+          document.getElementById("email").classList.add("required-field");
+          isValid = false;
+        } else {
+          document.getElementById("email-error").style.display = "none";
+          document.getElementById("email").classList.remove("required-field");
+        }
+
+        // Validate phone
+        const phone = document.getElementById("phone").value;
+        if (!phone) {
+          document.getElementById("phone-error").style.display = "block";
+          document.getElementById("phone").classList.add("required-field");
+          isValid = false;
+        } else {
+          document.getElementById("phone-error").style.display = "none";
+          document.getElementById("phone").classList.remove("required-field");
+        }
+
+        return isValid;
+      }
+
+      function validateAndGenerateResume() {
+        if (validateForm()) {
+          generateResume();
+        }
+      }
+
+      function generateResume() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const address = document.getElementById("address").value;
+        const objective = document.getElementById("objective").value;
+        const edu10 = document.getElementById("edu10").value;
+        const edu12 = document.getElementById("edu12").value;
+        const eduGrad = document.getElementById("eduGrad").value;
+        const skills = document.getElementById("skills").value;
+        const projects = document.getElementById("projects").value;
+        const experience = document.getElementById("experience").value;
+        const languages = document.getElementById("languages").value;
+
+        // Store data for analysis
+        currentResumeData = {
+          name,
+          email,
+          phone,
+          address,
+          objective,
+          edu10,
+          edu12,
+          eduGrad,
+          skills,
+          projects,
+          experience,
+          languages,
+        };
+
+        document.getElementById("resume").style.display = "block";
+        document.getElementById("resume").innerHTML = `
+        <h2>${name}</h2>
+        <p><span class="bold">Email:</span> ${email} &nbsp;&nbsp;&nbsp; <span class="bold">Phone:</span> ${phone}</p>
+        <p><span class="bold">Address:</span> ${address}</p>
+        <hr>
+        <p><span class="bold">Career Objective:</span> ${objective}</p>
+
+        <h3>Educational Qualifications</h3>
+        <table>
+          <tr><th>Level</th><th>Details</th></tr>
+          <tr><td>Class 10</td><td>${edu10}</td></tr>
+          <tr><td>Class 12</td><td>${edu12}</td></tr>
+          <tr><td>Graduation</td><td>${eduGrad}</td></tr>
+        </table>
+
+        <h3>Skills</h3>
+        <p>${skills
+          .split(",")
+          .map((skill) => `<span class="bold">${skill.trim()}</span>`)
+          .join(", ")}</p>
+
+        <h3>Projects</h3>
+        <p>${projects}</p>
+
+        <h3>Experience</h3>
+        <p>${experience}</p>
+
+        <h3>Languages Known</h3>
+        <p>${languages}</p>
+      `;
+
+        // Show scoring section
+        document.getElementById("scoring-section").style.display = "block";
+        // Calculate basic scores (AI will enhance these later)
+        calculateBasicScores();
+      }
+
+      function calculateBasicScores() {
+        // Basic scoring logic (will be enhanced by AI later)
+        const data = currentResumeData;
+        let contentScore = 50;
+        let atsScore = 50;
+        let skillsScore = 50;
+
+        // Content quality scoring
+        if (data.objective && data.objective.length > 30) contentScore += 10;
+        if (data.experience && data.experience.length > 50) contentScore += 10;
+        if (data.projects && data.projects.length > 50) contentScore += 10;
+        if (data.skills && data.skills.split(",").length >= 3)
+          contentScore += 10;
+        if (data.eduGrad) contentScore += 10;
+
+        // ATS scoring
+        if (data.skills && data.skills.toLowerCase().includes("html"))
+          atsScore += 10;
+        if (data.skills && data.skills.toLowerCase().includes("css"))
+          atsScore += 10;
+        if (data.experience) atsScore += 10;
+        if (data.projects) atsScore += 10;
+        if (data.objective) atsScore += 10;
+
+        // Skills relevance scoring
+        const techKeywords = [
+          "javascript",
+          "python",
+          "java",
+          "c++",
+          "html",
+          "css",
+          "react",
+          "angular",
+          "node",
+          "sql",
+          "database",
+        ];
+        const skillCount = data.skills
+          ? data.skills
+              .split(",")
+              .filter((skill) =>
+                techKeywords.includes(skill.trim().toLowerCase())
+              ).length
+          : 0;
+        skillsScore = Math.min(100, 30 + skillCount * 10);
+
+        // Ensure scores are within 0-100 range
+        contentScore = Math.max(0, Math.min(100, contentScore));
+        atsScore = Math.max(0, Math.min(100, atsScore));
+        skillsScore = Math.max(0, Math.min(100, skillsScore));
+        const overallScore = Math.round(
+          (contentScore + atsScore + skillsScore) / 3
+        );
+
+        // Update UI with scores
+        updateScores(contentScore, atsScore, skillsScore, overallScore);
+      }
+
+      function updateScores(content, ats, skills, overall) {
+        document.getElementById("content-score").textContent = content;
+        document.getElementById("ats-score").textContent = ats;
+        document.getElementById("skills-score").textContent = skills;
+        document.getElementById("overall-score").textContent = overall;
+
+        document.getElementById("content-progress").style.width = `${content}%`;
+        document.getElementById("ats-progress").style.width = `${ats}%`;
+        document.getElementById("skills-progress").style.width = `${skills}%`;
+        document.getElementById("overall-progress").style.width = `${overall}%`;
+
+        // Set color based on score
+        setScoreColor("content", content);
+        setScoreColor("ats", ats);
+        setScoreColor("skills", skills);
+        setScoreColor("overall", overall);
+      }
+
+      function setScoreColor(type, score) {
+        const element = document.getElementById(`${type}-progress`);
+        if (score >= 80) {
+          element.style.backgroundColor = "#28a745"; // Green
+        } else if (score >= 50) {
+          element.style.backgroundColor = "#ffc107"; // Yellow
+        } else {
+          element.style.backgroundColor = "#dc3545"; // Red
+        }
+      }
+
+      function switchTab(tabId) {
+        // Hide all tabs and remove active class
+        document.querySelectorAll(".feedback-content").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        document.querySelectorAll(".feedback-tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+
+        // Show selected tab
+        document.getElementById(tabId).classList.add("active");
+        document
+          .querySelector(`.feedback-tab[onclick="switchTab('${tabId}')"]`)
+          .classList.add("active");
+      }
+
+      async function analyzeResume() {
+        if (!currentResumeData.name) {
+          alert("Please generate your resume first");
+          return;
+        }
+
+        document.getElementById("loading").style.display = "block";
+
+        try {
+          // Simulate API delay
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // Simulated response (replace with actual API call in production)
+          const feedback = {
+            strengths:
+              "Your resume shows strong technical skills in web development technologies. The education background is well-presented and the career objective is clear. The projects section demonstrates practical application of your skills.",
+            weaknesses:
+              "The work experience section could be more detailed with specific achievements and metrics. Some skills could be better organized by category (e.g., programming languages, frameworks, tools).",
+            improvements:
+              "1. Add quantifiable achievements to your experience section (e.g., 'Improved website performance by 30%').\n2. Group related skills together for better readability.\n3. Include more action verbs in your project descriptions.\n4. Consider adding a summary section at the top.",
+            atsTips:
+              "1. Include more industry-standard keywords from job descriptions.\n2. Ensure consistent formatting throughout the document.\n3. Avoid using tables for critical content as some ATS systems struggle with them.\n4. Include both acronyms and full terms for technologies (e.g., 'JS (JavaScript)').",
+          };
+
+          // Update the UI with feedback
+          document.getElementById(
+            "strengths"
+          ).innerHTML = `<p>${feedback.strengths}</p>`;
+          document.getElementById(
+            "weaknesses"
+          ).innerHTML = `<p>${feedback.weaknesses}</p>`;
+          document.getElementById(
+            "improvements"
+          ).innerHTML = `<p>${feedback.improvements.replace(
+            /\n/g,
+            "<br>"
+          )}</p>`;
+          document.getElementById(
+            "ats-tips"
+          ).innerHTML = `<p>${feedback.atsTips.replace(/\n/g, "<br>")}</p>`;
+
+          // Update scores based on AI analysis (simulated)
+          const contentScore = Math.min(
+            100,
+            parseInt(document.getElementById("content-score").textContent) + 15
+          );
+          const atsScore = Math.min(
+            100,
+            parseInt(document.getElementById("ats-score").textContent) + 10
+          );
+          const skillsScore = Math.min(
+            100,
+            parseInt(document.getElementById("skills-score").textContent) + 5
+          );
+          const overallScore = Math.round(
+            (contentScore + atsScore + skillsScore) / 3
+          );
+
+          updateScores(contentScore, atsScore, skillsScore, overallScore);
+        } catch (error) {
+          console.error("Error analyzing resume:", error);
+          alert("Failed to analyze resume. Please try again later.");
+        } finally {
+          document.getElementById("loading").style.display = "none";
+        }
+      }
+
+      async function generateInterviewPrep() {
+        if (!currentResumeData.name) {
+          alert("Please generate your resume first");
+          return;
+        }
+
+        document.getElementById("loading").style.display = "block";
+        switchTab("interview");
+
+        try {
+          // Simulate API delay
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // Simulated interview questions based on resume content
+          let interviewQuestions = [
+            "Can you walk us through one of the projects you mentioned in your resume?",
+            "How did you apply your skills in HTML, CSS, and JavaScript in your previous experience?",
+            "What challenges did you face during your internship at WebTech Pvt. Ltd. and how did you overcome them?",
+            "How do you stay updated with the latest web development technologies?",
+            "Can you describe a situation where you had to work in a team to complete a project?",
+          ];
+
+          // Add skill-specific questions if mentioned
+          if (currentResumeData.skills) {
+            const skills = currentResumeData.skills.toLowerCase();
+            if (skills.includes("python")) {
+              interviewQuestions.push(
+                "What Python frameworks or libraries are you most comfortable working with?"
+              );
+            }
+            if (skills.includes("react")) {
+              interviewQuestions.push(
+                "Can you explain the difference between class components and functional components in React?"
+              );
+            }
+            if (skills.includes("sql")) {
+              interviewQuestions.push(
+                "How would you optimize a slow-running SQL query?"
+              );
+            }
+          }
+
+          // Add behavioral questions
+          interviewQuestions = interviewQuestions.concat([
+            "Tell me about a time you had to solve a difficult problem.",
+            "Describe a situation where you had to learn something new quickly.",
+            "How do you handle tight deadlines or multiple projects?",
+            "Where do you see yourself in 5 years?",
+            "Why are you interested in this position?",
+          ]);
+
+          // Create interview prep content
+          let interviewContent = `
+            <h4>Technical Questions</h4>
+            <div class="suggestion-item">
+              ${interviewQuestions
+                .slice(0, 5)
+                .map((q) => `<p>• ${q}</p>`)
+                .join("")}
+            </div>
+            
+            <h4>Skill-Specific Questions</h4>
+            <div class="suggestion-item">
+              ${interviewQuestions
+                .slice(5, 8)
+                .map((q) => `<p>• ${q}</p>`)
+                .join("")}
+            </div>
+            
+            <h4>Behavioral Questions</h4>
+            <div class="suggestion-item">
+              ${interviewQuestions
+                .slice(8)
+                .map((q) => `<p>• ${q}</p>`)
+                .join("")}
+            </div>
+            
+            <h4>Interview Tips</h4>
+            <div class="suggestion-item">
+              <p>• Research the company thoroughly before the interview</p>
+              <p>• Prepare specific examples using the STAR method (Situation, Task, Action, Result)</p>
+              <p>• Dress professionally and arrive early (or test your tech for virtual interviews)</p>
+              <p>• Have questions ready to ask the interviewer</p>
+              <p>• Follow up with a thank-you email after the interview</p>
+            </div>
+          `;
+
+          document.getElementById("interview").innerHTML = interviewContent;
+        } catch (error) {
+          console.error("Error generating interview prep:", error);
+          document.getElementById("interview").innerHTML =
+            "<p>Failed to generate interview suggestions. Please try again later.</p>";
+        } finally {
+          document.getElementById("loading").style.display = "none";
+        }
+      }
+
+      function downloadPDF() {
+        const resumeContent = document.getElementById("resume");
+        if (resumeContent.style.display === "none") {
+          alert("Please generate your resume first");
+          return;
+        }
+
+        const opt = {
+          margin: 0.5,
+          filename: "Resume.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        };
+        html2pdf().from(resumeContent).set(opt).save();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BA/Psychology/Law/Design Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #f0f9ff, #fef3c7, #fce7f3, #ecfdf5);
+        background-size: 500% 500%;
+        animation: bgShift 25s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #1f2937;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 70px;
+        background: linear-gradient(90deg, #4b0082, #2e1b4e);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 3px solid #c4b5fd;
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 40px;
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: #ddd6fe;
+        letter-spacing: 2px;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      #img {
+        height: 100px;
+        width: auto;
+        border-radius: 20px;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+        border: 3px solid #a5b4fc;
+        transform: rotate(2deg);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 55px;
+        height: 55px;
+        background: linear-gradient(135deg, #7c3aed, #db2777);
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        border: 2px solid #e9d5ff;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: #fefce8;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        padding: 25px;
+        width: 280px;
+        display: none;
+        z-index: 10;
+        border: 2px solid #d8b4fe;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 12px 0;
+        font-size: 17px;
+        font-family: "Source Sans Pro", sans-serif;
+        font-weight: 400;
+        color: #4c1d95;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 70px auto;
+        background: linear-gradient(145deg, #ffffff, #f3e8ff);
+        padding: 70px 60px;
+        border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        animation: fadeIn 1.5s ease;
+        border: 2px solid #e9d5ff;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1000px;
+
+        background: radial-gradient(
+          circle at 10% 10%,
+          rgba(196, 181, 253, 0.2),
+          transparent
+        );
+        z-index: -1;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Quicksand", sans-serif;
+        font-size: 42px;
+        font-weight: 700;
+        color: #c026d3;
+        margin-bottom: 60px;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container {
+        margin-top: 35px;
+      }
+
+      .subject-selection label {
+        display: block;
+        margin: 18px 0;
+        font-size: 19px;
+        font-family: "Source Sans Pro", sans-serif;
+        font-weight: 600;
+        color: #1e40af;
+      }
+
+      .career-info label {
+        display: block;
+        margin: 18px 0;
+        font-size: 18px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #166534;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 18px;
+        accent-color: #6d28d9;
+        transform: scale(1.3);
+        cursor: pointer;
+      }
+
+      .question-block {
+        margin-bottom: 40px;
+        background: #fff7ed;
+        padding: 30px 35px;
+        border-left: 8px solid #7c3aed;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        position: relative;
+        animation: slideIn 0.5s ease;
+      }
+
+      .question-block:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 19px;
+        margin-bottom: 18px;
+        font-family: "Playfair Display", serif;
+        color: #7e22ce;
+      }
+
+      .question-block label {
+        margin-left: 18px;
+        display: block;
+        font-size: 18px;
+        padding-left: 18px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #44403c;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 18px 40px;
+        background: linear-gradient(135deg, #6d28d9, #db2777);
+        color: #ffffff;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 19px;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 700;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+
+      .career-info {
+        margin-top: 40px;
+        padding: 40px;
+        background: linear-gradient(135deg, #f0fdf4, #fefce8);
+        border-radius: 25px;
+        border-left: 8px solid #166534;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        animation: fadeIn 0.8s ease-in-out;
+        position: relative;
+      }
+
+      .career-info::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 20px;
+        width: 50px;
+        height: 5px;
+        background: #166534;
+        border-radius: 5px;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        font-family: "Source Sans Pro", sans-serif;
+        font-size: 26px;
+        color: #be123c;
+      }
+
+      .result-container p {
+        font-size: 18px;
+        line-height: 1.9;
+        font-family: "Roboto", sans-serif;
+        color: #4b5563;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: 600;
+        color: #ea580c;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 35px;
+          margin: 40px 20px;
+        }
+        button {
+          font-size: 17px;
+          padding: 16px 30px;
+        }
+        .navbar {
+          padding: 12px 25px;
+        }
+        .navbar h3 {
+          font-size: 32px;
+        }
+        h2 {
+          font-size: 36px;
+        }
+        .question-block {
+          padding: 25px;
+        }
+        .profile-icon {
+          width: 45px;
+          height: 45px;
+          font-size: 20px;
+        }
+        .profile-dropdown {
+          width: 220px;
+          padding: 15px;
+        }
+      }
+      .improvement-tips {
+        margin-top: 30px;
+        background: #fff3e0;
+        padding: 25px;
+        border-radius: 15px;
+        border-left: 8px solid #f59e0b;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.7s ease-in-out;
+      }
+
+      .improvement-tips h4 {
+        color: #b45309;
+        margin-top: 0;
+        font-family: "Quicksand", sans-serif;
+        font-size: 24px;
+        margin-bottom: 15px;
+      }
+
+      .improvement-tips ul {
+        padding-left: 25px;
+      }
+
+      .improvement-tips li {
+        margin-bottom: 15px;
+        font-family: "Source Sans Pro", sans-serif;
+        color: #4b5563;
+      }
+
+      .improvement-tips li strong {
+        color: #7c3aed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>ArtsQuest</h3>
+      </div>
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>BA/Psychology/Law/Design Quiz</h2>
+
+      <div class="subject-selection">
+        <label><input type="checkbox" value="Literature" /> Literature</label>
+        <label><input type="checkbox" value="Psychology" /> Psychology</label>
+        <label
+          ><input type="checkbox" value="Legal Studies" /> Legal Studies</label
+        >
+        <label
+          ><input type="checkbox" value="Graphic Design" /> Graphic
+          Design</label
+        >
+        <label><input type="checkbox" value="Sociology" /> Sociology</label>
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const improvementTips = {
+        Literature: [
+          "Read classic literature regularly",
+          "Practice literary analysis techniques",
+          "Study different literary movements",
+          "Work on your creative writing skills",
+        ],
+        Psychology: [
+          "Review key psychological theories",
+          "Practice case study analysis",
+          "Study brain anatomy and functions",
+          "Keep up with current psychology research",
+        ],
+        "Legal Studies": [
+          "Memorize important legal maxims",
+          "Study landmark judgments",
+          "Practice legal reasoning exercises",
+          "Stay updated with recent amendments",
+        ],
+        "Graphic Design": [
+          "Practice design principles daily",
+          "Experiment with different design tools",
+          "Study color theory in depth",
+          "Analyze professional design portfolios",
+        ],
+        Sociology: [
+          "Review sociological theories",
+          "Study contemporary social issues",
+          "Practice analyzing social structures",
+          "Research different cultural practices",
+        ],
+      };
+      const quizData = {
+        Literature: [
+          {
+            question: "Who wrote the novel 'Pride and Prejudice'?",
+            options: ["Jane Austen", "Charlotte Brontë", "Virginia Woolf"],
+            answer: "Jane Austen",
+          },
+          {
+            question: "What is the primary theme of '1984' by George Orwell?",
+            options: ["Romance", "Totalitarianism", "Adventure"],
+            answer: "Totalitarianism",
+          },
+          {
+            question: "What is a sonnet?",
+            options: ["14-line poem", "Short story", "Epic narrative"],
+            answer: "14-line poem",
+          },
+          {
+            question: "Which movement emphasized emotion over reason?",
+            options: ["Realism", "Romanticism", "Modernism"],
+            answer: "Romanticism",
+          },
+          {
+            question: "What is stream of consciousness in literature?",
+            options: [
+              "Linear plot",
+              "Inner thoughts flow",
+              "Historical recount",
+            ],
+            answer: "Inner thoughts flow",
+          },
+        ],
+        Psychology: [
+          {
+            question: "Who is the founder of psychoanalysis?",
+            options: ["Sigmund Freud", "Carl Jung", "B.F. Skinner"],
+            answer: "Sigmund Freud",
+          },
+          {
+            question: "What does the term 'cognition' refer to?",
+            options: [
+              "Emotional response",
+              "Mental processes",
+              "Physical behavior",
+            ],
+            answer: "Mental processes",
+          },
+          {
+            question: "What is classical conditioning?",
+            options: [
+              "Learning by association",
+              "Trial and error",
+              "Observational learning",
+            ],
+            answer: "Learning by association",
+          },
+          {
+            question: "What is the role of the amygdala?",
+            options: ["Memory storage", "Emotion processing", "Motor control"],
+            answer: "Emotion processing",
+          },
+          {
+            question: "What is a phobia?",
+            options: ["Mild anxiety", "Irrational fear", "Chronic depression"],
+            answer: "Irrational fear",
+          },
+        ],
+        "Legal Studies": [
+          {
+            question: "What is the supreme law of India?",
+            options: ["Constitution", "Penal Code", "Civil Code"],
+            answer: "Constitution",
+          },
+          {
+            question: "What is a tort?",
+            options: ["Criminal act", "Civil wrong", "Contract breach"],
+            answer: "Civil wrong",
+          },
+          {
+            question: "What does 'habeas corpus' mean?",
+            options: ["Produce the body", "Guilty mind", "Equal justice"],
+            answer: "Produce the body",
+          },
+          {
+            question: "What is the role of a public prosecutor?",
+            options: ["Defend accused", "Represent state", "Draft laws"],
+            answer: "Represent state",
+          },
+          {
+            question: "What is jurisprudence?",
+            options: ["Court procedure", "Philosophy of law", "Case law"],
+            answer: "Philosophy of law",
+          },
+        ],
+        "Graphic Design": [
+          {
+            question: "What is typography in design?",
+            options: ["Color theory", "Text arrangement", "Image editing"],
+            answer: "Text arrangement",
+          },
+          {
+            question: "What does RGB stand for?",
+            options: [
+              "Red, Green, Blue",
+              "Raster Graphic Base",
+              "Render Gray Balance",
+            ],
+            answer: "Red, Green, Blue",
+          },
+          {
+            question: "What is a mood board used for?",
+            options: [
+              "Final design",
+              "Inspiration collection",
+              "Client billing",
+            ],
+            answer: "Inspiration collection",
+          },
+          {
+            question: "What is the rule of thirds in design?",
+            options: ["Color mixing", "Grid alignment", "Font pairing"],
+            answer: "Grid alignment",
+          },
+          {
+            question: "What is vector graphics?",
+            options: ["Pixel-based", "Scalable images", "3D modeling"],
+            answer: "Scalable images",
+          },
+        ],
+        Sociology: [
+          {
+            question: "Who coined the term 'sociology'?",
+            options: ["Karl Marx", "Auguste Comte", "Max Weber"],
+            answer: "Auguste Comte",
+          },
+          {
+            question: "What is social stratification?",
+            options: [
+              "Cultural integration",
+              "Hierarchical division",
+              "Group harmony",
+            ],
+            answer: "Hierarchical division",
+          },
+          {
+            question: "What is a nuclear family?",
+            options: [
+              "Extended relatives",
+              "Parents and children",
+              "Single individual",
+            ],
+            answer: "Parents and children",
+          },
+          {
+            question: "What does 'culture' encompass?",
+            options: [
+              "Economic systems",
+              "Beliefs and values",
+              "Political laws",
+            ],
+            answer: "Beliefs and values",
+          },
+          {
+            question: "What is deviance in sociology?",
+            options: ["Norm violation", "Social unity", "Economic growth"],
+            answer: "Norm violation",
+          },
+        ],
+      };
+
+      const careerMap = {
+        Literature: ["Creative Writing", "Journalism", "Teaching"],
+        Psychology: ["Clinical Psychology", "Counseling", "Research"],
+        "Legal Studies": ["Lawyer", "Judge", "Legal Consultant"],
+        "Graphic Design": ["UI/UX Design", "Branding", "Animation"],
+        Sociology: ["Social Work", "Policy Analysis", "Community Development"],
+      };
+
+      const careerDetails = {
+        "Creative Writing": {
+          overview: "Crafting stories, scripts, and poems",
+          institutions: ["The Hindu", "Penguin Random House", "Times Group"],
+          demand: "75%",
+          salary: "₹4–20 LPA",
+        },
+        Journalism: {
+          overview: "Reporting news and features",
+          institutions: ["NDTV", "BBC", "The Indian Express"],
+          demand: "80%",
+          salary: "₹5–25 LPA",
+        },
+        Teaching: {
+          overview: "Educating in literature and humanities",
+          institutions: ["Delhi University", "JNU", "Amity"],
+          demand: "85%",
+          salary: "₹4–30 LPA",
+        },
+        "Clinical Psychology": {
+          overview: "Diagnosing and treating mental health",
+          institutions: ["NIMHANS", "Fortis", "Apollo"],
+          demand: "80%",
+          salary: "₹6–35 LPA",
+        },
+        Counseling: {
+          overview: "Supporting emotional well-being",
+          institutions: ["MindCare", "VIMHANS", "NGOs"],
+          demand: "75%",
+          salary: "₹5–25 LPA",
+        },
+        Research: {
+          overview: "Studying human behavior",
+          institutions: ["IISc", "TISS", "IITs"],
+          demand: "70%",
+          salary: "₹5–20 LPA",
+        },
+        Lawyer: {
+          overview: "Representing clients in legal matters",
+          institutions: ["AZB & Partners", "Amarchand", "Supreme Court"],
+          demand: "85%",
+          salary: "₹8–50 LPA",
+        },
+        Judge: {
+          overview: "Presiding over court cases",
+          institutions: ["High Courts", "District Courts", "Judiciary"],
+          demand: "70%",
+          salary: "₹10–40 LPA",
+        },
+        "Legal Consultant": {
+          overview: "Advising on legal compliance",
+          institutions: ["Deloitte", "EY", "KPMG"],
+          demand: "80%",
+          salary: "₹6–30 LPA",
+        },
+        "UI/UX Design": {
+          overview: "Designing user-friendly interfaces",
+          institutions: ["Google", "Adobe", "Zomato"],
+          demand: "90%",
+          salary: "₹8–40 LPA",
+        },
+        Branding: {
+          overview: "Creating brand identities",
+          institutions: ["Ogilvy", "DDB Mudra", "Leo Burnett"],
+          demand: "85%",
+          salary: "₹6–30 LPA",
+        },
+        Animation: {
+          overview: "Producing animated visuals",
+          institutions: ["Disney", "Prime Focus", "Red Chillies"],
+          demand: "80%",
+          salary: "₹5–25 LPA",
+        },
+        "Social Work": {
+          overview: "Supporting community welfare",
+          institutions: ["CRY", "Goonj", "UNICEF"],
+          demand: "75%",
+          salary: "₹4–20 LPA",
+        },
+        "Policy Analysis": {
+          overview: "Shaping social policies",
+          institutions: ["NITI Aayog", "UNDP", "PRS India"],
+          demand: "70%",
+          salary: "₹6–25 LPA",
+        },
+        "Community Development": {
+          overview: "Empowering local communities",
+          institutions: ["TISS", "Azim Premji Foundation", "NGOs"],
+          demand: "80%",
+          salary: "₹5–22 LPA",
+        },
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${subject} Quiz</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected && selected.value === q.answer) correct++;
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Results</h3>";
+
+        // Track weak subjects (below 80%)
+        const weakSubjects = [];
+
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          resultContainer.innerHTML += `<p><strong>${subject}:</strong> ${score.toFixed(
+            2
+          )}%</p>`;
+          if (score < 80) {
+            weakSubjects.push(subject);
+          }
+        }
+
+        // Add improvement suggestions for weak subjects
+        if (weakSubjects.length > 0) {
+          resultContainer.innerHTML += `
+            <div class="improvement-tips">
+              <h4>Improvement Suggestions</h4>
+              <p>Your scores in these subjects could be improved (below 80%):</p>
+              <ul>
+                ${weakSubjects
+                  .map(
+                    (subject) => `
+                    <li>
+                      <strong>${subject}:</strong> 
+                      ${improvementTips[subject]
+                        .map((tip) => `<div>• ${tip}</div>`)
+                        .join("")}
+                    </li>
+                  `
+                  )
+                  .join("")}
+              </ul>
+              <p>Consider focusing more on these subjects to achieve professional mastery.</p>
+            </div>`;
+        }
+
+        resultContainer.innerHTML += `
+          <p>Select subjects for career suggestions:</p>
+          <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+          <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+          <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+          <div class="career-info" id="careerInfo"></div>
+        `;
+      }
+
+      resultContainer.innerHTML += `
+        <p>Select subjects for career suggestions:</p>
+        <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+        <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+        <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+        <div class="career-info" id="careerInfo"></div>
+      `;
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">Show Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+        <h4>${career}</h4>
+        <p><strong>Overview:</strong> ${details.overview}</p>
+        <p><strong>Top Institutions:</strong> ${details.institutions.join(
+          ", "
+        )}</p>
+        <p><strong>Demand:</strong> ${details.demand}</p>
+        <p><strong>Salary:</strong> ${details.salary}</p>
+      `;
+      }
+    </script>
+  </body>
+</html>

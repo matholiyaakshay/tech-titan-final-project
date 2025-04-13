@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exam Categories</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap");
+
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(270deg, #e0f7fa, #e3f2fd, #ede7f6, #f3e5f5);
+        background-size: 800% 800%;
+        animation: professionalGradient 30s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      @keyframes professionalGradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+      .logout-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        font-weight: bold;
+      }
+
+      .logout-btn:hover {
+        background: #c0392b;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: 100px auto 40px;
+        background: #ffffff;
+        padding: 35px 30px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.2s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        color: #4a148c;
+        font-size: 28px;
+        margin-bottom: 25px;
+      }
+
+      label {
+        font-weight: 600;
+        display: block;
+        margin-top: 18px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      select {
+        padding: 12px 14px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1.5px solid #ccc;
+        font-size: 16px;
+        background-color: #f9f9f9;
+        transition: border 0.3s;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #7b1fa2;
+      }
+
+      button {
+        margin-top: 25px;
+        padding: 14px;
+        width: 100%;
+        background: linear-gradient(135deg, #ab47bc, #7e57c2);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #7e57c2, #ab47bc);
+        transform: scale(1.02);
+      }
+
+      .exam-options {
+        display: none;
+        margin-top: 20px;
+      }
+
+      .exam-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border-left: 4px solid #42a5f5;
+        cursor: pointer;
+      }
+
+      .exam-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .exam-card.govt {
+        border-left-color: #4caf50;
+      }
+
+      .exam-card.private {
+        border-left-color: #ff9800;
+      }
+
+      .exam-card.entrance {
+        border-left-color: #9c27b0;
+      }
+
+      .exam-card.scholarship {
+        border-left-color: #2196f3;
+      }
+
+      .exam-card.international {
+        border-left-color: #f44336;
+      }
+
+      .exam-card h3 {
+        margin: 0 0 10px;
+        color: #0d1b2a;
+        font-size: 18px;
+      }
+
+      .exam-card p {
+        margin: 8px 0;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .exam-card .exam-type {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .govt .exam-type {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .private .exam-type {
+        background-color: #fff3e0;
+        color: #e65100;
+      }
+
+      .entrance .exam-type {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+      }
+
+      .scholarship .exam-type {
+        background-color: #e3f2fd;
+        color: #1565c0;
+      }
+
+      .international .exam-type {
+        background-color: #ffebee;
+        color: #c62828;
+      }
+
+      .selection-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #0d1b2a;
+        text-align: center;
+      }
+
+      .modal-exam-details {
+        margin-top: 20px;
+      }
+
+      .modal-exam-details h3 {
+        color: #0d1b2a;
+        margin-bottom: 10px;
+      }
+
+      .modal-exam-details p {
+        margin: 8px 0;
+        color: #555;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #777;
+      }
+
+      .close-modal:hover {
+        color: #333;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          padding: 15px 20px;
+        }
+
+        .container {
+          padding: 25px;
+          margin-top: 90px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .navbar {
+          padding: 8px 15px;
+        }
+
+        #img {
+          height: 40px;
+        }
+
+        .navbar h3 {
+          font-size: 20px;
+        }
+
+        .profile-icon {
+          width: 36px;
+          height: 36px;
+          font-size: 16px;
+        }
+
+        .container {
+          padding: 20px;
+          margin-top: 80px;
+        }
+
+        h2 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <a href="main.html">
+          <img src="img.png" id="img" alt="Track Titan Logo"
+        /></a>
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <div class="profile-container">
+        <div class="profile-icon" id="profileCircle">U</div>
+        <div class="profile-dropdown">
+          <p><strong>Name:</strong> <span id="profileName">User Name</span></p>
+          <p>
+            <strong>Email:</strong>
+            <span id="profileEmail">user@example.com</span>
+          </p>
+          <p><strong>Role:</strong> Student</p>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>📝 Exam Categories</h2>
+
+      <label for="examSector">🏛️ Select Exam Sector:</label>
+      <select id="examSector" onchange="showExamOptions()">
+        <option value="">-- Choose Sector --</option>
+        <option value="government">Government Sector Exams</option>
+        <option value="private">Private Sector Exams</option>
+        <option value="entrance">Entrance Exams</option>
+        <option value="scholarship">Scholarship & Olympiads</option>
+        <option value="international">International Exams</option>
+      </select>
+
+      <div id="examOptions" class="exam-options">
+        <label for="exam">📚 Select Exam:</label>
+        <select id="exam">
+          <option value="">-- Select Exam --</option>
+        </select>
+      </div>
+
+      <button onclick="showExamDetails()">View Exam Details</button>
+
+      <div class="selection-modal" id="selectionModal">
+        <div class="modal-content">
+          <span class="close-modal" onclick="closeModal()">&times;</span>
+          <h2 class="modal-title" id="modalExamTitle">Exam Title</h2>
+          <div class="modal-exam-details">
+            <p><strong>Type:</strong> <span id="modalExamType"></span></p>
+            <p>
+              <strong>Conducted by:</strong>
+              <span id="modalExamConductor"></span>
+            </p>
+            <p>
+              <strong>Eligibility:</strong>
+              <span id="modalExamEligibility"></span>
+            </p>
+            <p><strong>Purpose:</strong> <span id="modalExamPurpose"></span></p>
+          </div>
+          <button
+            onclick="selectExam()"
+            style="
+              margin-top: 20px;
+              padding: 10px 20px;
+              background: #2563eb;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+            "
+          >
+            Select This Exam
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check for user data
+      document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+
+        if (!user) {
+          window.location.href = "registation.html";
+        } else {
+          const initials = user.name
+            .split(" ")
+            .map((word) => word[0])
+            .join("")
+            .toUpperCase();
+
+          document.getElementById("profileCircle").textContent = initials;
+          document.getElementById("profileName").textContent = user.name;
+          document.getElementById("profileEmail").textContent = user.email;
+        }
+      });
+
+      // Comprehensive exam data
+      const examData = {
+        government: [
+          {
+            name: "UPSC Civil Services",
+            conductor: "Union Public Service Commission",
+            eligibility: "Graduation",
+            purpose: "IAS, IPS, IFS, etc.",
+          },
+          {
+            name: "SSC CGL",
+            conductor: "Staff Selection Commission",
+            eligibility: "Graduation",
+            purpose: "Group B & C Gazetted Officers",
+          },
+          {
+            name: "IBPS PO",
+            conductor: "Institute of Banking Personnel Selection",
+            eligibility: "Graduation",
+            purpose: "Probationary Officer in Public Banks",
+          },
+          {
+            name: "RRB NTPC",
+            conductor: "Railway Recruitment Board",
+            eligibility: "Graduation",
+            purpose: "Non-Technical Popular Categories in Railways",
+          },
+          {
+            name: "State PSCs",
+            conductor: "State Public Service Commissions",
+            eligibility: "Graduation",
+            purpose: "State Civil Services",
+          },
+          {
+            name: "SSC CHSL",
+            conductor: "Staff Selection Commission",
+            eligibility: "12th Pass",
+            purpose: "Lower Division Clerk/Postal Assistant",
+          },
+          {
+            name: "SSC JE",
+            conductor: "Staff Selection Commission",
+            eligibility: "Diploma in Engineering",
+            purpose: "Junior Engineer Positions",
+          },
+          {
+            name: "SSC GD Constable",
+            conductor: "Staff Selection Commission",
+            eligibility: "10th Pass",
+            purpose: "Constable in CAPFs",
+          },
+          {
+            name: "SSC Stenographer",
+            conductor: "Staff Selection Commission",
+            eligibility: "12th Pass",
+            purpose: "Stenographer Grade C & D",
+          },
+          {
+            name: "SSC MTS",
+            conductor: "Staff Selection Commission",
+            eligibility: "10th Pass",
+            purpose: "Multi-Tasking Staff",
+          },
+          {
+            name: "SSC Scientific Assistant",
+            conductor: "Staff Selection Commission",
+            eligibility: "B.Sc/B.E/B.Tech",
+            purpose: "Scientific Assistant in IMD",
+          },
+          {
+            name: "SSC CPO",
+            conductor: "Staff Selection Commission",
+            eligibility: "Graduation",
+            purpose: "Sub-Inspector in CAPFs",
+          },
+          {
+            name: "CDS",
+            conductor: "Union Public Service Commission",
+            eligibility: "Graduation/12th Pass",
+            purpose: "Officer in Army, Navy & Air Force",
+          },
+          {
+            name: "NDA",
+            conductor: "Union Public Service Commission",
+            eligibility: "12th Pass",
+            purpose: "Officer in Army, Navy & Air Force",
+          },
+          {
+            name: "CAPF",
+            conductor: "Union Public Service Commission",
+            eligibility: "Graduation",
+            purpose: "Assistant Commandant in CAPFs",
+          },
+          {
+            name: "AFCAT",
+            conductor: "Indian Air Force",
+            eligibility: "Graduation",
+            purpose: "Flying and Ground Duty Officers",
+          },
+          {
+            name: "Indian Coast Guard",
+            conductor: "Indian Coast Guard",
+            eligibility: "12th Pass/Graduation",
+            purpose: "Navik/Assistant Commandant",
+          },
+          {
+            name: "Indian Navy SSR/AA",
+            conductor: "Indian Navy",
+            eligibility: "12th Pass",
+            purpose: "Sailor in Indian Navy",
+          },
+          {
+            name: "Indian Army Soldier",
+            conductor: "Indian Army",
+            eligibility: "10th/12th Pass",
+            purpose: "Soldier in Indian Army",
+          },
+          {
+            name: "ESIC SSO",
+            conductor: "Employees State Insurance Corporation",
+            eligibility: "Graduation",
+            purpose: "Social Security Officer",
+          },
+          {
+            name: "FCI",
+            conductor: "Food Corporation of India",
+            eligibility: "Graduation/12th Pass",
+            purpose: "Management Trainee/Assistant Grade",
+          },
+          {
+            name: "RBI Grade B",
+            conductor: "Reserve Bank of India",
+            eligibility: "Graduation",
+            purpose: "Officer in Reserve Bank",
+          },
+          {
+            name: "RBI Assistant",
+            conductor: "Reserve Bank of India",
+            eligibility: "Graduation",
+            purpose: "Assistant in RBI Offices",
+          },
+          {
+            name: "NABARD Grade A & B",
+            conductor: "National Bank for Agriculture and Rural Development",
+            eligibility: "Graduation/Post Graduation",
+            purpose: "Officer in NABARD",
+          },
+          {
+            name: "SEBI Grade A",
+            conductor: "Securities and Exchange Board of India",
+            eligibility: "Graduation/Post Graduation",
+            purpose: "Officer in SEBI",
+          },
+          {
+            name: "LIC AAO",
+            conductor: "Life Insurance Corporation",
+            eligibility: "Graduation",
+            purpose: "Assistant Administrative Officer",
+          },
+          {
+            name: "LIC ADO",
+            conductor: "Life Insurance Corporation",
+            eligibility: "12th Pass",
+            purpose: "Apprentice Development Officer",
+          },
+          {
+            name: "EPFO",
+            conductor: "Employees Provident Fund Organization",
+            eligibility: "Graduation",
+            purpose: "Social Security Assistant/Enforcement Officer",
+          },
+          {
+            name: "SBI PO",
+            conductor: "State Bank of India",
+            eligibility: "Graduation",
+            purpose: "Probationary Officer in SBI",
+          },
+          {
+            name: "SBI Clerk",
+            conductor: "State Bank of India",
+            eligibility: "Graduation",
+            purpose: "Junior Associate in SBI",
+          },
+          {
+            name: "SBI SO",
+            conductor: "State Bank of India",
+            eligibility: "Graduation/Post Graduation",
+            purpose: "Specialist Officer in SBI",
+          },
+        ],
+        private: [
+          {
+            name: "CAT",
+            conductor: "IIMs",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "GATE",
+            conductor: "IITs/IISc",
+            eligibility: "Engineering/Science Graduates",
+            purpose: "PG Admissions & PSU Jobs",
+          },
+          {
+            name: "Company Specific Exams",
+            conductor: "Various Corporations",
+            eligibility: "Varies",
+            purpose: "Private Sector Jobs",
+          },
+          {
+            name: "XAT",
+            conductor: "XLRI",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "NMAT",
+            conductor: "NMIMS",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "SNAP",
+            conductor: "Symbiosis",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "IIFT",
+            conductor: "IIFT",
+            eligibility: "Graduation",
+            purpose: "MBA (International Business)",
+          },
+          {
+            name: "CMAT",
+            conductor: "NTA",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "MAT",
+            conductor: "AIMA",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "ATMA",
+            conductor: "AIMS",
+            eligibility: "Graduation",
+            purpose: "MBA Admissions",
+          },
+          {
+            name: "TISS NET",
+            conductor: "TISS",
+            eligibility: "Graduation",
+            purpose: "MA/MBA Admissions",
+          },
+          {
+            name: "IRMA",
+            conductor: "IRMA",
+            eligibility: "Graduation",
+            purpose: "Rural Management",
+          },
+          {
+            name: "IIT JAM",
+            conductor: "IITs",
+            eligibility: "Graduation",
+            purpose: "M.Sc Admissions",
+          },
+          {
+            name: "BITSAT",
+            conductor: "BITS Pilani",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "VITEEE",
+            conductor: "VIT",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "SRMJEEE",
+            conductor: "SRM",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "Manipal Entrance Test",
+            conductor: "Manipal University",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "KIITEE",
+            conductor: "KIIT",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "IPU CET",
+            conductor: "GGSIPU",
+            eligibility: "12th Pass/Graduation",
+            purpose: "Various UG/PG Courses",
+          },
+          {
+            name: "MU OET",
+            conductor: "Manipal University",
+            eligibility: "12th Pass",
+            purpose: "Various UG/PG Courses",
+          },
+          {
+            name: "LPU NEST",
+            conductor: "LPU",
+            eligibility: "12th Pass",
+            purpose: "Various UG Courses",
+          },
+          {
+            name: "Amity JEE",
+            conductor: "Amity University",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "UPES DAT",
+            conductor: "UPES",
+            eligibility: "12th Pass",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "Pearl Academy Entrance",
+            conductor: "Pearl Academy",
+            eligibility: "12th Pass",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "NID DAT",
+            conductor: "NID",
+            eligibility: "12th Pass",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "CEED",
+            conductor: "IIT Bombay",
+            eligibility: "Graduation",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "UCEED",
+            conductor: "IIT Bombay",
+            eligibility: "12th Pass",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "NIFT Entrance",
+            conductor: "NIFT",
+            eligibility: "12th Pass",
+            purpose: "Fashion Technology Admissions",
+          },
+          {
+            name: "AIEED",
+            conductor: "ARCH Academy",
+            eligibility: "12th Pass",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "AIIMS Nursing",
+            conductor: "AIIMS",
+            eligibility: "12th Pass",
+            purpose: "Nursing Admissions",
+          },
+          {
+            name: "JIPMER Nursing",
+            conductor: "JIPMER",
+            eligibility: "12th Pass",
+            purpose: "Nursing Admissions",
+          },
+        ],
+        entrance: [
+          {
+            name: "JEE Advanced",
+            conductor: "IITs",
+            eligibility: "12th Pass with JEE Main",
+            purpose: "IIT Admissions",
+          },
+          {
+            name: "NEET",
+            conductor: "NTA",
+            eligibility: "12th Pass with PCB",
+            purpose: "Medical College Admissions",
+          },
+          {
+            name: "CLAT",
+            conductor: "Consortium of NLUs",
+            eligibility: "12th Pass",
+            purpose: "Law School Admissions",
+          },
+          {
+            name: "NIFT",
+            conductor: "National Institute of Fashion Technology",
+            eligibility: "12th Pass",
+            purpose: "Design Admissions",
+          },
+          {
+            name: "AIIMS MBBS",
+            conductor: "AIIMS",
+            eligibility: "12th Pass with PCB",
+            purpose: "Medical Admissions",
+          },
+          {
+            name: "JIPMER MBBS",
+            conductor: "JIPMER",
+            eligibility: "12th Pass with PCB",
+            purpose: "Medical Admissions",
+          },
+          {
+            name: "JEE Main",
+            conductor: "NTA",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "BITSAT",
+            conductor: "BITS Pilani",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "VITEEE",
+            conductor: "VIT",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "SRMJEEE",
+            conductor: "SRM",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "WBJEE",
+            conductor: "WBJEE Board",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Pharmacy Admissions",
+          },
+          {
+            name: "MHT CET",
+            conductor: "State CET Cell",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Pharmacy Admissions",
+          },
+          {
+            name: "KCET",
+            conductor: "Karnataka Examination Authority",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "COMEDK",
+            conductor: "COMEDK",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "EAMCET",
+            conductor: "AP/Telangana State Councils",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "KEAM",
+            conductor: "Commissioner for Entrance Exams",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "GUJCET",
+            conductor: "GSEB",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Pharmacy Admissions",
+          },
+          {
+            name: "UPSEE",
+            conductor: "AKTU",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "Jharkhand PECE",
+            conductor: "JCECEB",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "HPCET",
+            conductor: "Himachal Pradesh University",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "BCECE",
+            conductor: "BCECEB",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "CG PET",
+            conductor: "CGBSE",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "AP EAMCET",
+            conductor: "APSCHE",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "TS EAMCET",
+            conductor: "TSCHE",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "OJEE",
+            conductor: "Odisha JEE",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "CUSAT CAT",
+            conductor: "CUSAT",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "IPU CET",
+            conductor: "GGSIPU",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "LPU NEST",
+            conductor: "LPU",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+          {
+            name: "Manipal Entrance Test",
+            conductor: "Manipal University",
+            eligibility: "12th Pass",
+            purpose: "Engineering/Medical Admissions",
+          },
+          {
+            name: "KIITEE",
+            conductor: "KIIT",
+            eligibility: "12th Pass",
+            purpose: "Engineering Admissions",
+          },
+        ],
+        scholarship: [
+          {
+            name: "NTSE",
+            conductor: "NCERT",
+            eligibility: "Class 10 Students",
+            purpose: "National Talent Search Scholarship",
+          },
+          {
+            name: "KVPY",
+            conductor: "IISc",
+            eligibility: "Class 11-12 & Undergraduates",
+            purpose: "Kishore Vaigyanik Protsahan Yojana",
+          },
+          {
+            name: "International Olympiads",
+            conductor: "Various Organizations",
+            eligibility: "School Students",
+            purpose: "International Competitions",
+          },
+          {
+            name: "IMO",
+            conductor: "Science Olympiad Foundation",
+            eligibility: "School Students",
+            purpose: "Math Olympiad",
+          },
+          {
+            name: "NSO",
+            conductor: "Science Olympiad Foundation",
+            eligibility: "School Students",
+            purpose: "Science Olympiad",
+          },
+          {
+            name: "NSTSE",
+            conductor: "Unified Council",
+            eligibility: "School Students",
+            purpose: "National Level Science Talent Search",
+          },
+          {
+            name: "HBBVS",
+            conductor: "HRD Ministry",
+            eligibility: "Class 9-12 Students",
+            purpose: "Scholarship for Single Girl Child",
+          },
+          {
+            name: "NMMS",
+            conductor: "NCERT",
+            eligibility: "Class 8 Students",
+            purpose: "National Means-cum-Merit Scholarship",
+          },
+          {
+            name: "Inspire Scholarship",
+            conductor: "DST",
+            eligibility: "Class 12 Students",
+            purpose: "Innovation in Science Pursuit",
+          },
+          {
+            name: "Saksham Scholarship",
+            conductor: "AICTE",
+            eligibility: "Engineering Students with Disabilities",
+            purpose: "Financial Support",
+          },
+          {
+            name: "Pragati Scholarship",
+            conductor: "AICTE",
+            eligibility: "Girl Engineering Students",
+            purpose: "Financial Support",
+          },
+          {
+            name: "Prime Minister's Scholarship",
+            conductor: "Ministry of Home Affairs",
+            eligibility: "Wards of Police Personnel",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "Central Sector Scholarship",
+            conductor: "Ministry of Education",
+            eligibility: "Class 12 Passouts",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "Swami Vivekananda Scholarship",
+            conductor: "West Bengal Govt",
+            eligibility: "Class 12 Passouts",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "Post Matric Scholarship",
+            conductor: "State Governments",
+            eligibility: "SC/ST/OBC Students",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "Pre Matric Scholarship",
+            conductor: "State Governments",
+            eligibility: "SC/ST/OBC Students",
+            purpose: "School Education Support",
+          },
+          {
+            name: "Merit Cum Means Scholarship",
+            conductor: "Ministry of Minority Affairs",
+            eligibility: "Minority Community Students",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "AICTE Scholarship",
+            conductor: "AICTE",
+            eligibility: "Technical Education Students",
+            purpose: "Financial Support",
+          },
+          {
+            name: "UGC Scholarship",
+            conductor: "UGC",
+            eligibility: "University Students",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "CSIR Scholarship",
+            conductor: "CSIR",
+            eligibility: "Science Research Students",
+            purpose: "Research Support",
+          },
+          {
+            name: "ICAR Scholarship",
+            conductor: "ICAR",
+            eligibility: "Agriculture Students",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "DBT Scholarship",
+            conductor: "DBT",
+            eligibility: "Biotechnology Students",
+            purpose: "Higher Education Support",
+          },
+          {
+            name: "INSPIRE Internship",
+            conductor: "DST",
+            eligibility: "Class 11-12 Students",
+            purpose: "Science Internship",
+          },
+          {
+            name: "NSP Scholarship",
+            conductor: "National Scholarship Portal",
+            eligibility: "Varies",
+            purpose: "Various Scholarships",
+          },
+          {
+            name: "Ramanujan Fellowship",
+            conductor: "SERB",
+            eligibility: "PhD Holders",
+            purpose: "Research Fellowship",
+          },
+          {
+            name: "JBNSTS Scholarship",
+            conductor: "JBNSTS",
+            eligibility: "West Bengal Students",
+            purpose: "Science Talent Support",
+          },
+          {
+            name: "Kishore Vaigyanik Protsahan Yojana",
+            conductor: "IISc",
+            eligibility: "Class 11-12 & Undergraduates",
+            purpose: "Science Research Support",
+          },
+          {
+            name: "Innovation in Science Pursuit",
+            conductor: "DST",
+            eligibility: "Class 12 Students",
+            purpose: "Science Education Support",
+          },
+          {
+            name: "National Talent Search Exam",
+            conductor: "NCERT",
+            eligibility: "Class 10 Students",
+            purpose: "Talent Recognition",
+          },
+          {
+            name: "Olympiad Exams",
+            conductor: "Various Organizations",
+            eligibility: "School Students",
+            purpose: "Talent Recognition",
+          },
+        ],
+        international: [
+          {
+            name: "SAT",
+            conductor: "College Board",
+            eligibility: "High School Students",
+            purpose: "US College Admissions",
+          },
+          {
+            name: "GRE",
+            conductor: "ETS",
+            eligibility: "Graduates",
+            purpose: "Graduate School Admissions",
+          },
+          {
+            name: "TOEFL/IELTS",
+            conductor: "ETS/British Council",
+            eligibility: "Varies",
+            purpose: "English Proficiency Test",
+          },
+          {
+            name: "GMAT",
+            conductor: "GMAC",
+            eligibility: "Graduates",
+            purpose: "Business Schools",
+          },
+          {
+            name: "USMLE",
+            conductor: "ECFMG",
+            eligibility: "Medical Graduates",
+            purpose: "Medical Licensing",
+          },
+          {
+            name: "MCAT",
+            conductor: "AAMC",
+            eligibility: "Pre-Medical Students",
+            purpose: "Medical School Admissions",
+          },
+          {
+            name: "LSAT",
+            conductor: "LSAC",
+            eligibility: "Graduates",
+            purpose: "Law School Admissions",
+          },
+          {
+            name: "ACT",
+            conductor: "ACT Inc.",
+            eligibility: "High School Students",
+            purpose: "US College Admissions",
+          },
+          {
+            name: "AP Exams",
+            conductor: "College Board",
+            eligibility: "High School Students",
+            purpose: "College Credit",
+          },
+          {
+            name: "IB Exams",
+            conductor: "IBO",
+            eligibility: "IB Students",
+            purpose: "IB Diploma",
+          },
+          {
+            name: "Cambridge International Exams",
+            conductor: "Cambridge Assessment",
+            eligibility: "School Students",
+            purpose: "International Qualifications",
+          },
+          {
+            name: "Pearson Test of English",
+            conductor: "Pearson",
+            eligibility: "Varies",
+            purpose: "English Proficiency Test",
+          },
+          {
+            name: "Duolingo English Test",
+            conductor: "Duolingo",
+            eligibility: "Varies",
+            purpose: "English Proficiency Test",
+          },
+          {
+            name: "OET",
+            conductor: "Cambridge Boxhill",
+            eligibility: "Medical Professionals",
+            purpose: "English Proficiency for Healthcare",
+          },
+          {
+            name: "CELPIP",
+            conductor: "Paragon",
+            eligibility: "Varies",
+            purpose: "English Proficiency for Canada",
+          },
+          {
+            name: "CAEL",
+            conductor: "Paragon",
+            eligibility: "Varies",
+            purpose: "English Proficiency for Canada",
+          },
+          {
+            name: "PTE Academic",
+            conductor: "Pearson",
+            eligibility: "Varies",
+            purpose: "English Proficiency Test",
+          },
+          {
+            name: "TFI",
+            conductor: "ETS",
+            eligibility: "Varies",
+            purpose: "French Proficiency Test",
+          },
+          {
+            name: "DELE",
+            conductor: "Instituto Cervantes",
+            eligibility: "Varies",
+            purpose: "Spanish Proficiency Test",
+          },
+          {
+            name: "TestDaF",
+            conductor: "TestDaF Institute",
+            eligibility: "Varies",
+            purpose: "German Proficiency Test",
+          },
+          {
+            name: "JLPT",
+            conductor: "Japan Foundation",
+            eligibility: "Varies",
+            purpose: "Japanese Proficiency Test",
+          },
+          {
+            name: "HSK",
+            conductor: "Hanban",
+            eligibility: "Varies",
+            purpose: "Chinese Proficiency Test",
+          },
+          {
+            name: "TOPIK",
+            conductor: "NIIED",
+            eligibility: "Varies",
+            purpose: "Korean Proficiency Test",
+          },
+          {
+            name: "DELF/DALF",
+            conductor: "CIEP",
+            eligibility: "Varies",
+            purpose: "French Proficiency Test",
+          },
+          {
+            name: "CELI",
+            conductor: "University of Perugia",
+            eligibility: "Varies",
+            purpose: "Italian Proficiency Test",
+          },
+          {
+            name: "TORFL",
+            conductor: "Russian Ministry of Education",
+            eligibility: "Varies",
+            purpose: "Russian Proficiency Test",
+          },
+          {
+            name: "CPE",
+            conductor: "Cambridge Assessment",
+            eligibility: "Varies",
+            purpose: "English Proficiency Test",
+          },
+          {
+            name: "BEC",
+            conductor: "Cambridge Assessment",
+            eligibility: "Varies",
+            purpose: "Business English Certification",
+          },
+          {
+            name: "IELTS Life Skills",
+            conductor: "British Council",
+            eligibility: "Varies",
+            purpose: "UK Visa English Test",
+          },
+          {
+            name: "STEP",
+            conductor: "University of Cambridge",
+            eligibility: "High School Students",
+            purpose: "Mathematics Admissions Test",
+          },
+        ],
+      };
+
+      function showExamOptions() {
+        const sector = document.getElementById("examSector").value;
+        const examSelect = document.getElementById("exam");
+        const examOptionsDiv = document.getElementById("examOptions");
+
+        // Clear previous options
+        examSelect.innerHTML = '<option value="">-- Select Exam --</option>';
+
+        if (sector) {
+          // Show exam options div
+          examOptionsDiv.style.display = "block";
+
+          // Add new options based on selected sector
+          examData[sector].forEach((exam) => {
+            const option = document.createElement("option");
+            option.value = exam.name;
+            option.textContent = exam.name;
+            examSelect.appendChild(option);
+          });
+        } else {
+          // Hide exam options div if no sector selected
+          examOptionsDiv.style.display = "none";
+        }
+      }
+
+      let selectedExam = null;
+
+      function showExamDetails() {
+        const selectedExamName = document.getElementById("exam").value;
+        const sector = document.getElementById("examSector").value;
+
+        if (selectedExamName && sector) {
+          const exam = examData[sector].find(
+            (e) => e.name === selectedExamName
+          );
+          if (exam) {
+            selectedExam = exam;
+            document.getElementById("modalExamTitle").textContent = exam.name;
+            document.getElementById("modalExamType").textContent =
+              sector.charAt(0).toUpperCase() + sector.slice(1);
+            document.getElementById("modalExamConductor").textContent =
+              exam.conductor;
+            document.getElementById("modalExamEligibility").textContent =
+              exam.eligibility;
+            document.getElementById("modalExamPurpose").textContent =
+              exam.purpose;
+            document.getElementById("selectionModal").style.display = "flex";
+          }
+        } else {
+          alert("Please select both sector and exam");
+        }
+      }
+
+      function closeModal() {
+        document.getElementById("selectionModal").style.display = "none";
+      }
+
+      function selectExam() {
+        if (selectedExam) {
+          alert(
+            `You have selected: ${selectedExam.name}\nWe'll guide you to preparation resources for this exam.`
+          );
+          closeModal();
+          // Here you can add redirection to exam-specific page
+          // window.location.href = `exam_prep.html?exam=${encodeURIComponent(selectedExam.name)}`;
+        }
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("selectionModal");
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
+      function logout() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          user.isLoggedIn = false;
+          localStorage.setItem("trackTitansUser", JSON.stringify(user));
+        }
+        window.location.href = "registation.html";
+      }
+    </script>
+  </body>
+</html>

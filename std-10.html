@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+        background-size: 300% 300%;
+        animation: bgShift 15s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.2s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        color: #4a148c;
+        font-size: 28px;
+        margin-bottom: 30px;
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container {
+        margin-top: 20px;
+      }
+
+      .subject-selection label,
+      .career-info label {
+        display: block;
+        margin: 10px 0;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .question-block {
+        margin-bottom: 25px;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-left: 5px solid #7e57c2;
+        border-radius: 10px;
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #4a148c;
+      }
+
+      .question-block label {
+        margin-left: 10px;
+        display: block;
+        font-size: 15px;
+        padding-left: 10px;
+        font-weight: 500;
+      }
+
+      .result {
+        margin-top: 20px;
+        font-size: 16px;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #ab47bc, #7e57c2);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #7e57c2, #ab47bc);
+        transform: scale(1.03);
+      }
+
+      .career-info {
+        margin-top: 25px;
+        padding: 25px;
+        background: #f3e5f5;
+        border-radius: 15px;
+        border-left: 5px solid #7e57c2;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        color: #6a1b9a;
+      }
+
+      .result-container p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: bold;
+        color: #7e57c2;
+      }
+
+      .improvement-tips {
+        margin-top: 20px;
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #ff9800;
+      }
+
+      .improvement-tips h4 {
+        color: #e65100;
+        margin-top: 0;
+      }
+
+      .improvement-tips ul {
+        padding-left: 20px;
+      }
+
+      .improvement-tips li {
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 500px) {
+        .container {
+          padding: 20px;
+        }
+        button {
+          font-size: 16px;
+        }
+        .navbar {
+          padding: 1px 20px;
+        }
+        .navbar h3 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>Standard 10 - Quiz App</h2>
+
+      <div class="subject-selection">
+        <label><input type="checkbox" value="Gujarati" /> Gujarati</label>
+        <label><input type="checkbox" value="Maths" /> Maths</label>
+        <label><input type="checkbox" value="Hindi" /> Hindi</label>
+        <label><input type="checkbox" value="English" /> English</label>
+        <label><input type="checkbox" value="Science" /> Science</label>
+        <label
+          ><input type="checkbox" value="Social Science" /> Social
+          Science</label
+        >
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const quizData = {
+        Gujarati: [
+          {
+            question: "'વિદ્યાલય' શબ્દનો સંધિ વિભાજન શું છે?",
+            options: ["વિ + દ્યાલય", "વિદ્યા + લય", "વિ +ાલય", "વિદ્ + યાલય"],
+            answer: "વિદ્યા + લય",
+          },
+          {
+            question: "ગુજરાતમાં સૌથી લાંબી નદી કઈ છે?",
+            options: ["નર્મદા", "મહી", "તાપી", "સાબરમતી"],
+            answer: "નર્મદા",
+          },
+          {
+            question: "ગાંધીજીનો જન્મ ક્યાં થયો હતો?",
+            options: ["પોરબંદર", "રાજકોટ", "ભાવનગર", "અમદાવાદ"],
+            answer: "પોરબંદર",
+          },
+          {
+            question: " 'જળ' કયો પ્રકારનો સંજ્ઞા શબ્દ છે?",
+            options: [
+              "જાતિ સંજ્ઞા",
+              "વ્યક્તિ સંજ્ઞા",
+              "સ્થિતિ સંજ્ઞા",
+              "સંદર્ભ સંજ્ઞા",
+            ],
+            answer: "જાતિ સંજ્ઞા",
+          },
+          {
+            question: "ગુજરાતનો લઘુત્તમ તાપમાન ક્યારે નોંધાય છે?",
+            options: ["ડિસેમ્બર", "માર્ચ", "જુલાઈ", "સપ્ટેમ્બર"],
+            answer: "ડિસેમ્બર",
+          },
+        ],
+        Maths: [
+          {
+            question: "What is the value of (a + b)²?",
+            options: [
+              "a² + b²",
+              "a² + b² + 2ab",
+              "a² − b² + 2ab",
+              "a² + b² − 2ab",
+            ],
+            answer: "a² + b² + 2ab",
+          },
+          {
+            question: "What is the square root of 144?",
+            options: ["10", "11", "12", "13"],
+            answer: "12",
+          },
+          {
+            question: "Find the value of: 5³ (5 raised to the power 3)",
+            options: ["25", "50", "100", "125"],
+            answer: "125",
+          },
+          {
+            question: "Square of 5 is?",
+            options: ["10", "25", "20"],
+            answer: "25",
+          },
+          {
+            question: "What is the sum of angles in a triangle?",
+            options: ["180°", "360°", "90°", "150°"],
+            answer: "180°",
+          },
+        ],
+        Hindi: [
+          {
+            question: "भारत की राजधानी क्या है?",
+            options: ["दिल्ली", "मुंबई", "कोलकाता"],
+            answer: "दिल्ली",
+          },
+          {
+            question: "गांधी जी को क्या कहा जाता है?",
+            options: ["राष्ट्रपिता", "प्रधानमंत्री", "राजा"],
+            answer: "राष्ट्रपिता",
+          },
+          {
+            question: "हिंदी दिवस कब मनाया जाता है?",
+            options: ["14 सितंबर", "26 जनवरी", "15 अगस्त"],
+            answer: "14 सितंबर",
+          },
+          {
+            question: "भारत का राष्ट्रीय पक्षी कौन है?",
+            options: ["मोर", "कौवा", "गौरैया"],
+            answer: "मोर",
+          },
+          {
+            question: "स्वतंत्रता दिवस कब होता है?",
+            options: ["15 अगस्त", "26 जनवरी", "2 अक्टूबर"],
+            answer: "15 अगस्त",
+          },
+        ],
+        English: [
+          {
+            question: "What is the opposite of 'Hot'?",
+            options: ["Cold", "Big", "Small", "Small"],
+            answer: "Cold",
+          },
+          {
+            question: "Which is a verb?",
+            options: ["Run", "Table", "Blue", "Pen"],
+            answer: "Run",
+          },
+          {
+            question: "What is the plural of 'Child'?",
+            options: ["Childs", "Children", "Childes", "Childse"],
+            answer: "Children",
+          },
+          {
+            question: "What comes after 'B'?",
+            options: ["C", "D", "E", "A"],
+            answer: "C",
+          },
+          {
+            question: "Which word is a noun?",
+            options: ["Book", "Fast", "Go", "Ready"],
+            answer: "Book",
+          },
+        ],
+        Science: [
+          {
+            question: "Which gas is essential for photosynthesis?",
+            options: ["Oxygen", "Carbon Dioxide", " Nitrogen", "Hydrogen"],
+            answer: "Carbon Dioxide",
+          },
+          {
+            question: "What is the boiling point of water?",
+            options: ["50°C", "90°C", "100°C", "120°C"],
+            answer: "100°C",
+          },
+          {
+            question: "What is H2O commonly known as?",
+            options: ["Oxygen", "Carbon dioxide", "Nitrogen", "water"],
+            answer: "water",
+          },
+          {
+            question: "Which part of the plant conducts photosynthesis?",
+            options: ["Roots", "Flowers", " Leaves", "Stem"],
+            answer: "Leaves",
+          },
+          {
+            question: "Which planet is known for its rings?",
+            options: ["Mars", "Saturn", "Jupiter", "Neptune"],
+            answer: "Saturn",
+          },
+        ],
+        "Social Science": [
+          {
+            question: "Who wrote the Constitution of India?",
+            options: ["B.R. Ambedkar", "Gandhi", "Nehru", "Sardar Patel"],
+            answer: "B.R. Ambedkar",
+          },
+          {
+            question: "Which is the capital of India?",
+            options: ["Delhi", "Mumbai", "Chennai", "Ahmedabed"],
+            answer: "Delhi",
+          },
+          {
+            question: "How many states in India?",
+            options: ["28", "29", "30", "31"],
+            answer: "28",
+          },
+          {
+            question: "Who was the first PM of India?",
+            options: ["Nehru", "Modi", "Gandhi", "Patel"],
+            answer: "Nehru",
+          },
+          {
+            question: "Where is Taj Mahal?",
+            options: ["Agra", "Delhi", "Mumbai", "Pune"],
+            answer: "Agra",
+          },
+        ],
+      };
+
+      const careerMap = {
+        Gujarati: ["Journalism", "Teaching"],
+        Maths: ["Engineering", "Data Science"],
+        Hindi: ["Literature", "Translation"],
+        English: ["Communication", "Writing"],
+        Science: ["Medical", "Engineering"],
+        "Social Science": ["Civil Services", "Law"],
+      };
+
+      const careerDetails = {
+        Engineering: {
+          overview: "Solving technical problems",
+          companies: ["Infosys", "TCS"],
+          jobs: "80%",
+          salary: "₹6–20 LPA",
+        },
+        Medical: {
+          overview: "Health & surgery",
+          companies: ["Apollo", "Fortis"],
+          jobs: "85%",
+          salary: "₹5–25 LPA",
+        },
+        "Civil Services": {
+          overview: "Government administration",
+          companies: ["IAS", "IPS"],
+          jobs: "30%",
+          salary: "₹10–30 LPA",
+        },
+        Law: {
+          overview: "Legal systems & justice",
+          companies: ["High Court", "Firms"],
+          jobs: "60%",
+          salary: "₹6–15 LPA",
+        },
+        Journalism: {
+          overview: "News & media",
+          companies: ["Times Group", "ABP"],
+          jobs: "70%",
+          salary: "₹4–12 LPA",
+        },
+        "Data Science": {
+          overview: "Data analysis & ML",
+          companies: ["Google", "Amazon"],
+          jobs: "90%",
+          salary: "₹10–40 LPA",
+        },
+        Translation: {
+          overview: "Language conversion",
+          companies: ["Translation Firms"],
+          jobs: "50%",
+          salary: "₹3–8 LPA",
+        },
+        Teaching: {
+          overview: "Education & mentoring",
+          companies: ["Schools", "Colleges"],
+          jobs: "80%",
+          salary: "₹3–10 LPA",
+        },
+        Writing: {
+          overview: "Content & copywriting",
+          companies: ["Media", "Ad Agencies"],
+          jobs: "65%",
+          salary: "₹4–10 LPA",
+        },
+        Communication: {
+          overview: "Public relations & media",
+          companies: ["PR Firms", "Companies"],
+          jobs: "70%",
+          salary: "₹5–12 LPA",
+        },
+        Literature: {
+          overview: "Author & researcher",
+          companies: ["Publishers", "Academia"],
+          jobs: "40%",
+          salary: "₹4–9 LPA",
+        },
+      };
+
+      const improvementTips = {
+        Gujarati: [
+          "Practice daily Gujarati grammar exercises",
+          "Read Gujarati newspapers and literature",
+          "Focus on vocabulary building",
+          "Work on sentence formation",
+        ],
+        Maths: [
+          "Practice basic arithmetic daily",
+          "Focus on understanding formulas rather than memorizing",
+          "Solve at least 5 problems daily",
+          "Work on your calculation speed",
+        ],
+        Hindi: [
+          "Read Hindi story books",
+          "Practice Hindi grammar rules",
+          "Watch Hindi news channels",
+          "Write short essays in Hindi",
+        ],
+        English: [
+          "Read English newspapers daily",
+          "Practice grammar exercises",
+          "Build your vocabulary with new words",
+          "Try speaking in English with friends",
+        ],
+        Science: [
+          "Focus on understanding basic concepts",
+          "Create diagrams and flowcharts for biology",
+          "Practice numerical problems in physics",
+          "Make notes of important chemical reactions",
+        ],
+        "Social Science": [
+          "Make timelines for historical events",
+          "Create mind maps for geography concepts",
+          "Relate political science concepts to current affairs",
+          "Practice map work regularly",
+        ],
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${subject} Quiz</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected && selected.value === q.answer) correct++;
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Results</h3>";
+
+        // Track weak subjects (below 40%)
+        const weakSubjects = [];
+
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          resultContainer.innerHTML += `<p><strong>${subject}:</strong> ${score.toFixed(
+            2
+          )}%</p>`;
+          if (score < 40) {
+            weakSubjects.push(subject);
+          }
+        }
+
+        // Add improvement suggestions for weak subjects
+        if (weakSubjects.length > 0) {
+          resultContainer.innerHTML += `
+            <div class="improvement-tips">
+                <h4>Improvement Needed</h4>
+                <p>Your scores in these subjects need attention (below 40%):</p>
+                <ul>
+                    ${weakSubjects
+                      .map(
+                        (subject) => `
+                        <li>
+                            <strong>${subject}:</strong> 
+                            ${improvementTips[subject]
+                              .map((tip) => `<div>• ${tip}</div>`)
+                              .join("")}
+                        </li>
+                    `
+                      )
+                      .join("")}
+                </ul>
+                <p>Consider focusing more on these subjects and practicing regularly.</p>
+            </div>`;
+        }
+
+        const above80Subjects = Object.entries(subjectScores)
+          .filter(([_, score]) => score >= 80)
+          .map(([subject]) => subject);
+
+        resultContainer.innerHTML += `
+        <p>Select subjects to get career suggestions:</p>
+        <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+        <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+        <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+        <div class="career-info" id="careerInfo"></div>
+      `;
+      }
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">Show Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+        <h4>${career}</h4>
+        <p><strong>Overview:</strong> ${details.overview}</p>
+        <p><strong>Top Companies:</strong> ${details.companies.join(", ")}</p>
+        <p><strong>Job Market:</strong> ${details.jobs}</p>
+        <p><strong>Salary:</strong> ${details.salary}</p>
+      `;
+      }
+
+      const initials = user.name
+        .split(" ")
+        .map((word) => word[0])
+        .join("")
+        .toUpperCase();
+
+      document.getElementById("profileCircle").textContent = initials;
+      document.getElementById("profileName").textContent = user.name;
+      document.getElementById("profileEmail").textContent = user.email;
+      document.getElementById("profileAge").textContent =
+        user.age || "Not specified";
+      document.getElementById("profileRole").textContent =
+        user.role || "Student";
+
+      function logout() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          user.isLoggedIn = false;
+          localStorage.setItem("trackTitansUser", JSON.stringify(user));
+        }
+        window.location.href = "registation.html";
+      }
+    </script>
+  </body>
+</html>

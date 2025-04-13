@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B.Tech Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #b3e5fc, #d1c4e9);
+        background-size: 300% 300%;
+        animation: bgShift 15s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #222;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 50px;
+        background-color: #1a237e;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 32px;
+        font-family: "Poppins", sans-serif;
+        letter-spacing: 1px;
+        color: #fff;
+      }
+
+      #img {
+        height: 80px;
+        width: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #0288d1, #7b1fa2);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.2);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        padding: 20px;
+        width: 250px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 8px 0;
+        font-size: 15px;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        animation: fadeIn 1s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        color: #311b92;
+        font-size: 32px;
+        margin-bottom: 40px;
+      }
+
+      .branch-selection,
+      .quiz-container,
+      .result-container,
+      .improvement-container {
+        margin-top: 25px;
+      }
+
+      .branch-selection label,
+      .career-info label {
+        display: block;
+        margin: 12px 0;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #222;
+      }
+
+      .branch-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 12px;
+      }
+
+      .question-block {
+        margin-bottom: 30px;
+        background: #eceff1;
+        padding: 20px 25px;
+        border-left: 6px solid #5e35b1;
+        border-radius: 12px;
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 17px;
+        margin-bottom: 12px;
+        color: #311b92;
+      }
+
+      .question-block label {
+        margin-left: 12px;
+        display: block;
+        font-size: 16px;
+        padding-left: 12px;
+        font-weight: 500;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #7c4dff, #0288d1);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 17px;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: background 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #0288d1, #7c4dff);
+        transform: scale(1.05);
+      }
+
+      .career-info {
+        margin-top: 30px;
+        padding: 30px;
+        background: #e8eaf6;
+        border-radius: 15px;
+        border-left: 6px solid #5e35b1;
+        animation: fadeIn 0.6s ease-in-out;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        color: #4527a0;
+      }
+
+      .result-container p {
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      .improvement-suggestion {
+        background: #fff8e1;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 4px solid #ffa000;
+      }
+
+      .improvement-suggestion h4 {
+        margin-top: 0;
+        color: #e65100;
+      }
+
+      .progress-bar {
+        height: 10px;
+        background: #e0e0e0;
+        border-radius: 5px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4caf50, #8bc34a);
+        border-radius: 5px;
+        transition: width 0.5s ease;
+      }
+
+      .score-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: bold;
+        color: #5e35b1;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 25px;
+        }
+        button {
+          font-size: 15px;
+        }
+        .navbar {
+          padding: 10px 25px;
+        }
+        .navbar h3 {
+          font-size: 26px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>TechQuest</h3>
+      </div>
+
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>B.Tech Engineering Quiz</h2>
+
+      <div class="branch-selection">
+        <label
+          ><input type="checkbox" value="Computer Science" /> Computer
+          Science</label
+        >
+        <label><input type="checkbox" value="Mechanical" /> Mechanical</label>
+        <label><input type="checkbox" value="Electrical" /> Electrical</label>
+        <label><input type="checkbox" value="Civil" /> Civil</label>
+        <label><input type="checkbox" value="Electronics" /> Electronics</label>
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+      <div class="improvement-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const quizData = {
+        "Computer Science": [
+          {
+            question: "What is the time complexity of binary search?",
+            options: ["O(n)", "O(log n)", "O(n²)"],
+            answer: "O(log n)",
+            explanation:
+              "Binary search halves the search space each time, resulting in logarithmic time complexity.",
+          },
+          {
+            question: "Which data structure uses LIFO?",
+            options: ["Queue", "Stack", "Array"],
+            answer: "Stack",
+            explanation:
+              "Stack follows Last-In-First-Out (LIFO) principle while Queue follows First-In-First-Out (FIFO).",
+          },
+          {
+            question: "What does SQL stand for?",
+            options: [
+              "Structured Query Language",
+              "Simple Query Logic",
+              "Standard Queue Language",
+            ],
+            answer: "Structured Query Language",
+            explanation:
+              "SQL is the standard language for relational database management systems.",
+          },
+          {
+            question: "Which is not a programming paradigm?",
+            options: ["Object-Oriented", "Functional", "Database"],
+            answer: "Database",
+            explanation:
+              "Database is a storage system, not a programming paradigm.",
+          },
+          {
+            question: "What is the output of 5 XOR 3?",
+            options: ["6", "7", "2"],
+            answer: "6",
+            explanation: "In binary: 101 XOR 011 = 110 which is 6 in decimal.",
+          },
+        ],
+        Mechanical: [
+          {
+            question: "What is the SI unit of force?",
+            options: ["Newton", "Joule", "Watt"],
+            answer: "Newton",
+            explanation: "Force is measured in Newtons (N) in the SI system.",
+          },
+          {
+            question: "Which law relates stress and strain?",
+            options: ["Newton's Law", "Hooke's Law", "Pascal's Law"],
+            answer: "Hooke's Law",
+            explanation:
+              "Hooke's Law states that stress is proportional to strain within elastic limit.",
+          },
+          {
+            question: "What is the primary source of energy in a steam engine?",
+            options: ["Coal", "Solar", "Wind"],
+            answer: "Coal",
+            explanation:
+              "Steam engines traditionally use coal to heat water and produce steam.",
+          },
+          {
+            question: "What does CNC stand for?",
+            options: [
+              "Computer Numerical Control",
+              "Centralized Network Control",
+              "Composite Numeric Code",
+            ],
+            answer: "Computer Numerical Control",
+            explanation:
+              "CNC machines are automated milling devices that make industrial components.",
+          },
+          {
+            question: "Which material is commonly used for gears?",
+            options: ["Steel", "Plastic", "Wood"],
+            answer: "Steel",
+            explanation:
+              "Steel is preferred for gears due to its strength and durability.",
+          },
+        ],
+        Electrical: [
+          {
+            question: "What is the unit of electrical resistance?",
+            options: ["Ohm", "Volt", "Ampere"],
+            answer: "Ohm",
+            explanation: "Resistance is measured in Ohms (Ω).",
+          },
+          {
+            question: "Which law relates voltage, current, and resistance?",
+            options: ["Ohm's Law", "Faraday's Law", "Kirchhoff's Law"],
+            answer: "Ohm's Law",
+            explanation:
+              "Ohm's Law: V = I × R (Voltage = Current × Resistance).",
+          },
+          {
+            question: "What is the frequency of AC in India?",
+            options: ["50 Hz", "60 Hz", "100 Hz"],
+            answer: "50 Hz",
+            explanation:
+              "India uses 50Hz AC frequency while some countries like USA use 60Hz.",
+          },
+          {
+            question: "What does a transformer do?",
+            options: [
+              "Converts AC to DC",
+              "Steps up/down voltage",
+              "Stores energy",
+            ],
+            answer: "Steps up/down voltage",
+            explanation:
+              "Transformers change voltage levels while maintaining power (ignoring small losses).",
+          },
+          {
+            question: "Which device measures current?",
+            options: ["Ammeter", "Voltmeter", "Ohmmeter"],
+            answer: "Ammeter",
+            explanation:
+              "Ammeter measures current, voltmeter measures voltage, ohmmeter measures resistance.",
+          },
+        ],
+        Civil: [
+          {
+            question: "What is the main component of concrete?",
+            options: ["Cement", "Sand", "Water"],
+            answer: "Cement",
+            explanation:
+              "Cement is the binding material in concrete that holds aggregates together.",
+          },
+          {
+            question: "What does RCC stand for?",
+            options: [
+              "Reinforced Concrete Cement",
+              "Rapid Construction Code",
+              "Rigid Cement Column",
+            ],
+            answer: "Reinforced Concrete Cement",
+            explanation:
+              "RCC combines concrete's compressive strength with steel's tensile strength.",
+          },
+          {
+            question: "Which test measures concrete strength?",
+            options: [
+              "Slump Test",
+              "Compressive Strength Test",
+              "Tensile Test",
+            ],
+            answer: "Compressive Strength Test",
+            explanation:
+              "Concrete is strongest in compression, so this is the standard strength test.",
+          },
+          {
+            question: "What is used to measure land area?",
+            options: ["Theodolite", "Total Station", "Chain"],
+            answer: "Total Station",
+            explanation:
+              "Total Station is an electronic/optical instrument used for surveying.",
+          },
+          {
+            question: "What is the purpose of a retaining wall?",
+            options: ["Support soil", "Decorate", "Insulate"],
+            answer: "Support soil",
+            explanation:
+              "Retaining walls hold back earth to prevent erosion and manage slopes.",
+          },
+        ],
+        Electronics: [
+          {
+            question: "What does LED stand for?",
+            options: [
+              "Light Emitting Diode",
+              "Low Energy Device",
+              "Linear Electric Diode",
+            ],
+            answer: "Light Emitting Diode",
+            explanation:
+              "LEDs are semiconductor light sources that emit light when current flows through them.",
+          },
+          {
+            question: "Which component stores charge?",
+            options: ["Capacitor", "Resistor", "Transistor"],
+            answer: "Capacitor",
+            explanation:
+              "Capacitors store electrical energy in an electric field.",
+          },
+          {
+            question: "What is the function of a diode?",
+            options: [
+              "Amplify signal",
+              "Allow current one way",
+              "Store energy",
+            ],
+            answer: "Allow current one way",
+            explanation:
+              "Diodes are semiconductor devices that allow current to flow in only one direction.",
+          },
+          {
+            question: "What is the base of binary system?",
+            options: ["2", "10", "16"],
+            answer: "2",
+            explanation:
+              "Binary system uses base-2 (0 and 1) unlike decimal which uses base-10.",
+          },
+          {
+            question: "Which gate outputs true only if all inputs are true?",
+            options: ["OR", "AND", "NOT"],
+            answer: "AND",
+            explanation:
+              "AND gate outputs 1 only when all inputs are 1, otherwise outputs 0.",
+          },
+        ],
+      };
+
+      const improvementResources = {
+        "Computer Science": [
+          "Practice data structures on LeetCode or HackerRank",
+          "Learn algorithms from 'Introduction to Algorithms' by Cormen",
+          "Build small projects to apply programming concepts",
+          "Take online courses on Coursera/edX about computer science fundamentals",
+        ],
+        Mechanical: [
+          "Review fundamental mechanics from 'Engineering Mechanics' by R.C. Hibbeler",
+          "Practice solving problems from 'Shigley's Mechanical Engineering Design'",
+          "Watch YouTube channels like 'Lesics' for visual explanations",
+          "Join maker communities to get hands-on experience",
+        ],
+        Electrical: [
+          "Study 'Fundamentals of Electric Circuits' by Alexander and Sadiku",
+          "Practice circuit analysis problems regularly",
+          "Use simulation tools like LTspice for practical understanding",
+          "Follow electrical engineering blogs and forums",
+        ],
+        Civil: [
+          "Review 'Basic Civil Engineering' by S.S. Bhavikatti",
+          "Practice structural analysis problems",
+          "Visit construction sites (with permission) to observe practical applications",
+          "Learn AutoCAD or Revit for civil engineering designs",
+        ],
+        Electronics: [
+          "Study 'Microelectronic Circuits' by Sedra and Smith",
+          "Build simple circuits on breadboards to understand components",
+          "Learn to use circuit simulation software like Proteus",
+          "Follow electronics tutorials on platforms like All About Circuits",
+        ],
+      };
+
+      const careerMap = {
+        "Computer Science": [
+          "Software Development",
+          "Data Science",
+          "Cybersecurity",
+        ],
+        Mechanical: ["Automotive Engineering", "Robotics", "Manufacturing"],
+        Electrical: ["Power Systems", "Renewable Energy", "Control Systems"],
+        Civil: [
+          "Structural Engineering",
+          "Urban Planning",
+          "Construction Management",
+        ],
+        Electronics: ["Embedded Systems", "Telecommunications", "VLSI Design"],
+      };
+
+      const careerDetails = {
+        "Software Development": {
+          overview: "Building applications and systems",
+          companies: ["Microsoft", "Google", "Amazon"],
+          jobs: "95%",
+          salary: "₹8–50 LPA",
+        },
+        "Data Science": {
+          overview: "Analyzing data for insights",
+          companies: ["Meta", "IBM", "Accenture"],
+          jobs: "90%",
+          salary: "₹10–45 LPA",
+        },
+        Cybersecurity: {
+          overview: "Protecting systems from threats",
+          companies: ["Cisco", "Palo Alto", "FireEye"],
+          jobs: "85%",
+          salary: "₹12–40 LPA",
+        },
+        "Automotive Engineering": {
+          overview: "Designing vehicles and components",
+          companies: ["Tata Motors", "BMW", "Tesla"],
+          jobs: "80%",
+          salary: "₹6–25 LPA",
+        },
+        Robotics: {
+          overview: "Developing automated systems",
+          companies: ["Boston Dynamics", "ABB", "Fanuc"],
+          jobs: "75%",
+          salary: "₹8–30 LPA",
+        },
+        Manufacturing: {
+          overview: "Optimizing production processes",
+          companies: ["Siemens", "GE", "L&T"],
+          jobs: "70%",
+          salary: "₹5–20 LPA",
+        },
+        "Power Systems": {
+          overview: "Managing electricity distribution",
+          companies: ["NTPC", "Schneider Electric", "ABB"],
+          jobs: "80%",
+          salary: "₹6–25 LPA",
+        },
+        "Renewable Energy": {
+          overview: "Developing sustainable energy solutions",
+          companies: ["Adani Green", "Siemens Gamesa", "Vestas"],
+          jobs: "85%",
+          salary: "₹7–30 LPA",
+        },
+        "Control Systems": {
+          overview: "Automating industrial processes",
+          companies: ["Honeywell", "Rockwell", "Emerson"],
+          jobs: "75%",
+          salary: "₹6–22 LPA",
+        },
+        "Structural Engineering": {
+          overview: "Designing safe buildings and bridges",
+          companies: ["L&T", "AECOM", "Jacobs"],
+          jobs: "80%",
+          salary: "₹5–20 LPA",
+        },
+        "Urban Planning": {
+          overview: "Developing city infrastructure",
+          companies: ["CBRE", "JLL", "HCP"],
+          jobs: "70%",
+          salary: "₹6–18 LPA",
+        },
+        "Construction Management": {
+          overview: "Overseeing construction projects",
+          companies: ["Shapoorji Pallonji", "DLF", "Turner"],
+          jobs: "75%",
+          salary: "₹6–22 LPA",
+        },
+        "Embedded Systems": {
+          overview: "Designing hardware-software interfaces",
+          companies: ["Intel", "Qualcomm", "NXP"],
+          jobs: "80%",
+          salary: "₹8–35 LPA",
+        },
+        Telecommunications: {
+          overview: "Building communication networks",
+          companies: ["Nokia", "Ericsson", "Jio"],
+          jobs: "75%",
+          salary: "₹6–25 LPA",
+        },
+        "VLSI Design": {
+          overview: "Creating integrated circuits",
+          companies: ["TSMC", "AMD", "Cadence"],
+          jobs: "80%",
+          salary: "₹10–40 LPA",
+        },
+      };
+
+      let selectedBranches = [];
+      let quizIndex = 0;
+      let branchScores = {};
+      let branchAnswers = {};
+
+      function startQuiz() {
+        selectedBranches = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedBranches.length === 0) {
+          alert("Please select at least one branch.");
+          return;
+        }
+
+        document.querySelector(".branch-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        branchScores = {};
+        branchAnswers = {};
+        loadBranchQuiz();
+      }
+
+      function loadBranchQuiz() {
+        const branch = selectedBranches[quizIndex];
+        const questions = quizData[branch].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${branch} Quiz (${quizIndex + 1}/${
+          selectedBranches.length
+        })</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${branch} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const branch = selectedBranches[quizIndex];
+        const questions = quizData[branch].slice(0, 5);
+        let correct = 0;
+
+        // Store user answers for feedback
+        branchAnswers[branch] = [];
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected) {
+            branchAnswers[branch].push({
+              question: q.question,
+              userAnswer: selected.value,
+              correctAnswer: q.answer,
+              explanation: q.explanation,
+              isCorrect: selected.value === q.answer,
+            });
+            if (selected.value === q.answer) correct++;
+          }
+        });
+
+        branchScores[branch] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedBranches.length) {
+          loadBranchQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        const improvementContainer = document.querySelector(
+          ".improvement-container"
+        );
+
+        resultContainer.style.display = "block";
+        improvementContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Your Results</h3>";
+
+        let needsImprovement = [];
+
+        for (const [branch, score] of Object.entries(branchScores)) {
+          // Add progress bar for each branch
+          resultContainer.innerHTML += `
+            <div class="score-label">
+              <span><strong>${branch}:</strong></span>
+              <span>${score.toFixed(2)}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${score}%"></div>
+            </div>
+          `;
+
+          if (score < 80) {
+            needsImprovement.push(branch);
+          }
+        }
+
+        // Show improvement suggestions if any branch is below 80%
+        if (needsImprovement.length > 0) {
+          improvementContainer.innerHTML = `
+            <h3>Areas for Improvement</h3>
+            <p>You scored below 80% in these subjects. Here are some suggestions to improve:</p>
+          `;
+
+          needsImprovement.forEach((branch) => {
+            improvementContainer.innerHTML += `
+              <div class="improvement-suggestion">
+                <h4>${branch}</h4>
+                <p><strong>Resources to improve:</strong></p>
+                <ul>
+                  ${improvementResources[branch]
+                    .map((resource) => `<li>${resource}</li>`)
+                    .join("")}
+                </ul>
+                <button onclick="showDetailedFeedback('${branch}')">See detailed feedback</button>
+              </div>
+            `;
+          });
+
+          improvementContainer.innerHTML += `
+            <p>After reviewing these resources, you can retake the quiz to improve your scores.</p>
+            <button onclick="showCareerOptions()">Continue to Career Suggestions</button>
+          `;
+        } else {
+          improvementContainer.innerHTML = `
+            <p>Great job! You scored 80% or above in all subjects.</p>
+            <button onclick="showCareerOptions()">Continue to Career Suggestions</button>
+          `;
+        }
+      }
+
+      function showDetailedFeedback(branch) {
+        const feedback = branchAnswers[branch];
+        let feedbackHTML = `
+          <h3>Detailed Feedback for ${branch}</h3>
+          <button onclick="showResults()" style="margin-bottom: 20px;">Back to Results</button>
+        `;
+
+        feedback.forEach((item, index) => {
+          feedbackHTML += `
+            <div class="question-block" style="background: ${
+              item.isCorrect ? "#e8f5e9" : "#ffebee"
+            }">
+              <p>Q${index + 1}. ${item.question}</p>
+              <p><strong>Your answer:</strong> ${item.userAnswer} ${
+            item.isCorrect ? "✓" : "✗"
+          }</p>
+              ${
+                !item.isCorrect
+                  ? `<p><strong>Correct answer:</strong> ${item.correctAnswer}</p>`
+                  : ""
+              }
+              <p><strong>Explanation:</strong> ${item.explanation}</p>
+            </div>
+          `;
+        });
+
+        document.querySelector(".improvement-container").innerHTML =
+          feedbackHTML;
+      }
+
+      function showCareerOptions() {
+        document.querySelector(".improvement-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+
+        resultContainer.innerHTML += `
+          <div class="career-info">
+            <h4>Career Path Suggestions</h4>
+            <p>Select branches to consider for career suggestions:</p>
+            <label><input type="radio" name="careerMode" value="all" checked> All Branches</label>
+            <label><input type="radio" name="careerMode" value="above80"> Only Branches where I scored above 80%</label>
+            <button onclick="showCareerSuggestions()">Show Career Options</button>
+            <div id="careerInfo"></div>
+          </div>
+        `;
+      }
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(branchScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([branch]) => branch);
+
+        let careers = new Set();
+        selectedForCareers.forEach((branch) => {
+          (careerMap[branch] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career to explore:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">View Career Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+          <div style="margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 8px;">
+            <h4>${career} Career Path</h4>
+            <p><strong>Overview:</strong> ${details.overview}</p>
+            <p><strong>Top Companies:</strong> ${details.companies.join(
+              ", "
+            )}</p>
+            <p><strong>Job Market Growth:</strong> ${
+              details.jobs
+            } positive outlook</p>
+            <p><strong>Expected Salary Range:</strong> ${details.salary}</p>
+            <button onclick="showCareerSuggestions()">Back to Career List</button>
+          </div>
+        `;
+      }
+    </script>
+  </body>
+</html>

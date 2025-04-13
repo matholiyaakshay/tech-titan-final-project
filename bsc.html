@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B.Sc Science Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #a5f3fc, #fef9d7, #fbcfe8, #d1fae5);
+        background-size: 600% 600%;
+        animation: bgShift 22s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #1e293b;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px 80px;
+        background: linear-gradient(90deg, #0e7490, #083344);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+
+        top: 0;
+        z-index: 100;
+        border-bottom: 4px solid #22d3ee;
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 42px;
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        color: #a5f3fc;
+        letter-spacing: 2.5px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #img {
+        height: 110px;
+        width: auto;
+        border-radius: 25px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        border: 4px solid #67e8f9;
+        transform: rotate(-2deg);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #0891b2, #ec4899);
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-family: "Manrope", sans-serif;
+        font-weight: 600;
+        font-size: 26px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        border: 3px solid #a5f3fc;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 80px;
+        right: 0;
+        background: #fef9d7;
+        border-radius: 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        padding: 30px;
+        width: 300px;
+        display: none;
+        z-index: 10;
+        border: 3px solid #a5b4fc;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 15px 0;
+        font-size: 18px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #164e63;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        animation: fadeIn 1s ease;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          rgba(34, 211, 238, 0.3),
+          transparent
+        );
+        z-index: -1;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(60px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+        font-size: 46px;
+        font-weight: 700;
+        color: #db2777;
+        margin-bottom: 70px;
+        letter-spacing: 1.5px;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container,
+      .improvement-container {
+        margin-top: 40px;
+      }
+
+      .subject-selection label {
+        display: block;
+        margin: 20px 0;
+        font-size: 20px;
+        font-family: "Manrope", sans-serif;
+        font-weight: 600;
+        color: #1d4ed8;
+      }
+
+      .career-info label {
+        display: block;
+        margin: 20px 0;
+        font-size: 19px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #15803d;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 20px;
+        accent-color: #0e7490;
+        transform: scale(1.4);
+        cursor: pointer;
+      }
+
+      .question-block {
+        margin-bottom: 45px;
+        background: #f0fdf4;
+        padding: 35px 40px;
+        border-left: 10px solid #0e7490;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        animation: slideIn 0.6s ease;
+      }
+
+      .question-block:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 20px;
+        font-family: "Space Mono", monospace;
+        color: #7c3aed;
+      }
+
+      .question-block label {
+        margin-left: 20px;
+        display: block;
+        font-size: 19px;
+        padding-left: 20px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #475569;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 20px 45px;
+        background: linear-gradient(135deg, #0e7490, #ec4899);
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 20px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 700;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.12);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+      }
+
+      .career-info {
+        margin-top: 45px;
+        padding: 45px;
+        background: linear-gradient(135deg, #f0f9ff, #fef9d7);
+        border-radius: 30px;
+        border-left: 10px solid #15803d;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.9s ease-in-out;
+        position: relative;
+      }
+
+      .career-info::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        right: 30px;
+        width: 60px;
+        height: 6px;
+        background: #15803d;
+        border-radius: 6px;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 28px;
+        color: #dc2626;
+      }
+
+      .result-container p {
+        font-size: 19px;
+        line-height: 2;
+        font-family: "Roboto", sans-serif;
+        color: #4b5563;
+      }
+
+      .improvement-suggestion {
+        background: #fff8e1;
+        padding: 30px;
+        border-radius: 25px;
+        margin: 25px 0;
+        border-left: 8px solid #f59e0b;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .improvement-suggestion h4 {
+        margin-top: 0;
+        color: #b45309;
+        font-family: "Manrope", sans-serif;
+      }
+
+      .progress-bar {
+        height: 12px;
+        background: #e0e0e0;
+        border-radius: 8px;
+        margin: 15px 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, #34d399);
+        border-radius: 8px;
+        transition: width 0.5s ease;
+      }
+
+      .score-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-family: "Manrope", sans-serif;
+        font-size: 18px;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: 600;
+        color: #f97316;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 40px;
+          margin: 50px 25px;
+        }
+        button {
+          font-size: 18px;
+          padding: 18px 35px;
+        }
+        .navbar {
+          padding: 15px 30px;
+        }
+        .navbar h3 {
+          font-size: 36px;
+        }
+        h2 {
+          font-size: 40px;
+        }
+        .question-block {
+          padding: 30px;
+        }
+        .profile-icon {
+          width: 50px;
+          height: 50px;
+          font-size: 22px;
+        }
+        .profile-dropdown {
+          width: 240px;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>ScienceQuest</h3>
+      </div>
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>B.Sc Science Quiz</h2>
+
+      <div class="subject-selection">
+        <label><input type="checkbox" value="Physics" /> Physics</label>
+        <label><input type="checkbox" value="Chemistry" /> Chemistry</label>
+        <label><input type="checkbox" value="Biology" /> Biology</label>
+        <label><input type="checkbox" value="Mathematics" /> Mathematics</label>
+        <label
+          ><input type="checkbox" value="Computer Science" /> Computer
+          Science</label
+        >
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+      <div class="improvement-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const quizData = {
+        Physics: [
+          {
+            question: "What is Newton's first law of motion?",
+            options: ["Action-reaction", "Inertia", "F=ma"],
+            answer: "Inertia",
+            explanation:
+              "Newton's First Law (Law of Inertia) states that an object will remain at rest or in uniform motion unless acted upon by an external force.",
+          },
+          {
+            question: "What is the SI unit of electric charge?",
+            options: ["Ampere", "Coulomb", "Volt"],
+            answer: "Coulomb",
+            explanation:
+              "The coulomb (symbol: C) is the SI unit of electric charge, named after Charles-Augustin de Coulomb.",
+          },
+          {
+            question: "What does a convex lens do to light?",
+            options: ["Diverges", "Converges", "Reflects"],
+            answer: "Converges",
+            explanation:
+              "A convex lens causes parallel light rays to converge to a focal point, which is why it's called a converging lens.",
+          },
+          {
+            question: "What is the formula for kinetic energy?",
+            options: ["1/2 mv²", "mv", "mgh"],
+            answer: "1/2 mv²",
+            explanation:
+              "Kinetic energy is calculated as half the mass (m) times velocity (v) squared, representing the energy of motion.",
+          },
+          {
+            question: "What is the speed of light in a vacuum?",
+            options: ["3×10⁸ m/s", "3×10⁶ m/s", "3×10¹⁰ m/s"],
+            answer: "3×10⁸ m/s",
+            explanation:
+              "The speed of light in vacuum is exactly 299,792,458 m/s, commonly approximated as 3×10⁸ m/s.",
+          },
+        ],
+        Chemistry: [
+          {
+            question: "What is the atomic number of carbon?",
+            options: ["6", "12", "8"],
+            answer: "6",
+            explanation:
+              "Carbon has 6 protons in its nucleus, giving it an atomic number of 6. The number 12 refers to its atomic mass.",
+          },
+          {
+            question: "What type of bond shares electrons?",
+            options: ["Ionic", "Covalent", "Metallic"],
+            answer: "Covalent",
+            explanation:
+              "Covalent bonds involve sharing of electron pairs between atoms, while ionic bonds involve electron transfer.",
+          },
+          {
+            question: "What is the pH of a neutral solution?",
+            options: ["0", "7", "14"],
+            answer: "7",
+            explanation:
+              "The pH scale runs from 0 (acidic) to 14 (basic), with 7 being neutral (like pure water at 25°C).",
+          },
+          {
+            question: "What gas is most abundant in Earth's atmosphere?",
+            options: ["Oxygen", "Nitrogen", "Carbon dioxide"],
+            answer: "Nitrogen",
+            explanation:
+              "Nitrogen makes up about 78% of Earth's atmosphere, while oxygen is about 21% and CO₂ only about 0.04%.",
+          },
+          {
+            question: "What is Avogadro's number?",
+            options: ["6.022×10²³", "6.626×10⁻³⁴", "9.8 m/s²"],
+            answer: "6.022×10²³",
+            explanation:
+              "Avogadro's number (6.022×10²³) is the number of particles in one mole of a substance, fundamental to chemistry calculations.",
+          },
+        ],
+        Biology: [
+          {
+            question: "What is the powerhouse of the cell?",
+            options: ["Nucleus", "Mitochondria", "Ribosome"],
+            answer: "Mitochondria",
+            explanation:
+              "Mitochondria generate most of the cell's supply of ATP, which is used as a source of chemical energy.",
+          },
+          {
+            question: "What molecule carries genetic information?",
+            options: ["RNA", "DNA", "Protein"],
+            answer: "DNA",
+            explanation:
+              "DNA (deoxyribonucleic acid) contains the genetic instructions used in the development and functioning of all living organisms.",
+          },
+          {
+            question: "What is photosynthesis primarily performed by?",
+            options: ["Chloroplasts", "Mitochondria", "Vacuoles"],
+            answer: "Chloroplasts",
+            explanation:
+              "Chloroplasts contain chlorophyll and are the organelles where photosynthesis occurs in plant cells.",
+          },
+          {
+            question: "What is the human body's largest organ?",
+            options: ["Liver", "Skin", "Lung"],
+            answer: "Skin",
+            explanation:
+              "The skin is the body's largest organ, with an average adult's skin covering about 2 square meters and weighing about 4 kg.",
+          },
+          {
+            question: "What is an ecosystem?",
+            options: [
+              "Single organism",
+              "Community and environment",
+              "Only plants",
+            ],
+            answer: "Community and environment",
+            explanation:
+              "An ecosystem includes all the living organisms (community) in an area interacting with each other and their physical environment.",
+          },
+        ],
+        Mathematics: [
+          {
+            question: "What is the derivative of x²?",
+            options: ["2x", "x²", "2"],
+            answer: "2x",
+            explanation:
+              "Using the power rule, the derivative of x^n is n*x^(n-1). So for x², it's 2x^(2-1) = 2x.",
+          },
+          {
+            question: "What is the value of π (pi) approximately?",
+            options: ["3.14", "2.72", "1.62"],
+            answer: "3.14",
+            explanation:
+              "Pi (π) is approximately 3.14159, often rounded to 3.14. 2.72 is the approximate value of e (Euler's number).",
+          },
+          {
+            question: "What is a matrix?",
+            options: ["Single number", "Array of numbers", "Equation"],
+            answer: "Array of numbers",
+            explanation:
+              "In mathematics, a matrix is a rectangular array of numbers, symbols, or expressions arranged in rows and columns.",
+          },
+          {
+            question: "What is the Pythagorean theorem?",
+            options: ["a² + b² = c²", "a + b = c", "a² - b² = c²"],
+            answer: "a² + b² = c²",
+            explanation:
+              "The Pythagorean theorem relates the sides of a right triangle: the square of the hypotenuse (c) equals the sum of squares of the other two sides (a and b).",
+          },
+          {
+            question: "What is a prime number?",
+            options: ["Divisible by many", "Only two factors", "Even number"],
+            answer: "Only two factors",
+            explanation:
+              "A prime number is a natural number greater than 1 that has exactly two distinct positive divisors: 1 and itself.",
+          },
+        ],
+        "Computer Science": [
+          {
+            question: "What does CPU stand for?",
+            options: [
+              "Central Processing Unit",
+              "Control Program Unit",
+              "Computer Power Unit",
+            ],
+            answer: "Central Processing Unit",
+            explanation:
+              "The CPU is the electronic circuitry that executes instructions comprising a computer program, performing basic arithmetic, logic, controlling, and input/output operations.",
+          },
+          {
+            question: "What is a binary system base?",
+            options: ["10", "2", "16"],
+            answer: "2",
+            explanation:
+              "The binary system is a base-2 number system that uses only two digits: 0 and 1, fundamental to all modern computing.",
+          },
+          {
+            question: "What is an algorithm?",
+            options: [
+              "Hardware component",
+              "Step-by-step procedure",
+              "Programming language",
+            ],
+            answer: "Step-by-step procedure",
+            explanation:
+              "An algorithm is a finite sequence of well-defined instructions, typically used to solve a class of problems or perform a computation.",
+          },
+          {
+            question: "What does HTML stand for?",
+            options: [
+              "HyperText Markup Language",
+              "High-Level Machine Language",
+              "HyperTool Multi Language",
+            ],
+            answer: "HyperText Markup Language",
+            explanation:
+              "HTML is the standard markup language for documents designed to be displayed in a web browser, defining structure and meaning of web content.",
+          },
+          {
+            question: "What is a firewall?",
+            options: ["Network security", "Programming tool", "Database"],
+            answer: "Network security",
+            explanation:
+              "A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.",
+          },
+        ],
+      };
+
+      const improvementResources = {
+        Physics: [
+          "Practice problem-solving from 'University Physics' by Young and Freedman",
+          "Watch MIT OpenCourseWare physics lectures",
+          "Use PhET Interactive Simulations for visual learning",
+          "Join physics forums like Physics Stack Exchange",
+        ],
+        Chemistry: [
+          "Work through 'Chemistry: The Central Science' by Brown et al.",
+          "Practice balancing chemical equations regularly",
+          "Use molecular model kits to visualize structures",
+          "Follow YouTube channels like 'Tyler DeWitt' for clear explanations",
+        ],
+        Biology: [
+          "Study 'Campbell Biology' for comprehensive coverage",
+          "Create concept maps for biological processes",
+          "Use Anki flashcards for memorizing terms",
+          "Watch Crash Course Biology videos",
+        ],
+        Mathematics: [
+          "Solve problems from 'Calculus' by James Stewart",
+          "Practice proofs and problem-solving daily",
+          "Use Wolfram Alpha for step-by-step solutions",
+          "Participate in math Olympiad training",
+        ],
+        "Computer Science": [
+          "Practice coding on platforms like LeetCode and HackerRank",
+          "Build small projects to apply concepts",
+          "Read 'Introduction to Algorithms' by Cormen et al.",
+          "Follow CS50 by Harvard for fundamentals",
+        ],
+      };
+
+      const careerMap = {
+        Physics: ["Astrophysics", "Nuclear Physics", "Engineering"],
+        Chemistry: [
+          "Pharmaceutical Research",
+          "Chemical Engineering",
+          "Analytical Chemistry",
+        ],
+        Biology: ["Biotechnology", "Environmental Science", "Medical Research"],
+        Mathematics: ["Data Science", "Actuarial Science", "Cryptography"],
+        "Computer Science": [
+          "Software Development",
+          "AI Research",
+          "Cybersecurity",
+        ],
+      };
+
+      const careerDetails = {
+        Astrophysics: {
+          overview: "Studying celestial bodies and phenomena",
+          institutions: ["ISRO", "TIFR", "NASA"],
+          demand: "70%",
+          salary: "₹8–30 LPA",
+        },
+        "Nuclear Physics": {
+          overview: "Researching atomic nuclei and energy",
+          institutions: ["BARC", "DRDO", "CERN"],
+          demand: "65%",
+          salary: "₹10–35 LPA",
+        },
+        Engineering: {
+          overview: "Applying physics to design systems",
+          institutions: ["IITs", "L&T", "Tesla"],
+          demand: "85%",
+          salary: "₹6–40 LPA",
+        },
+        "Pharmaceutical Research": {
+          overview: "Developing new drugs",
+          institutions: ["Cipla", "Pfizer", "Sun Pharma"],
+          demand: "80%",
+          salary: "₹7–30 LPA",
+        },
+        "Chemical Engineering": {
+          overview: "Designing chemical processes",
+          institutions: ["Reliance", "ONGC", "BASF"],
+          demand: "80%",
+          salary: "₹6–35 LPA",
+        },
+        "Analytical Chemistry": {
+          overview: "Analyzing material properties",
+          institutions: ["SRL Diagnostics", "CSIR", "Eurofins"],
+          demand: "75%",
+          salary: "₹5–25 LPA",
+        },
+        Biotechnology: {
+          overview: "Engineering biological systems",
+          institutions: ["Biocon", "Bharat Biotech", "IISc"],
+          demand: "85%",
+          salary: "₹6–30 LPA",
+        },
+        "Environmental Science": {
+          overview: "Studying ecosystems and sustainability",
+          institutions: ["TERI", "WWF", "NEERI"],
+          demand: "80%",
+          salary: "₹5–25 LPA",
+        },
+        "Medical Research": {
+          overview: "Advancing health sciences",
+          institutions: ["ICMR", "AIIMS", "WHO"],
+          demand: "80%",
+          salary: "₹6–30 LPA",
+        },
+        "Data Science": {
+          overview: "Analyzing data for insights",
+          institutions: ["Google", "Amazon", "Mu Sigma"],
+          demand: "90%",
+          salary: "₹8–50 LPA",
+        },
+        "Actuarial Science": {
+          overview: "Assessing financial risks",
+          institutions: ["LIC", "HDFC Ergo", "Swiss Re"],
+          demand: "75%",
+          salary: "₹7–30 LPA",
+        },
+        Cryptography: {
+          overview: "Securing digital information",
+          institutions: ["DRDO", "Microsoft", "IBM"],
+          demand: "70%",
+          salary: "₹8–35 LPA",
+        },
+        "Software Development": {
+          overview: "Building applications and systems",
+          institutions: ["TCS", "Infosys", "Meta"],
+          demand: "95%",
+          salary: "₹6–60 LPA",
+        },
+        "AI Research": {
+          overview: "Developing intelligent systems",
+          institutions: ["DeepMind", "NVIDIA", "IITs"],
+          demand: "85%",
+          salary: "₹10–50 LPA",
+        },
+        Cybersecurity: {
+          overview: "Protecting digital infrastructure",
+          institutions: ["Palo Alto", "CISCO", "Quick Heal"],
+          demand: "90%",
+          salary: "₹8–40 LPA",
+        },
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+      let subjectAnswers = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        subjectAnswers = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${subject} Quiz (${quizIndex + 1}/${
+          selectedSubjects.length
+        })</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        // Store user answers for feedback
+        subjectAnswers[subject] = [];
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected) {
+            subjectAnswers[subject].push({
+              question: q.question,
+              userAnswer: selected.value,
+              correctAnswer: q.answer,
+              explanation: q.explanation,
+              isCorrect: selected.value === q.answer,
+            });
+            if (selected.value === q.answer) correct++;
+          }
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        const improvementContainer = document.querySelector(
+          ".improvement-container"
+        );
+
+        resultContainer.style.display = "block";
+        improvementContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Your Results</h3>";
+
+        let needsImprovement = [];
+
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          // Add progress bar for each subject
+          resultContainer.innerHTML += `
+            <div class="score-label">
+              <span><strong>${subject}:</strong></span>
+              <span>${score.toFixed(2)}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${score}%"></div>
+            </div>
+          `;
+
+          if (score < 80) {
+            needsImprovement.push(subject);
+          }
+        }
+
+        // Show improvement suggestions if any subject is below 80%
+        if (needsImprovement.length > 0) {
+          improvementContainer.innerHTML = `
+            <h3>Areas for Improvement</h3>
+            <p>You scored below 80% in these subjects. Here are some suggestions to improve:</p>
+          `;
+
+          needsImprovement.forEach((subject) => {
+            improvementContainer.innerHTML += `
+              <div class="improvement-suggestion">
+                <h4>${subject}</h4>
+                <p><strong>Resources to improve:</strong></p>
+                <ul>
+                  ${improvementResources[subject]
+                    .map((resource) => `<li>${resource}</li>`)
+                    .join("")}
+                </ul>
+                <button onclick="showDetailedFeedback('${subject}')">See detailed feedback</button>
+              </div>
+            `;
+          });
+
+          improvementContainer.innerHTML += `
+            <p>After reviewing these resources, you can retake the quiz to improve your scores.</p>
+            <button onclick="showCareerOptions()">Continue to Career Suggestions</button>
+          `;
+        } else {
+          improvementContainer.innerHTML = `
+            <p>Great job! You scored 80% or above in all subjects.</p>
+            <button onclick="showCareerOptions()">Continue to Career Suggestions</button>
+          `;
+        }
+      }
+
+      function showDetailedFeedback(subject) {
+        const feedback = subjectAnswers[subject];
+        let feedbackHTML = `
+          <h3>Detailed Feedback for ${subject}</h3>
+          <button onclick="showResults()" style="margin-bottom: 20px;">Back to Results</button>
+        `;
+
+        feedback.forEach((item, index) => {
+          feedbackHTML += `
+            <div class="question-block" style="background: ${
+              item.isCorrect ? "#e8f5e9" : "#ffebee"
+            }">
+              <p>Q${index + 1}. ${item.question}</p>
+              <p><strong>Your answer:</strong> ${item.userAnswer} ${
+            item.isCorrect ? "✓" : "✗"
+          }</p>
+              ${
+                !item.isCorrect
+                  ? `<p><strong>Correct answer:</strong> ${item.correctAnswer}</p>`
+                  : ""
+              }
+              <p><strong>Explanation:</strong> ${item.explanation}</p>
+            </div>
+          `;
+        });
+
+        document.querySelector(".improvement-container").innerHTML =
+          feedbackHTML;
+      }
+
+      function showCareerOptions() {
+        document.querySelector(".improvement-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+
+        resultContainer.innerHTML += `
+          <div class="career-info">
+            <h4>Career Path Suggestions</h4>
+            <p>Select subjects to consider for career suggestions:</p>
+            <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+            <label><input type="radio" name="careerMode" value="above80"> Only Subjects where I scored above 80%</label>
+            <button onclick="showCareerSuggestions()">Show Career Options</button>
+            <div id="careerInfo"></div>
+          </div>
+        `;
+      }
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career to explore:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">View Career Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+          <div style="margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 8px;">
+            <h4>${career} Career Path</h4>
+            <p><strong>Overview:</strong> ${details.overview}</p>
+            <p><strong>Top Institutions:</strong> ${details.institutions.join(
+              ", "
+            )}</p>
+            <p><strong>Job Market Growth:</strong> ${
+              details.demand
+            } positive outlook</p>
+            <p><strong>Expected Salary Range:</strong> ${details.salary}</p>
+            <button onclick="showCareerSuggestions()">Back to Career List</button>
+          </div>
+        `;
+      }
+    </script>
+  </body>
+</html>

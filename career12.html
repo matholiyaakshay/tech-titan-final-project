@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+        background-size: 300% 300%;
+        animation: bgShift 15s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.2s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        color: #4a148c;
+        font-size: 28px;
+        margin-bottom: 30px;
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container {
+        margin-top: 20px;
+      }
+
+      .subject-selection label,
+      .career-info label {
+        display: block;
+        margin: 10px 0;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .question-block {
+        margin-bottom: 25px;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-left: 5px solid #7e57c2;
+        border-radius: 10px;
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #4a148c;
+      }
+
+      .question-block label {
+        margin-left: 10px;
+        display: block;
+        font-size: 15px;
+        padding-left: 10px;
+        font-weight: 500;
+      }
+
+      .result {
+        margin-top: 20px;
+        font-size: 16px;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 14px 25px;
+        background: linear-gradient(135deg, #ab47bc, #7e57c2);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #7e57c2, #ab47bc);
+        transform: scale(1.03);
+      }
+
+      .career-info {
+        margin-top: 25px;
+        padding: 25px;
+        background: #f3e5f5;
+        border-radius: 15px;
+        border-left: 5px solid #7e57c2;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        color: #6a1b9a;
+      }
+
+      .result-container p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: bold;
+        color: #7e57c2;
+      }
+
+      @media (max-width: 500px) {
+        .container {
+          padding: 20px;
+        }
+        button {
+          font-size: 16px;
+        }
+        .navbar {
+          padding: 1px 20px;
+        }
+        .navbar h3 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>Standard 12 - Quiz App</h2>
+
+      <div class="subject-selection">
+        <label><input type="checkbox" value="Physics" /> Physics</label>
+        <label><input type="checkbox" value="Chemistry" /> Chemistry</label>
+        <label><input type="checkbox" value="Biology" /> Biology</label>
+        <label><input type="checkbox" value="Mathematics" /> Mathematics</label>
+        <label><input type="checkbox" value="Accountancy" /> Accountancy</label>
+        <label><input type="checkbox" value="Economics" /> Economics</label>
+        <label
+          ><input type="checkbox" value="Business Studies" /> Business
+          Studies</label
+        >
+        <label
+          ><input type="checkbox" value="Computer Science" /> Computer
+          Science</label
+        >
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const quizData = {
+        Physics: [
+          {
+            question:
+              "Which law states that the force between two charges is directly proportional to the product of their charges and inversely proportional to the square of the distance between them?",
+            options: ["Ohm's Law", "Coulomb's Law", "Newton's Law"],
+            answer: "Coulomb's Law",
+          },
+          {
+            question: "What is the SI unit of electric current?",
+            options: ["Volt", "Ampere", "Ohm"],
+            answer: "Ampere",
+          },
+          {
+            question:
+              "Which phenomenon explains the splitting of white light into its constituent colors?",
+            options: ["Reflection", "Refraction", "Dispersion"],
+            answer: "Dispersion",
+          },
+          {
+            question: "The time period of a simple pendulum depends on:",
+            options: ["Its mass", "Its length", "Both mass and length"],
+            answer: "Its length",
+          },
+          {
+            question: "Which of the following is a vector quantity?",
+            options: ["Speed", "Distance", "Displacement"],
+            answer: "Displacement",
+          },
+        ],
+        Chemistry: [
+          {
+            question: "What is the pH value of pure water?",
+            options: ["5", "7", "9"],
+            answer: "7",
+          },
+          {
+            question: "Which gas is known as laughing gas?",
+            options: ["Nitrogen dioxide", "Nitrous oxide", "Nitric oxide"],
+            answer: "Nitrous oxide",
+          },
+          {
+            question:
+              "The process of conversion of a solid directly into gas is called:",
+            options: ["Sublimation", "Evaporation", "Condensation"],
+            answer: "Sublimation",
+          },
+          {
+            question: "Which element has the atomic number 1?",
+            options: ["Helium", "Hydrogen", "Oxygen"],
+            answer: "Hydrogen",
+          },
+          {
+            question: "What is the chemical formula of common salt?",
+            options: ["NaCl", "NaOH", "Na2CO3"],
+            answer: "NaCl",
+          },
+        ],
+        Biology: [
+          {
+            question: "Which organelle is known as the powerhouse of the cell?",
+            options: ["Nucleus", "Mitochondria", "Ribosome"],
+            answer: "Mitochondria",
+          },
+          {
+            question: "Photosynthesis occurs in which part of the plant cell?",
+            options: ["Chloroplast", "Mitochondria", "Nucleus"],
+            answer: "Chloroplast",
+          },
+          {
+            question: "Which blood group is known as the universal donor?",
+            options: ["A", "B", "O"],
+            answer: "O",
+          },
+          {
+            question: "The study of fossils is called:",
+            options: ["Paleontology", "Archaeology", "Geology"],
+            answer: "Paleontology",
+          },
+          {
+            question:
+              "Which vitamin is produced by the human body when exposed to sunlight?",
+            options: ["Vitamin A", "Vitamin C", "Vitamin D"],
+            answer: "Vitamin D",
+          },
+        ],
+        Mathematics: [
+          {
+            question: "What is the derivative of sin(x)?",
+            options: ["cos(x)", "-cos(x)", "tan(x)"],
+            answer: "cos(x)",
+          },
+          {
+            question: "What is the value of π (pi) approximately?",
+            options: ["3.14", "2.71", "1.61"],
+            answer: "3.14",
+          },
+          {
+            question:
+              "In a right-angled triangle, the side opposite to the right angle is called:",
+            options: ["Perpendicular", "Base", "Hypotenuse"],
+            answer: "Hypotenuse",
+          },
+          {
+            question: "What is the value of log₁₀100?",
+            options: ["1", "2", "10"],
+            answer: "2",
+          },
+          {
+            question: "The sum of angles in a triangle is:",
+            options: ["90°", "180°", "360°"],
+            answer: "180°",
+          },
+        ],
+        Accountancy: [
+          {
+            question:
+              "Which accounting principle states that revenue should be recognized when earned?",
+            options: [
+              "Matching Principle",
+              "Revenue Recognition Principle",
+              "Cost Principle",
+            ],
+            answer: "Revenue Recognition Principle",
+          },
+          {
+            question: "What is the accounting equation?",
+            options: [
+              "Assets = Liabilities + Equity",
+              "Profit = Revenue - Expenses",
+              "Both of these",
+            ],
+            answer: "Assets = Liabilities + Equity",
+          },
+          {
+            question:
+              "Which financial statement shows the financial position of a business at a point in time?",
+            options: [
+              "Income Statement",
+              "Balance Sheet",
+              "Cash Flow Statement",
+            ],
+            answer: "Balance Sheet",
+          },
+          {
+            question: "Debit means:",
+            options: [
+              "Left side of an account",
+              "Right side of an account",
+              "Increase in an account",
+            ],
+            answer: "Left side of an account",
+          },
+          {
+            question:
+              "Which account is not closed at the end of the accounting period?",
+            options: ["Revenue", "Expense", "Asset"],
+            answer: "Asset",
+          },
+        ],
+        Economics: [
+          {
+            question: "What does GDP stand for?",
+            options: [
+              "Gross Domestic Product",
+              "General Domestic Price",
+              "Goods Distribution Process",
+            ],
+            answer: "Gross Domestic Product",
+          },
+          {
+            question: "Which of these is not a factor of production?",
+            options: ["Land", "Labor", "Money"],
+            answer: "Money",
+          },
+          {
+            question: "Inflation refers to:",
+            options: [
+              "Increase in prices",
+              "Decrease in prices",
+              "Stability in prices",
+            ],
+            answer: "Increase in prices",
+          },
+          {
+            question: "The central bank of India is:",
+            options: ["SBI", "RBI", "PNB"],
+            answer: "RBI",
+          },
+          {
+            question:
+              "Which economic system is characterized by private ownership of resources?",
+            options: ["Capitalism", "Socialism", "Communism"],
+            answer: "Capitalism",
+          },
+        ],
+        "Business Studies": [
+          {
+            question: "Which of these is not a function of management?",
+            options: ["Planning", "Staffing", "Selling"],
+            answer: "Selling",
+          },
+          {
+            question: "SWOT analysis stands for:",
+            options: [
+              "Strengths, Weaknesses, Opportunities, Threats",
+              "Sales, Workers, Operations, Technology",
+              "None of these",
+            ],
+            answer: "Strengths, Weaknesses, Opportunities, Threats",
+          },
+          {
+            question:
+              "The process of finding and attracting capable applicants for employment is called:",
+            options: ["Selection", "Recruitment", "Training"],
+            answer: "Recruitment",
+          },
+          {
+            question: "Which of these is not a type of business organization?",
+            options: ["Sole Proprietorship", "Partnership", "Department"],
+            answer: "Department",
+          },
+          {
+            question: "The 4Ps of marketing are:",
+            options: [
+              "Product, Price, Place, Promotion",
+              "People, Process, Physical Evidence, Promotion",
+              "Profit, Production, Planning, Promotion",
+            ],
+            answer: "Product, Price, Place, Promotion",
+          },
+        ],
+        "Computer Science": [
+          {
+            question: "Which language is understood directly by the computer?",
+            options: ["Java", "Python", "Machine Language"],
+            answer: "Machine Language",
+          },
+          {
+            question: "What does CPU stand for?",
+            options: [
+              "Central Processing Unit",
+              "Computer Processing Unit",
+              "Central Program Unit",
+            ],
+            answer: "Central Processing Unit",
+          },
+          {
+            question: "Which of these is not a programming language?",
+            options: ["HTML", "Java", "Photoshop"],
+            answer: "Photoshop",
+          },
+          {
+            question: "What is the binary equivalent of decimal 10?",
+            options: ["1010", "1001", "1100"],
+            answer: "1010",
+          },
+          {
+            question: "Which protocol is used to send emails?",
+            options: ["HTTP", "FTP", "SMTP"],
+            answer: "SMTP",
+          },
+        ],
+      };
+
+      const careerMap = {
+        Physics: ["Engineering", "Astrophysics"],
+        Chemistry: ["Chemical Engineering", "Pharmacy"],
+        Biology: ["Medical", "Biotechnology"],
+        Mathematics: ["Data Science", "Actuarial Science"],
+        Accountancy: ["Chartered Accountancy", "Financial Analyst"],
+        Economics: ["Economist", "Investment Banking"],
+        "Business Studies": ["Business Management", "Entrepreneurship"],
+        "Computer Science": ["Software Engineering", "AI Specialist"],
+      };
+
+      const careerDetails = {
+        Engineering: {
+          overview: "Design and build structures, machines, and systems",
+          companies: ["L&T", "TATA", "Infosys"],
+          jobs: "85%",
+          salary: "₹6–25 LPA",
+        },
+        Astrophysics: {
+          overview: "Study celestial objects and phenomena",
+          companies: ["ISRO", "NASA", "Research Institutes"],
+          jobs: "40%",
+          salary: "₹5–15 LPA",
+        },
+        "Chemical Engineering": {
+          overview: "Design chemical manufacturing processes",
+          companies: ["Reliance", "BASF", "Dow Chemical"],
+          jobs: "75%",
+          salary: "₹5–20 LPA",
+        },
+        Pharmacy: {
+          overview: "Prepare and dispense medications",
+          companies: ["Apollo", "Cipla", "Sun Pharma"],
+          jobs: "80%",
+          salary: "₹4–12 LPA",
+        },
+        Medical: {
+          overview: "Diagnose and treat medical conditions",
+          companies: ["Hospitals", "Research Centers", "Clinics"],
+          jobs: "90%",
+          salary: "₹8–30 LPA",
+        },
+        Biotechnology: {
+          overview: "Develop biological products and technologies",
+          companies: ["Biocon", "Serum Institute", "Dr. Reddy's"],
+          jobs: "70%",
+          salary: "₹5–18 LPA",
+        },
+        "Data Science": {
+          overview: "Analyze and interpret complex data",
+          companies: ["Google", "Amazon", "Microsoft"],
+          jobs: "95%",
+          salary: "₹10–40 LPA",
+        },
+        "Actuarial Science": {
+          overview: "Assess financial risks using mathematics",
+          companies: ["Insurance Companies", "Banks", "Consulting Firms"],
+          jobs: "65%",
+          salary: "₹8–25 LPA",
+        },
+        "Chartered Accountancy": {
+          overview: "Financial accounting and auditing",
+          companies: ["Big 4 Firms", "Banks", "Corporations"],
+          jobs: "85%",
+          salary: "₹7–30 LPA",
+        },
+        "Financial Analyst": {
+          overview: "Guide businesses in financial decisions",
+          companies: ["Investment Banks", "Mutual Funds", "Corporate Finance"],
+          jobs: "75%",
+          salary: "₹6–20 LPA",
+        },
+        Economist: {
+          overview: "Analyze economic data and trends",
+          companies: ["RBI", "World Bank", "Think Tanks"],
+          jobs: "60%",
+          salary: "₹5–15 LPA",
+        },
+        "Investment Banking": {
+          overview: "Help companies raise capital",
+          companies: ["Goldman Sachs", "Morgan Stanley", "JP Morgan"],
+          jobs: "70%",
+          salary: "₹12–50 LPA",
+        },
+        "Business Management": {
+          overview: "Oversee business operations",
+          companies: ["All Major Corporations", "Startups", "MNCs"],
+          jobs: "80%",
+          salary: "₹5–25 LPA",
+        },
+        Entrepreneurship: {
+          overview: "Start and run your own business",
+          companies: ["Your Own Company", "Startups"],
+          jobs: "Varies",
+          salary: "Varies",
+        },
+        "Software Engineering": {
+          overview: "Develop computer programs and systems",
+          companies: ["Google", "Microsoft", "TCS"],
+          jobs: "90%",
+          salary: "₹8–35 LPA",
+        },
+        "AI Specialist": {
+          overview: "Develop artificial intelligence systems",
+          companies: ["Tech Giants", "Research Labs", "Startups"],
+          jobs: "85%",
+          salary: "₹12–50 LPA",
+        },
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${subject} Quiz</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected && selected.value === q.answer) correct++;
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Results</h3>";
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          resultContainer.innerHTML += `<p><strong>${subject}:</strong> ${score.toFixed(
+            2
+          )}%</p>`;
+        }
+
+        const weakSubjects = Object.entries(subjectScores)
+          .filter(([_, score]) => score < 80)
+          .map(([subject]) => subject);
+
+        resultContainer.innerHTML += `
+        <p>Select subjects to get career suggestions:</p>
+        <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+        <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+        <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+        <div class="career-info" id="careerInfo"></div>
+      `;
+      }
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">Show Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+        <h4>${career}</h4>
+        <p><strong>Overview:</strong> ${details.overview}</p>
+        <p><strong>Top Companies:</strong> ${details.companies.join(", ")}</p>
+        <p><strong>Job Market:</strong> ${details.jobs}</p>
+        <p><strong>Salary:</strong> ${details.salary}</p>
+      `;
+      }
+    </script>
+  </body>
+</html>

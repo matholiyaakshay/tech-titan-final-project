@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Track Titans - Register / Login</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(270deg, #e0f7fa, #e3f2fd, #ede7f6, #f3e5f5);
+        background-size: 800% 800%;
+        animation: professionalGradient 30s ease infinite;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      @keyframes professionalGradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 70px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .main-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        padding: 40px 20px;
+      }
+
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      h2 {
+        text-align: center;
+        color: #1e3a8a;
+        margin-bottom: 25px;
+      }
+
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #2563eb;
+        color: white;
+        font-weight: bold;
+        border: none;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #1d4ed8;
+      }
+
+      .toggle-text {
+        margin-top: 15px;
+        text-align: center;
+        color: #2563eb;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .section-title {
+        font-weight: bold;
+        margin-top: 10px;
+        color: #475569;
+      }
+      
+      .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        #name {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <a href="main.html"><img src="img.png" id="img" /></a>
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <div class="profile-container">
+        <div class="profile-icon" id="profileCircle">?</div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="container">
+        <h2>Registration Form</h2>
+
+        <!-- Registration Section -->
+        <div id="registerSection">
+          Name
+          <input type="text" id="regName" placeholder="Enter Name" required />
+          <div id="nameError" class="error"></div>
+          
+          Email
+          <input type="email" id="regEmail" placeholder="Email" required />
+          <div id="emailError" class="error"></div>
+          
+          Password
+          <input type="password" id="regPass" placeholder="Password" required />
+          <div id="passError" class="error"></div>
+          
+          Age
+          <input type="number" id="regAge" placeholder="Age" required />
+          <div id="ageError" class="error"></div>
+          
+          <button id="registerBtn">Register</button>
+          <div class="toggle-text" onclick="toggleForm('login')">
+            Already have an account? Login
+          </div>
+        </div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="hidden">
+          <div class="section-title">Login (Existing User)</div>
+          Email
+          <input type="email" id="loginEmail" placeholder="Enter your email" required />
+          <div id="loginEmailError" class="error"></div>
+          
+          Password
+          <input type="password" id="loginPassword" placeholder="Enter your password" required />
+          <div id="loginPassError" class="error"></div>
+          
+          <button id="loginBtn">Login</button>
+          <div class="toggle-text" onclick="toggleForm('register')">
+            New user? Register here
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // DOM elements
+      const registerBtn = document.getElementById('registerBtn');
+      const loginBtn = document.getElementById('loginBtn');
+      
+      // Toggle between forms
+      function toggleForm(formType) {
+        const register = document.getElementById("registerSection");
+        const login = document.getElementById("loginSection");
+
+        if (formType === "login") {
+          register.classList.add("hidden");
+          login.classList.remove("hidden");
+        } else {
+          login.classList.add("hidden");
+          register.classList.remove("hidden");
+        }
+      }
+
+      // Clear error messages
+      function clearErrors() {
+        const errors = document.querySelectorAll('.error');
+        errors.forEach(error => error.textContent = '');
+      }
+
+      // Register user function
+      function registerUser() {
+        clearErrors();
+        
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPass").value;
+        const age = document.getElementById("regAge").value;
+        
+        // Validation
+        let isValid = true;
+        
+        if (!name) {
+          document.getElementById("nameError").textContent = "Name is required";
+          isValid = false;
+        }
+        
+        if (!email) {
+          document.getElementById("emailError").textContent = "Email is required";
+          isValid = false;
+        } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+          document.getElementById("emailError").textContent = "Invalid email format";
+          isValid = false;
+        }
+        
+        if (!password) {
+          document.getElementById("passError").textContent = "Password is required";
+          isValid = false;
+        } else if (password.length < 6) {
+          document.getElementById("passError").textContent = "Password must be at least 6 characters";
+          isValid = false;
+        }
+        
+        if (!age) {
+          document.getElementById("ageError").textContent = "Age is required";
+          isValid = false;
+        } else if (age < 13) {
+          document.getElementById("ageError").textContent = "You must be at least 13 years old";
+          isValid = false;
+        }
+        
+        if (!isValid) return;
+        
+        // Create user object
+        const userData = { 
+          name, 
+          email, 
+          password,
+          age: parseInt(age),
+          role: "Student",
+          isLoggedIn: true
+        };
+        
+        // Store user data
+        localStorage.setItem("trackTitansUser", JSON.stringify(userData));
+        
+        // Redirect to main page
+        window.location.href = "main.html";
+      }
+
+      // Login user function
+      function loginUser() {
+        clearErrors();
+        
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        
+        // Validation
+        let isValid = true;
+        
+        if (!email) {
+          document.getElementById("loginEmailError").textContent = "Email is required";
+          isValid = false;
+        }
+        
+        if (!password) {
+          document.getElementById("loginPassError").textContent = "Password is required";
+          isValid = false;
+        }
+        
+        if (!isValid) return;
+        
+        const userData = JSON.parse(localStorage.getItem("trackTitansUser"));
+        
+        if (!userData) {
+          alert("No registered users found. Please register first.");
+          toggleForm('register');
+          return;
+        }
+        
+        if (userData.email === email && userData.password === password) {
+          // Update login status
+          userData.isLoggedIn = true;
+          localStorage.setItem("trackTitansUser", JSON.stringify(userData));
+          
+          // Redirect to main page
+          window.location.href = "main.html";
+        } else {
+          alert("Invalid email or password");
+        }
+      }
+
+      // Check if user is already logged in
+      function checkLoginStatus() {
+        const userData = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (userData && userData.isLoggedIn) {
+         
+        }
+      }
+
+      // Event listeners
+      registerBtn.addEventListener('click', registerUser);
+      loginBtn.addEventListener('click', loginUser);
+
+      // Check login status when page loads
+      window.addEventListener('DOMContentLoaded', checkLoginStatus);
+    </script>
+  </body>
+</html>

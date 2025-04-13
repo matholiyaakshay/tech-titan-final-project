@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MBBS/BDS Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #e0f7fa, #f3e5f5, #fff3e0);
+        background-size: 400% 400%;
+        animation: bgShift 18s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #1e1e1e;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 50px;
+        background: linear-gradient(90deg, #006064, #00363a);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 34px;
+        font-family: "Lora", serif;
+        font-weight: 600;
+        color: #80d8ff;
+        letter-spacing: 1.2px;
+      }
+
+      #img {
+        height: 85px;
+        width: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 2px solid #b2ebf2;
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #0097a7, #d81b60);
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 18px;
+        width: 240px;
+        display: none;
+        z-index: 10;
+        border: 1px solid #e0f7fa;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 8px 0;
+        font-size: 15px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #004d40;
+      }
+
+      .container {
+        max-width: 1050px;
+        margin: 50px auto;
+        background: #fafafa;
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease;
+        border: 1px solid #e0e0e0;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+        font-size: 36px;
+        font-weight: 700;
+        color: #ad1457;
+        margin-bottom: 40px;
+        letter-spacing: 0.5px;
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container {
+        margin-top: 25px;
+      }
+
+      .subject-selection label {
+        display: block;
+        margin: 12px 0;
+        font-size: 17px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        color: #1565c0;
+      }
+
+      .career-info label {
+        display: block;
+        margin: 12px 0;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #2e7d32;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 12px;
+        accent-color: #00838f;
+        transform: scale(1.15);
+      }
+
+      .question-block {
+        margin-bottom: 30px;
+        background: #f5f5f5;
+        padding: 20px 25px;
+        border-left: 6px solid #00838f;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 17px;
+        margin-bottom: 12px;
+        font-family: "Lora", serif;
+        color: #6a1b9a;
+      }
+
+      .question-block label {
+        margin-left: 12px;
+        display: block;
+        font-size: 16px;
+        padding-left: 12px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #424242;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #0097a7, #d81b60);
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 17px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .career-info {
+        margin-top: 30px;
+        padding: 30px;
+        background: #e8f5e9;
+        border-radius: 15px;
+        border-left: 6px solid #2e7d32;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        animation: fadeIn 0.6s ease-in-out;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        font-family: "Montserrat", sans-serif;
+        font-size: 22px;
+        color: #c62828;
+      }
+
+      .result-container p {
+        font-size: 16px;
+        line-height: 1.7;
+        font-family: "Roboto", sans-serif;
+        color: #37474f;
+      }
+
+      .improvement-tips {
+        margin-top: 20px;
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #ff9800;
+      }
+
+      .improvement-tips h4 {
+        color: #e65100;
+        margin-top: 0;
+      }
+
+      .improvement-tips ul {
+        padding-left: 20px;
+      }
+
+      .improvement-tips li {
+        margin-bottom: 10px;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: 600;
+        color: #ef6c00;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 25px;
+          margin: 30px 10px;
+        }
+        button {
+          font-size: 15px;
+          padding: 12px 25px;
+        }
+        .navbar {
+          padding: 10px 20px;
+        }
+        .navbar h3 {
+          font-size: 28px;
+        }
+        h2 {
+          font-size: 30px;
+        }
+        .question-block {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>MedQuest</h3>
+      </div>
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>MBBS/BDS Medical Quiz</h2>
+
+      <div class="subject-selection">
+        <label><input type="checkbox" value="Anatomy" /> Anatomy</label>
+        <label><input type="checkbox" value="Physiology" /> Physiology</label>
+        <label
+          ><input type="checkbox" value="Biochemistry" /> Biochemistry</label
+        >
+        <label
+          ><input type="checkbox" value="Pharmacology" /> Pharmacology</label
+        >
+        <label><input type="checkbox" value="Dentistry" /> Dentistry</label>
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const quizData = {
+        Anatomy: [
+          {
+            question: "Which structure connects bones to muscles?",
+            options: ["Tendon", "Ligament", "Cartilage"],
+            answer: "Tendon",
+          },
+          {
+            question: "What is the largest organ in the human body?",
+            options: ["Liver", "Skin", "Lungs"],
+            answer: "Skin",
+          },
+          {
+            question: "Which vertebra is known as the axis?",
+            options: ["C1", "C2", "C3"],
+            answer: "C2",
+          },
+          {
+            question: "What type of joint is the knee?",
+            options: ["Hinge", "Ball-and-socket", "Pivot"],
+            answer: "Hinge",
+          },
+          {
+            question: "Which nerve controls the diaphragm?",
+            options: ["Vagus", "Phrenic", "Sciatic"],
+            answer: "Phrenic",
+          },
+        ],
+        Physiology: [
+          {
+            question: "Which organ produces bile?",
+            options: ["Pancreas", "Liver", "Gallbladder"],
+            answer: "Liver",
+          },
+          {
+            question: "What is the primary function of the nephron?",
+            options: ["Digestion", "Filtration", "Respiration"],
+            answer: "Filtration",
+          },
+          {
+            question: "Which gas triggers the breathing reflex?",
+            options: ["Oxygen", "Carbon dioxide", "Nitrogen"],
+            answer: "Carbon dioxide",
+          },
+          {
+            question: "Which hormone stimulates red blood cell production?",
+            options: ["Erythropoietin", "Insulin", "Cortisol"],
+            answer: "Erythropoietin",
+          },
+          {
+            question: "What is the role of the hypothalamus?",
+            options: ["Regulate homeostasis", "Control vision", "Digest food"],
+            answer: "Regulate homeostasis",
+          },
+        ],
+        Biochemistry: [
+          {
+            question: "Which molecule carries amino acids to ribosomes?",
+            options: ["mRNA", "tRNA", "rRNA"],
+            answer: "tRNA",
+          },
+          {
+            question: "What is the primary function of ATP?",
+            options: ["Store energy", "Transmit signals", "Build proteins"],
+            answer: "Store energy",
+          },
+          {
+            question: "Which vitamin deficiency causes scurvy?",
+            options: ["Vitamin A", "Vitamin C", "Vitamin D"],
+            answer: "Vitamin C",
+          },
+          {
+            question: "What is the main component of hemoglobin?",
+            options: ["Iron", "Calcium", "Magnesium"],
+            answer: "Iron",
+          },
+          {
+            question: "Which process converts glucose to ATP?",
+            options: ["Photosynthesis", "Cellular respiration", "Fermentation"],
+            answer: "Cellular respiration",
+          },
+        ],
+        Pharmacology: [
+          {
+            question: "Which drug treats bacterial infections?",
+            options: ["Amoxicillin", "Ibuprofen", "Metformin"],
+            answer: "Amoxicillin",
+          },
+          {
+            question: "What is the use of an antihistamine?",
+            options: [
+              "Treat allergies",
+              "Lower cholesterol",
+              "Control diabetes",
+            ],
+            answer: "Treat allergies",
+          },
+          {
+            question: "Which drug is used for asthma?",
+            options: ["Salbutamol", "Aspirin", "Losartan"],
+            answer: "Salbutamol",
+          },
+          {
+            question: "What does an anticoagulant do?",
+            options: ["Prevent clotting", "Reduce fever", "Kill bacteria"],
+            answer: "Prevent clotting",
+          },
+          {
+            question: "Which drug is a beta-blocker?",
+            options: ["Atenolol", "Paracetamol", "Cetirizine"],
+            answer: "Atenolol",
+          },
+        ],
+        Dentistry: [
+          {
+            question: "Which tooth appears first in infants?",
+            options: ["Molar", "Incisor", "Canine"],
+            answer: "Incisor",
+          },
+          {
+            question: "What is gingivitis?",
+            options: ["Tooth decay", "Gum inflammation", "Tooth fracture"],
+            answer: "Gum inflammation",
+          },
+          {
+            question: "Which instrument cleans dental plaque?",
+            options: ["Scaler", "Drill", "Mirror"],
+            answer: "Scaler",
+          },
+          {
+            question: "What is a dental crown made of?",
+            options: ["Porcelain", "Wood", "Plastic"],
+            answer: "Porcelain",
+          },
+          {
+            question: "Which condition causes tooth sensitivity?",
+            options: ["Enamel erosion", "Gum growth", "Tooth whitening"],
+            answer: "Enamel erosion",
+          },
+        ],
+      };
+
+      const careerMap = {
+        Anatomy: ["Orthopedics", "Radiology", "Forensic Medicine"],
+        Physiology: ["Cardiology", "Endocrinology", "Neurology"],
+        Biochemistry: ["Clinical Research", "Pathology", "Molecular Biology"],
+        Pharmacology: ["Clinical Pharmacology", "Medical Research", "Pharmacy"],
+        Dentistry: ["Oral Surgery", "Orthodontics", "Endodontics"],
+      };
+
+      const careerDetails = {
+        Orthopedics: {
+          overview: "Treating musculoskeletal disorders",
+          institutions: ["AIIMS", "Apollo Hospitals"],
+          demand: "85%",
+          salary: "₹10–50 LPA",
+        },
+        Radiology: {
+          overview: "Diagnosing using imaging techniques",
+          institutions: ["Fortis", "Max Healthcare"],
+          demand: "90%",
+          salary: "₹12–60 LPA",
+        },
+        "Forensic Medicine": {
+          overview: "Applying medicine to legal cases",
+          institutions: ["Government Hospitals", "CBI"],
+          demand: "70%",
+          salary: "₹8–25 LPA",
+        },
+        Cardiology: {
+          overview: "Managing heart-related conditions",
+          institutions: ["Narayana Health", "Medanta"],
+          demand: "90%",
+          salary: "₹15–70 LPA",
+        },
+        Endocrinology: {
+          overview: "Treating hormonal disorders",
+          institutions: ["Apollo", "Lilavati Hospital"],
+          demand: "80%",
+          salary: "₹12–50 LPA",
+        },
+        Neurology: {
+          overview: "Diagnosing nervous system disorders",
+          institutions: ["AIIMS", "NIMHANS"],
+          demand: "85%",
+          salary: "₹14–60 LPA",
+        },
+        "Clinical Research": {
+          overview: "Conducting medical trials",
+          institutions: ["Quintiles", "Syneos Health"],
+          demand: "80%",
+          salary: "₹6–20 LPA",
+        },
+        Pathology: {
+          overview: "Diagnosing diseases via samples",
+          institutions: ["SRL Diagnostics", "Dr. Lal PathLabs"],
+          demand: "85%",
+          salary: "₹8–30 LPA",
+        },
+        "Molecular Biology": {
+          overview: "Researching cellular processes",
+          institutions: ["IISc", "NCBS"],
+          demand: "70%",
+          salary: "₹7–25 LPA",
+        },
+        "Clinical Pharmacology": {
+          overview: "Studying drug effects in humans",
+          institutions: ["Pfizer", "GSK"],
+          demand: "75%",
+          salary: "₹8–25 LPA",
+        },
+        "Medical Research": {
+          overview: "Advancing medical knowledge",
+          institutions: ["ICMR", "WHO"],
+          demand: "80%",
+          salary: "₹7–30 LPA",
+        },
+        Pharmacy: {
+          overview: "Developing and dispensing drugs",
+          institutions: ["Sun Pharma", "Cipla"],
+          demand: "80%",
+          salary: "₹5–20 LPA",
+        },
+        "Oral Surgery": {
+          overview: "Performing dental surgeries",
+          institutions: ["Clove Dental", "Apollo Dental"],
+          demand: "85%",
+          salary: "₹8–40 LPA",
+        },
+        Orthodontics: {
+          overview: "Correcting teeth alignment",
+          institutions: ["Smile Dental", "Dental Care"],
+          demand: "80%",
+          salary: "₹7–35 LPA",
+        },
+        Endodontics: {
+          overview: "Treating dental pulp diseases",
+          institutions: ["Dental Square", "MyDentist"],
+          demand: "80%",
+          salary: "₹7–35 LPA",
+        },
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${subject} Quiz</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected && selected.value === q.answer) correct++;
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Results</h3>";
+
+        // Track weak subjects (below 40%)
+        const weakSubjects = [];
+
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          resultContainer.innerHTML += `<p><strong>${subject}:</strong> ${score.toFixed(
+            2
+          )}%</p>`;
+          if (score < 40) {
+            weakSubjects.push(subject);
+          }
+        }
+
+        // Add improvement suggestions for weak subjects
+        if (weakSubjects.length > 0) {
+          const improvementTips = {
+            Anatomy: [
+              "Focus on anatomical terminology and structures",
+              "Use 3D anatomy apps for better visualization",
+              "Practice with cadaver images and diagrams",
+              "Create flashcards for muscle origins/insertions",
+            ],
+            Physiology: [
+              "Understand physiological mechanisms rather than memorizing",
+              "Focus on homeostasis concepts",
+              "Practice drawing physiological pathways",
+              "Relate concepts to clinical scenarios",
+            ],
+            Biochemistry: [
+              "Memorize key metabolic pathways",
+              "Focus on enzyme kinetics and regulation",
+              "Understand molecular biology concepts",
+              "Practice drawing chemical structures",
+            ],
+            Pharmacology: [
+              "Focus on drug classifications",
+              "Understand mechanism of actions",
+              "Memorize important drug side effects",
+              "Create charts for drug interactions",
+            ],
+            Dentistry: [
+              "Focus on dental anatomy",
+              "Practice identifying tooth structures",
+              "Understand common dental procedures",
+              "Study oral pathology basics",
+            ],
+          };
+
+          resultContainer.innerHTML += `
+            <div class="improvement-tips">
+              <h4>Improvement Needed</h4>
+              <p>Your scores in these subjects need attention (below 40%):</p>
+              <ul>
+                ${weakSubjects
+                  .map(
+                    (subject) => `
+                  <li>
+                    <strong>${subject}:</strong> 
+                    ${improvementTips[subject]
+                      .map((tip) => `<div>• ${tip}</div>`)
+                      .join("")}
+                  </li>
+                `
+                  )
+                  .join("")}
+              </ul>
+              <p>Consider focusing more on these subjects and practicing regularly.</p>
+            </div>`;
+        }
+
+        const above80Subjects = Object.entries(subjectScores)
+          .filter(([_, score]) => score >= 80)
+          .map(([subject]) => subject);
+
+        resultContainer.innerHTML += `
+          <p>Select subjects for career suggestions:</p>
+          <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+          <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+          <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+          <div class="career-info" id="careerInfo"></div>
+        `;
+      }
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">Show Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+          <h4>${career}</h4>
+          <p><strong>Overview:</strong> ${details.overview}</p>
+          <p><strong>Top Institutions:</strong> ${details.institutions.join(
+            ", "
+          )}</p>
+          <p><strong>Demand:</strong> ${details.demand}</p>
+          <p><strong>Salary:</strong> ${details.salary}</p>
+        `;
+      }
+    </script>
+  </body>
+</html>

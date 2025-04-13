@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CS/CA/BBA Commerce Quiz App</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap");
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #e0f2fe, #fefce8, #f0fdf4);
+        background-size: 400% 400%;
+        animation: bgShift 20s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #1f1f1f;
+      }
+
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        background: linear-gradient(90deg, #1e3a8a, #172554);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 36px;
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        color: #93c5fd;
+        letter-spacing: 1.5px;
+      }
+
+      #img {
+        height: 90px;
+        width: auto;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+        border: 2px solid #bfdbfe;
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #2563eb, #be185d);
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-family: "Nunito", sans-serif;
+        font-weight: 600;
+        font-size: 22px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 65px;
+        right: 0;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        padding: 20px;
+        width: 260px;
+        display: none;
+        z-index: 10;
+        border: 1px solid #e0f2fe;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 10px 0;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #1e3a8a;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 60px auto;
+        background: #f8fafc;
+        padding: 60px 50px;
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.2s ease;
+        border: 1px solid #e5e7eb;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        font-family: "Open Sans", sans-serif;
+        font-size: 38px;
+        font-weight: 600;
+        color: #a21caf;
+        margin-bottom: 50px;
+        letter-spacing: 0.8px;
+      }
+
+      .subject-selection,
+      .quiz-container,
+      .result-container {
+        margin-top: 30px;
+      }
+
+      .subject-selection label {
+        display: block;
+        margin: 15px 0;
+        font-size: 18px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 600;
+        color: #1d4ed8;
+      }
+
+      .career-info label {
+        display: block;
+        margin: 15px 0;
+        font-size: 17px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #15803d;
+      }
+
+      .subject-selection input[type="checkbox"],
+      .career-info input[type="radio"] {
+        margin-right: 15px;
+        accent-color: #1e40af;
+        transform: scale(1.2);
+      }
+
+      .question-block {
+        margin-bottom: 35px;
+        background: #f9fafb;
+        padding: 25px 30px;
+        border-left: 7px solid #1e40af;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .question-block p {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 15px;
+        font-family: "Raleway", sans-serif;
+        color: #6d28d9;
+      }
+
+      .question-block label {
+        margin-left: 15px;
+        display: block;
+        font-size: 17px;
+        padding-left: 15px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        color: #4b5563;
+      }
+
+      button {
+        margin-top: 0px;
+        padding: 16px 35px;
+        background: linear-gradient(135deg, #1e40af, #be185d);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 18px;
+        font-family: "Open Sans", sans-serif;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .career-info {
+        margin-top: 35px;
+        padding: 35px;
+        background: #ecfdf5;
+        border-radius: 20px;
+        border-left: 7px solid #15803d;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.7s ease-in-out;
+      }
+
+      .career-info h4 {
+        margin-top: 0;
+        font-family: "Nunito", sans-serif;
+        font-size: 24px;
+        color: #b91c1c;
+      }
+
+      .result-container p {
+        font-size: 17px;
+        line-height: 1.8;
+        font-family: "Roboto", sans-serif;
+        color: #475569;
+      }
+
+      input[type="radio"]:checked + label,
+      input[type="checkbox"]:checked + label {
+        font-weight: 600;
+        color: #ea580c;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 30px;
+          margin: 30px 15px;
+        }
+        button {
+          font-size: 16px;
+          padding: 14px 25px;
+        }
+        .navbar {
+          padding: 10px 20px;
+        }
+        .navbar h3 {
+          font-size: 30px;
+        }
+        h2 {
+          font-size: 32px;
+        }
+        .question-block {
+          padding: 20px;
+        }
+      }
+      .improvement-tips {
+        margin-top: 20px;
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #ff9800;
+      }
+
+      .improvement-tips h4 {
+        color: #e65100;
+        margin-top: 0;
+      }
+
+      .improvement-tips ul {
+        padding-left: 20px;
+      }
+
+      .improvement-tips li {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <img src="img.png" id="img" />
+      </div>
+      <div id="name">
+        <h3>CommerceQuest</h3>
+      </div>
+      <a href="intermidiat.html"> <button id="goback">GO BACK</button></a>
+    </div>
+    <div class="container">
+      <h2>CS/CA/BBA Commerce Quiz</h2>
+
+      <div class="subject-selection">
+        <label><input type="checkbox" value="Accounting" /> Accounting</label>
+        <label
+          ><input type="checkbox" value="Business Law" /> Business Law</label
+        >
+        <label><input type="checkbox" value="Economics" /> Economics</label>
+        <label><input type="checkbox" value="Management" /> Management</label>
+        <label><input type="checkbox" value="Taxation" /> Taxation</label>
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="quiz-container" style="display: none"></div>
+      <div class="result-container" style="display: none"></div>
+    </div>
+
+    <script>
+      const improvementTips = {
+        Accounting: [
+          "Practice journal entries and ledger posting daily",
+          "Focus on understanding accounting standards",
+          "Work on balance sheet preparation",
+          "Review accrual vs cash accounting concepts",
+        ],
+        "Business Law": [
+          "Study contract law fundamentals",
+          "Memorize key sections of partnership law",
+          "Practice case studies on business regulations",
+          "Focus on trademark and copyright concepts",
+        ],
+        Economics: [
+          "Understand demand-supply graphs thoroughly",
+          "Practice calculating elasticity",
+          "Study monetary policy instruments",
+          "Work on opportunity cost problems",
+        ],
+        Management: [
+          "Review different leadership styles",
+          "Practice creating Gantt charts",
+          "Understand organizational structures",
+          "Study motivation theories in depth",
+        ],
+        Taxation: [
+          "Memorize current tax slabs",
+          "Practice GST calculations",
+          "Understand tax audit requirements",
+          "Review advance tax payment rules",
+        ],
+      };
+      const quizData = {
+        Accounting: [
+          {
+            question: "What is a balance sheet used for?",
+            options: [
+              "Track cash flow",
+              "Show financial position",
+              "Calculate taxes",
+            ],
+            answer: "Show financial position",
+          },
+          {
+            question: "What does accrual accounting recognize?",
+            options: [
+              "Cash payments",
+              "Revenue when earned",
+              "Fixed assets only",
+            ],
+            answer: "Revenue when earned",
+          },
+          {
+            question: "What is a contra account?",
+            options: [
+              "Reduces another account",
+              "Increases liabilities",
+              "Tracks profits",
+            ],
+            answer: "Reduces another account",
+          },
+          {
+            question: "What is goodwill in accounting?",
+            options: [
+              "Charitable donations",
+              "Intangible asset value",
+              "Cash reserve",
+            ],
+            answer: "Intangible asset value",
+          },
+          {
+            question: "What does a journal entry record?",
+            options: ["Daily transactions", "Annual profits", "Tax refunds"],
+            answer: "Daily transactions",
+          },
+        ],
+        "Business Law": [
+          {
+            question: "What is required for a contract to be enforceable?",
+            options: [
+              "Offer and acceptance",
+              "Written signature only",
+              "Third-party witness",
+            ],
+            answer: "Offer and acceptance",
+          },
+          {
+            question: "What does the Partnership Act, 1932 govern?",
+            options: ["Company shares", "Partner relationships", "Tax slabs"],
+            answer: "Partner relationships",
+          },
+          {
+            question: "What is a trademark?",
+            options: ["Business loan", "Brand identifier", "Tax exemption"],
+            answer: "Brand identifier",
+          },
+          {
+            question: "What is the purpose of a non-compete clause?",
+            options: ["Limit competition", "Increase sales", "Reduce taxes"],
+            answer: "Limit competition",
+          },
+          {
+            question: "What is a shareholder’s agreement?",
+            options: ["Tax policy", "Ownership terms", "Employee contract"],
+            answer: "Ownership terms",
+          },
+        ],
+        Economics: [
+          {
+            question: "What does elasticity of demand measure?",
+            options: ["Price sensitivity", "Production cost", "Market share"],
+            answer: "Price sensitivity",
+          },
+          {
+            question: "What is a recession?",
+            options: ["Economic growth", "Economic decline", "Stable economy"],
+            answer: "Economic decline",
+          },
+          {
+            question: "What is the role of the Reserve Bank of India?",
+            options: [
+              "Set tax rates",
+              "Control monetary policy",
+              "Audit companies",
+            ],
+            answer: "Control monetary policy",
+          },
+          {
+            question: "What is opportunity cost?",
+            options: [
+              "Actual expense",
+              "Next best alternative",
+              "Profit margin",
+            ],
+            answer: "Next best alternative",
+          },
+          {
+            question: "What is a trade deficit?",
+            options: [
+              "Exports exceed imports",
+              "Imports exceed exports",
+              "Balanced trade",
+            ],
+            answer: "Imports exceed exports",
+          },
+        ],
+        Management: [
+          {
+            question: "What is Maslow’s hierarchy of needs used for?",
+            options: [
+              "Financial planning",
+              "Motivation theory",
+              "Tax structuring",
+            ],
+            answer: "Motivation theory",
+          },
+          {
+            question: "What is a Gantt chart?",
+            options: ["Sales report", "Project timeline", "Balance sheet"],
+            answer: "Project timeline",
+          },
+          {
+            question: "What is transformational leadership?",
+            options: ["Task delegation", "Inspiring change", "Cost cutting"],
+            answer: "Inspiring change",
+          },
+          {
+            question: "What does KPI stand for?",
+            options: [
+              "Key Performance Indicator",
+              "Knowledge Process Improvement",
+              "Keystone Profit Index",
+            ],
+            answer: "Key Performance Indicator",
+          },
+          {
+            question: "What is a matrix organization?",
+            options: [
+              "Single leader",
+              "Multiple reporting lines",
+              "No hierarchy",
+            ],
+            answer: "Multiple reporting lines",
+          },
+        ],
+        Taxation: [
+          {
+            question: "What is a tax slab?",
+            options: ["Fixed tax rate", "Income-based tax rate", "Sales tax"],
+            answer: "Income-based tax rate",
+          },
+          {
+            question: "What is an indirect tax example?",
+            options: ["Income tax", "GST", "Property tax"],
+            answer: "GST",
+          },
+          {
+            question: "What is a tax audit?",
+            options: ["Tax payment", "Financial review", "Profit calculation"],
+            answer: "Financial review",
+          },
+          {
+            question: "What is advance tax paid on?",
+            options: ["Estimated income", "Past profits", "Fixed assets"],
+            answer: "Estimated income",
+          },
+          {
+            question: "What does PAN stand for?",
+            options: [
+              "Permanent Account Number",
+              "Personal Asset Note",
+              "Public Access Number",
+            ],
+            answer: "Permanent Account Number",
+          },
+        ],
+      };
+
+      const careerMap = {
+        Accounting: ["Chartered Accountancy", "Financial Analysis", "Auditing"],
+        "Business Law": [
+          "Company Secretary",
+          "Corporate Law",
+          "Compliance Officer",
+        ],
+        Economics: ["Economic Consulting", "Policy Analysis", "Banking"],
+        Management: ["Business Management", "Human Resources", "Marketing"],
+        Taxation: ["Tax Consultancy", "GST Specialist", "Financial Planning"],
+      };
+
+      const careerDetails = {
+        "Chartered Accountancy": {
+          overview: "Managing financial audits and advisory",
+          institutions: ["EY", "Deloitte", "KPMG"],
+          demand: "90%",
+          salary: "₹8–50 LPA",
+        },
+        "Financial Analysis": {
+          overview: "Evaluating investment opportunities",
+          institutions: ["JP Morgan", "Goldman Sachs", "HDFC"],
+          demand: "85%",
+          salary: "₹6–30 LPA",
+        },
+        Auditing: {
+          overview: "Ensuring financial compliance",
+          institutions: ["PwC", "BDO", "Grant Thornton"],
+          demand: "80%",
+          salary: "₹5–25 LPA",
+        },
+        "Company Secretary": {
+          overview: "Handling corporate governance",
+          institutions: ["Tata Group", "Reliance", "ICSI"],
+          demand: "85%",
+          salary: "₹6–40 LPA",
+        },
+        "Corporate Law": {
+          overview: "Advising on legal business matters",
+          institutions: ["AZB & Partners", "Cyril Amarchand", "Khaitan"],
+          demand: "80%",
+          salary: "₹8–45 LPA",
+        },
+        "Compliance Officer": {
+          overview: "Ensuring regulatory adherence",
+          institutions: ["SBI", "Infosys", "Wipro"],
+          demand: "75%",
+          salary: "₹5–20 LPA",
+        },
+        "Economic Consulting": {
+          overview: "Advising on economic strategies",
+          institutions: ["McKinsey", "BCG", "NERA"],
+          demand: "80%",
+          salary: "₹10–35 LPA",
+        },
+        "Policy Analysis": {
+          overview: "Shaping government policies",
+          institutions: ["NITI Aayog", "RBI", "World Bank"],
+          demand: "70%",
+          salary: "₹7–25 LPA",
+        },
+        Banking: {
+          overview: "Managing financial services",
+          institutions: ["ICICI", "Axis Bank", "SBI"],
+          demand: "85%",
+          salary: "₹5–30 LPA",
+        },
+        "Business Management": {
+          overview: "Leading organizational operations",
+          institutions: ["Aditya Birla", "HUL", "Amazon"],
+          demand: "90%",
+          salary: "₹8–50 LPA",
+        },
+        "Human Resources": {
+          overview: "Managing workforce and culture",
+          institutions: ["TCS", "Accenture", "PepsiCo"],
+          demand: "80%",
+          salary: "₹5–25 LPA",
+        },
+        Marketing: {
+          overview: "Promoting products and brands",
+          institutions: ["P&G", "Nestlé", "Flipkart"],
+          demand: "85%",
+          salary: "₹6–35 LPA",
+        },
+        "Tax Consultancy": {
+          overview: "Advising on tax strategies",
+          institutions: ["EY", "PwC", "BDO"],
+          demand: "80%",
+          salary: "₹6–30 LPA",
+        },
+        "GST Specialist": {
+          overview: "Handling GST compliance",
+          institutions: ["Deloitte", "KPMG", "ClearTax"],
+          demand: "75%",
+          salary: "₹5–20 LPA",
+        },
+        "Financial Planning": {
+          overview: "Guiding wealth management",
+          institutions: ["ICICI Prudential", "HDFC Life", "SBI Wealth"],
+          demand: "80%",
+          salary: "₹5–25 LPA",
+        },
+      };
+
+      let selectedSubjects = [];
+      let quizIndex = 0;
+      let subjectScores = {};
+
+      function startQuiz() {
+        selectedSubjects = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((cb) => cb.value);
+        if (selectedSubjects.length === 0) {
+          alert("Please select at least one subject.");
+          return;
+        }
+
+        document.querySelector(".subject-selection").style.display = "none";
+        document.querySelector(".quiz-container").style.display = "block";
+
+        quizIndex = 0;
+        subjectScores = {};
+        loadSubjectQuiz();
+      }
+
+      function loadSubjectQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+
+        const quizContainer = document.querySelector(".quiz-container");
+        quizContainer.innerHTML = `<h3>${subject} Quiz</h3>`;
+
+        questions.forEach((q, i) => {
+          const optionsHTML = q.options
+            .map(
+              (opt) =>
+                `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>`
+            )
+            .join("<br>");
+          quizContainer.innerHTML += `
+          <div class="question-block">
+            <p>Q${i + 1}. ${q.question}</p>
+            ${optionsHTML}
+          </div>`;
+        });
+
+        quizContainer.innerHTML += `<button onclick="submitQuiz()">Submit ${subject} Answers</button>`;
+      }
+
+      function submitQuiz() {
+        const subject = selectedSubjects[quizIndex];
+        const questions = quizData[subject].slice(0, 5);
+        let correct = 0;
+
+        questions.forEach((q, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          if (selected && selected.value === q.answer) correct++;
+        });
+
+        subjectScores[subject] = (correct / questions.length) * 100;
+
+        quizIndex++;
+        if (quizIndex < selectedSubjects.length) {
+          loadSubjectQuiz();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.querySelector(".quiz-container").style.display = "none";
+        const resultContainer = document.querySelector(".result-container");
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML = "<h3>Results</h3>";
+
+        // Track weak subjects (below 80%)
+        const weakSubjects = [];
+
+        for (const [subject, score] of Object.entries(subjectScores)) {
+          resultContainer.innerHTML += `<p><strong>${subject}:</strong> ${score.toFixed(
+            2
+          )}%</p>`;
+          if (score < 80) {
+            weakSubjects.push(subject);
+          }
+        }
+
+        // Add improvement suggestions for weak subjects
+        if (weakSubjects.length > 0) {
+          resultContainer.innerHTML += `
+            <div class="improvement-tips">
+              <h4>Improvement Suggestions</h4>
+              <p>Your scores in these subjects could be improved (below 80%):</p>
+              <ul>
+                ${weakSubjects
+                  .map(
+                    (subject) => `
+                    <li>
+                      <strong>${subject}:</strong> 
+                      ${improvementTips[subject]
+                        .map((tip) => `<div>• ${tip}</div>`)
+                        .join("")}
+                    </li>
+                  `
+                  )
+                  .join("")}
+              </ul>
+              <p>Consider focusing more on these subjects to achieve professional mastery.</p>
+            </div>`;
+        }
+
+        resultContainer.innerHTML += `
+          <p>Select subjects for career suggestions:</p>
+          <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+          <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+          <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+          <div class="career-info" id="careerInfo"></div>
+        `;
+      }
+
+      resultContainer.innerHTML += `
+        <p>Select subjects for career suggestions:</p>
+        <label><input type="radio" name="careerMode" value="all" checked> All Subjects</label>
+        <label><input type="radio" name="careerMode" value="above80"> Only Subjects above 80%</label>
+        <button onclick="showCareerSuggestions()">Show Career Suggestions</button>
+        <div class="career-info" id="careerInfo"></div>
+      `;
+
+      function showCareerSuggestions() {
+        const mode = document.querySelector(
+          'input[name="careerMode"]:checked'
+        ).value;
+        const selectedForCareers = Object.entries(subjectScores)
+          .filter(([_, score]) => mode === "all" || score >= 80)
+          .map(([subject]) => subject);
+
+        let careers = new Set();
+        selectedForCareers.forEach((subject) => {
+          (careerMap[subject] || []).forEach((career) => careers.add(career));
+        });
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML = "<h4>Choose a career:</h4>";
+
+        careers.forEach((career) => {
+          careerInfoDiv.innerHTML += `<label><input type="radio" name="career" value="${career}"> ${career}</label><br>`;
+        });
+
+        careerInfoDiv.innerHTML += `<button onclick="showCareerDetails()">Show Details</button>`;
+      }
+
+      function showCareerDetails() {
+        const selected = document.querySelector('input[name="career"]:checked');
+        if (!selected) {
+          alert("Please select a career to view details.");
+          return;
+        }
+
+        const career = selected.value;
+        const details = careerDetails[career];
+
+        const careerInfoDiv = document.getElementById("careerInfo");
+        careerInfoDiv.innerHTML += `
+        <h4>${career}</h4>
+        <p><strong>Overview:</strong> ${details.overview}</p>
+        <p><strong>Top Institutions:</strong> ${details.institutions.join(
+          ", "
+        )}</p>
+        <p><strong>Demand:</strong> ${details.demand}</p>
+        <p><strong>Salary:</strong> ${details.salary}</p>
+      `;
+      }
+    </script>
+  </body>
+</html>

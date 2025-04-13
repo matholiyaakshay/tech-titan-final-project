@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Career Jobs | Track Titan</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pacifico&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header Styles */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 50px;
+        background-color: #0d1b2a;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar h3 {
+        margin: 0;
+        font-size: 30px;
+        font-family: "Pacifico", cursive;
+        letter-spacing: 2px;
+      }
+
+      #img {
+        height: 60px;
+        width: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+      }
+
+      #name {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #5c6bc0, #26c6da);
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .profile-icon:hover {
+        transform: scale(1.15);
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        width: 220px;
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-container:hover .profile-dropdown {
+        display: block;
+      }
+
+      .profile-dropdown p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 30px 0;
+      }
+
+      h1 {
+        text-align: center;
+        color: #1e293b;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        border-radius: 2px;
+      }
+
+      .dropdown-container {
+        text-align: center;
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 0 20px;
+      }
+
+      select {
+        font-size: 16px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        outline: none;
+        width: 100%;
+        max-width: 400px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      select:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid #e2e8f0;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .card h3 {
+        margin: 15px;
+        font-size: 1.2rem;
+        color: #1e293b;
+        text-align: center;
+      }
+
+      .details-container {
+        padding: 0 20px;
+        max-width: 1200px;
+        margin: 30px auto;
+      }
+
+      .details {
+        padding: 30px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+      }
+
+      .details h2 {
+        color: #1e40af;
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 10px;
+      }
+
+      .details p {
+        margin-bottom: 12px;
+        line-height: 1.6;
+        color: #334155;
+      }
+
+      .details strong {
+        color: #1e293b;
+      }
+      .logout-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        font-weight: bold;
+      }
+
+      .logout-btn:hover {
+        background: #c0392b;
+      }
+
+      /* Footer Styles */
+      footer {
+        background: #0d1b2a;
+        color: #fff;
+        padding: 50px 0 20px;
+        margin-top: auto;
+      }
+
+      .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        gap: 30px;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .footer-section h3 {
+        color: #42a5f5;
+        margin-bottom: 20px;
+        font-size: 18px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-section h3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: #26c6da;
+      }
+
+      .footer-section p, 
+      .footer-section a {
+        color: #b3e5fc;
+        margin-bottom: 10px;
+        display: block;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: #42a5f5;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .social-links a {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+
+      .social-links a:hover {
+        background: #42a5f5;
+        transform: translateY(-3px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 30px;
+        margin-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 14px;
+        color: #b3e5fc;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 12px 20px;
+        }
+
+        #img {
+          height: 50px;
+        }
+
+        .navbar h3 {
+          font-size: 24px;
+        }
+
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+
+        .details {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .navbar {
+          padding: 10px 15px;
+        }
+
+        #img {
+          height: 40px;
+        }
+
+        .navbar h3 {
+          font-size: 20px;
+        }
+
+        .profile-icon {
+          width: 36px;
+          height: 36px;
+          font-size: 16px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+          padding: 15px;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .footer-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="navbar">
+      <div>
+        <a href="main.html"><img src="img.png" id="img" alt="Track Titan Logo" /></a>
+      </div>
+      <div id="name">
+        <h3>
+          <span style="color: #00acc1">Track</span>
+          <span style="color: #1e88e5">Titan</span>
+        </h3>
+      </div>
+      <div class="profile-container">
+        <div class="profile-icon" id="profileCircle">U</div>
+        <div class="profile-dropdown">
+          <p><strong>Name:</strong> <span id="profileName">User Name</span></p>
+          <p><strong>Email:</strong> <span id="profileEmail">user@example.com</span></p>
+          <p><strong>Role:</strong> <span id="profileRole">Student</span></p>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Explore Career Opportunities</h1>
+
+      <div class="dropdown-container">
+        <select id="careerSelect">
+          <option value="">-- Select a Career --</option>
+        </select>
+      </div>
+
+      <div class="grid" id="careerGrid">
+        <!-- Cards inserted here dynamically -->
+      </div>
+
+      <div class="details-container">
+        <div class="details" id="careerDetails"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>About TrackTitan</h3>
+          <p>Your personalized career navigation system helping students and professionals find their ideal career paths.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="main.html">Home</a>
+          <a href="road.html">Career Roadmap</a>
+          <a href="resume.html">Resume Builder</a>
+          <a href="career_jobfinal.html">Career Jobs</a>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i> support@tracktitan.com</p>
+          <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+          <p><i class="fas fa-map-marker-alt"></i> 123 Career St, Tech City</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 TrackTitan. All rights reserved. | <a href="#" style="color: #42a5f5;">Privacy Policy</a> | <a href="#" style="color: #42a5f5;">Terms of Service</a></p>
+      </div>
+    </footer>
+
+    <script>
+      const careers = [
+        {
+          title: "Software Engineer",
+          img: "softwer engginer.jpeg",
+          description: `
+            <h2>Software Engineer</h2>
+            <p><strong>Description:</strong> Design, build, and maintain software systems and applications.</p>
+            <p><strong>Skills:</strong> Programming, problem-solving, teamwork, algorithms.</p>
+            <p><strong>Opportunities:</strong> 92% demand globally.</p>
+            <p><strong>Top Companies:</strong> Google, Microsoft, Infosys, TCS.</p>
+            <p><strong>Salary:</strong> ₹6-25 LPA</p>
+          `,
+        },
+        {
+          title: "Doctor",
+          img: "docter.jpeg",
+          description: `
+            <h2>Doctor</h2>
+            <p><strong>Description:</strong> Diagnose and treat medical conditions, promoting patient health.</p>
+            <p><strong>Skills:</strong> Biology, compassion, decision-making, communication.</p>
+            <p><strong>Opportunities:</strong> 85% job growth in healthcare sector.</p>
+            <p><strong>Top Employers:</strong> Apollo, Fortis, AIIMS, Max Healthcare.</p>
+            <p><strong>Salary:</strong> ₹10-40 LPA</p>
+          `,
+        },
+        {
+          title: "Chartered Accountant",
+          img: "ca.jpeg",
+          description: `
+            <h2>Chartered Accountant</h2>
+            <p><strong>Description:</strong> Manage accounting, auditing, taxation, and financial analysis.</p>
+            <p><strong>Skills:</strong> Math, finance, analytics, ethics.</p>
+            <p><strong>Opportunities:</strong> 78% in corporate finance and auditing.</p>
+            <p><strong>Top Employers:</strong> Deloitte, KPMG, EY, PwC.</p>
+            <p><strong>Salary:</strong> ₹7-20 LPA</p>
+          `,
+        },
+        {
+          title: "Civil Engineer",
+          img: "civi.jpeg",
+          description: `
+            <h2>Civil Engineer</h2>
+            <p><strong>Description:</strong> Plan, design, and oversee infrastructure projects like roads and bridges.</p>
+            <p><strong>Skills:</strong> Structural design, CAD, project management.</p>
+            <p><strong>Opportunities:</strong> 70% demand in public and private sector.</p>
+            <p><strong>Top Companies:</strong> L&T, Gammon, Tata Projects.</p>
+            <p><strong>Salary:</strong> ₹4-15 LPA</p>
+          `,
+        },
+        {
+          title: "Graphic Designer",
+          img: "design.jpeg",
+          description: `
+            <h2>Graphic Designer</h2>
+            <p><strong>Description:</strong> Create visuals for marketing, branding, and web design.</p>
+            <p><strong>Skills:</strong> Adobe Suite, creativity, layout, typography.</p>
+            <p><strong>Opportunities:</strong> 65% growth in design and digital media.</p>
+            <p><strong>Top Companies:</strong> Wipro, Adobe, startups, agencies.</p>
+            <p><strong>Salary:</strong> ₹3-10 LPA</p>
+          `,
+        },
+        {
+          title: "Data Scientist",
+          img: "data.jpeg",
+          description: `
+            <h2>Data Scientist</h2>
+            <p><strong>Description:</strong> Analyze large datasets to derive actionable insights using statistics and AI.</p>
+            <p><strong>Skills:</strong> Python, machine learning, data visualization.</p>
+            <p><strong>Opportunities:</strong> 95% demand in tech and finance sectors.</p>
+            <p><strong>Top Companies:</strong> IBM, Flipkart, Amazon, Accenture.</p>
+            <p><strong>Salary:</strong> ₹8-30 LPA</p>
+          `,
+        },
+        {
+          title: "Mechanical Engineer",
+          img: "mechnical.jpeg",
+          description: `
+            <h2>Mechanical Engineer</h2>
+            <p><strong>Description:</strong> Mechanical Engineers design, develop, and maintain mechanical systems</p>
+            <p><strong>Skills:</strong> Strong understanding of physics and mathematics</p>
+            <p><strong>Opportunities:</strong> 70% Power generation (thermal, nuclear, and renewable energy systems)</p>
+            <p><strong>Top Companies:</strong> Larsen & Toubro (L&T),Tata Motors,Mahindra & Mahindra, ISRO (Indian Space Research Organisation)</p>
+            <p><strong>Salary:</strong> ₹8-30 LPA</p>
+          `,
+        },
+        {
+          title: "Electrical Engineer",
+          img: "Electrical.jpeg",
+          description: `
+            <h2>Electrical Engineer</h2>
+            <p><strong>Description:</strong> Electrical Engineers design, develop, test, and supervise the manufacturing of electrical equipment</p>
+            <p><strong>Skills:</strong>Proficiency in tools like MATLAB, Simulink, and PLC programming</p>
+            <p><strong>Opportunities:</strong> Power generation and distribution companies, Renewable energy (solar, wind, etc.)</p>
+            <p><strong>Top Companies:</strong> Bharat Heavy Electricals Limited (BHEL), Larsen & Toubro (L&T), Tata Power, NTPC (National Thermal Power Corporation)</p>
+            <p><strong>Salary:</strong> ₹6-25 LPA</p>
+          `,
+        },
+        {
+          title: "Police Officer",
+          img: "Police.jpeg",
+          description: `
+            <h2>Police Officer</h2>
+            <p><strong>Description:</strong> Police Officers maintain law and order, prevent crimes, investigate criminal activities, and ensure public safety.</p>
+            <p><strong>Skills:</strong> Physical fitness and stamina,Observation and investigation skills</p>
+            <p><strong>Opportunities:</strong> Central Armed Police Forces (CRPF, BSF, CISF),Crime Investigation Departments (CID, CBI)</p>
+            <p><strong>Top Companies:</strong> Indian Police Service (IPS),State Police Departments</p>
+            <p><strong>Salary:</strong> Constable/Sub-Inspector: ₹3 – ₹6 LPA, IPS Officer (Entry-Level): ₹10 – ₹15 LPA with perks</p>
+          `,
+        },
+        {
+          title: "IAS Officer",
+          img: "IAS.jpeg",
+          description: `
+            <h2>IAS Officer</h2>
+            <p><strong>Description:</strong> IAS Officers are top-level civil servants in India responsible for implementing government policies </p>
+            <p><strong>Skills:</strong> Leadership and decision-making,Administrative and management skills</p>
+            <p><strong>Opportunities:</strong> District Collector / District Magistrate,Secretaries in various ministries,Heads of public sector departments</p>
+            <p><strong>Top Companies:</strong> Government of India,State Governments</p>
+            <p><strong>Salary:</strong> Entry-Level (Junior Time Scale): ₹56,100/month + perks,Mid-Level (District Collector): ₹78,800 – ₹1,18,500/month + perks</p>
+          `,
+        },
+        {
+          title: "IPS Officer",
+          img: "IPS.jpeg",
+          description: `
+            <h2>IPS Officer</h2>
+          <p><strong>Description:</strong> IPS Officers are top-level civil servants in India responsible for implementing government policies </p>
+            <p><strong>Skills:</strong> Leadership and decision-making,Administrative and management skills</p>
+            <p><strong>Opportunities:</strong> District Collector / District Magistrate,Secretaries in various ministries,Heads of public sector departments</p>
+            <p><strong>Top Companies:</strong> Government of India,State Governments</p>
+            <p><strong>Salary:</strong> Entry-Level (Junior Time Scale): ₹56,100/month + perks,Mid-Level (District Collector): ₹78,800 – ₹1,18,500/month + perks</p>
+          `,
+        },
+        {
+          title: "Pilot",
+          img: "poilt.jpeg",
+          description: `
+            <h2>Pilot</h2>
+            <p><strong>Description:</strong> Pilots are trained professionals who operate aircraft to transport passengers or cargo.</p>
+            <p><strong>Skills:</strong> Strong understanding of aerodynamics and navigation,Quick decision-making and problem-solving</p>
+            <p><strong>Opportunities:</strong> Cargo and logistics airlines,Indian Air Force or defense aviation</p>
+            <p><strong>Top Companies:</strong>Air India,IndiGo,SpiceJet,Vistara</p>
+            <p><strong>Salary:</strong> Commercial Pilot (Entry-Level): ₹8 – ₹50 LPA</p>
+          `,
+        },
+        {
+          title: "Actor",
+          img: "Actor.jpeg",
+          description: `
+            <h2>Actor</h2>
+            <p><strong>Description:</strong> Actors portray characters in films, television shows, theatre, web series, and advertisements.</p>
+            <p><strong>Skills:</strong> Acting and improvisation,Expression and body language control</p>
+            <p><strong>Opportunities:</strong>Film and television industry,OTT platforms (Netflix, Amazon Prime, etc.)</p>
+            <p><strong>Top Companies:</strong> Bollywood and Regional Film Industries,TV production houses (Balaji Telefilms, Star India)</p>
+            <p><strong>Salary:</strong> Beginner/Fresh Actor: ₹1 – ₹5 LPA (varies by project),TV Actor: ₹10,000 – ₹1,00,000 per episode</p>
+          `,
+        },
+        {
+          title: "Singer",
+          img: "Singer.jpeg",
+          description: `
+            <h2>Singer</h2>
+<p><strong>Description:</strong> Singers perform songs or compositions for an audience in various genres such as classical, pop, rock, jazz, etc. They use their voice as an instrument to entertain, express emotions, and communicate ideas.</p>
+<p><strong>Skills:</strong> Vocal range and technique, Music theory, Stage presence, Breath control, Ear training, Performance skills</p>
+<p><strong>Opportunities:</strong> Music studios, Concerts, Film and TV industry, Music production houses, Event performances</p>
+<p><strong>Top Companies:</strong> Sony Music, Universal Music, Warner Music, T-Series, Yash Raj Films, Bollywood music producers</p>
+<p><strong>Salary:</strong> Entry-Level (0-2 years): ₹2 – ₹5 LPA <br> Mid-Level (3-7 years): ₹5 – ₹15 LPA <br> Senior-Level (7+ years): ₹15 – ₹30 LPA or more (for top artists)</p>
+          `,
+        },
+        {
+          title: "Dancer",
+          img: "Dancer.jpeg",
+          description: `
+            <h2>Dancer</h2>
+<p><strong>Description:</strong> Dancers use their body movements to express emotions, tell stories, and entertain audiences. They perform in various styles such as ballet, contemporary, hip-hop, folk dance, and more. Dancers may work in theaters, concerts, films, or events.</p>
+<p><strong>Skills:</strong> Dance techniques (ballet, contemporary, hip-hop, etc.), Flexibility and strength, Rhythm and timing, Choreography, Stage presence, Performance skills</p>
+<p><strong>Opportunities:</strong> Dance schools, Dance companies, Film and TV industry, Music videos, Live performances, Event and wedding performances</p>
+<p><strong>Top Companies:</strong> Shiamak Davar Dance Academy, Terence Lewis Professional Training Institute, Bollywood Film Industry, Dance India Dance (DID), So You Think You Can Dance India</p>
+<p><strong>Salary:</strong> Entry-Level (0-2 years): ₹1.5 – ₹4 LPA <br> Mid-Level (3-7 years): ₹4 – ₹12 LPA <br> Senior-Level (7+ years): ₹12 – ₹25 LPA or more (for top dancers and choreographers)</p>
+          `,
+        },
+        {
+          title: "Journalist",
+          img: "Journalist.jpeg",
+          description: `
+          <h2>Journalist</h2>
+<p><strong>Description:</strong> Journalists gather, assess, create, and present news and information to the public through various media outlets, including print, television, radio, and online platforms. They cover events, conduct interviews, and write articles to inform and educate the public.</p>
+<p><strong>Skills:</strong> Research and investigative skills, Writing and editing, Attention to detail, Communication skills, Multimedia skills (video, audio, photography), Analytical thinking, Time management</p>
+<p><strong>Opportunities:</strong> Newspapers, Magazines, TV and radio stations, News websites, Digital media platforms, PR firms, Freelance journalism</p>
+<p><strong>Top Companies:</strong> The Times of India, NDTV, BBC, The Hindu, Reuters, Associated Press (AP), India Today, The Indian Express</p>
+<p><strong>Salary:</strong> Entry-Level (0-2 years): ₹3 – ₹6 LPA <br> Mid-Level (3-7 years): ₹6 – ₹15 LPA <br> Senior-Level (7+ years): ₹15 – ₹30 LPA or more (for top journalists, editors, and news anchors)</p>
+          `,
+        },
+        {
+          title: "Photographer",
+          img: "Photographer.jpeg",
+          description: `
+            <h2>Photographer</h2>
+            <p><strong>Description:</strong> Photographers capture moments, events, people, places, and products through the lens of a camera.</p>
+            <p><strong>Skills:</strong> Knowledge of camera equipment and lighting,Creativity and visual storytelling</p>
+            <p><strong>Opportunities:</strong> Wedding and event photography,Fashion and product photography</p>
+            <p><strong>Top Companies:</strong>Wedding and event companies,Fashion magazines and brands </p>
+            <p><strong>Salary:</strong> Top Wedding/Fashion Photographers: ₹15+ LPA or ₹50,000 – ₹5,00,000 per project</p>
+          `,
+        },
+        {
+          title: "Banker",
+          img: "Banker.jpeg",
+          description: `
+            <h2>Banker</h2>
+            <p><strong>Description:</strong> Bankers manage financial transactions, offer loans, handle investments</p>
+            <p><strong>Skills:</strong> Financial and numerical skills,Communication and customer service</p>
+            <p><strong>Opportunities:</strong> Public and private sector banks,Reserve Bank of India (RBI)</p>
+            <p><strong>Top Companies:</strong> State Bank of India (SBI),ICICI Bank,HDFC Bank,Axis Bank</p>
+            <p><strong>Salary:</strong> ₹8-40 LPA</p>
+          `,
+        },
+        {
+          title: "Digital Marketer",
+          img: "Digital Marketer.jpeg",
+          description: `
+            <h2>Digital Marketer</h2>
+            <p><strong>Description:</strong> Digital Marketers promote products, services, or brands using online platforms like search engines, social media</p>
+            <p><strong>Skills:</strong>SEO (Search Engine Optimization),Social Media Marketing (SMM),Google Ads & Facebook Ads </p>
+            <p><strong>Opportunities:</strong> E-commerce and retail companies,Digital marketing agencies</p>
+            <p><strong>Top Companies:</strong>Webchutney, Dentsu, WATConsult ,Flipkart, Amazon, Zomato, Swiggy </p>
+            <p><strong>Salary:</strong> Manager/Specialist: ₹7 – ₹15 LPA</p>
+          `,
+        },
+        {
+          title: "Cybersecurity Expert",
+          img: "Cybersecurity Expert.jpeg",
+          description: `
+            <h2>Cybersecurity Expert</h2>
+            <p><strong>Description:</strong> Cybersecurity Experts protect computer systems, networks, and data from cyber threats such as hacking</p>
+            <p><strong>Skills:</strong>Network and system security,Ethical hacking and penetration testing </p>
+            <p><strong>Opportunities:</strong> IT companies and software firms,Banks and financial institutions</p>
+            <p><strong>Top Companies:</strong> TCS, Infosys, Wipro,Deloitte, EY, KPMG (consulting firms)</p>
+            <p><strong>Salary:</strong> Mid-Level (3–7 years): ₹9 – ₹20 LPA</p>
+          `,
+        },
+      ];
+
+      // DOM elements
+      const grid = document.getElementById("careerGrid");
+      const details = document.getElementById("careerDetails");
+      const dropdown = document.getElementById("careerSelect");
+      const profileCircle = document.getElementById("profileCircle");
+      const profileName = document.getElementById("profileName");
+      const profileEmail = document.getElementById("profileEmail");
+      const profileRole = document.getElementById("profileRole");
+
+      // Load user data if available
+      document.addEventListener('DOMContentLoaded', function() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+          profileCircle.textContent = initials;
+          profileName.textContent = user.name;
+          profileEmail.textContent = user.email;
+          profileRole.textContent = user.role || 'Student';
+        }
+      });
+
+      // Create career cards and dropdown options
+      careers.forEach((career) => {
+        // Create card
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${career.img}" alt="${career.title}" />
+          <h3>${career.title}</h3>
+        `;
+        card.onclick = () => {
+          details.innerHTML = career.description;
+          details.scrollIntoView({ behavior: "smooth" });
+        };
+        grid.appendChild(card);
+
+        // Create dropdown option
+        const option = document.createElement("option");
+        option.value = career.title;
+        option.textContent = career.title;
+        dropdown.appendChild(option);
+      });
+
+      // Handle dropdown change
+      dropdown.addEventListener("change", (e) => {
+        const selected = careers.find((c) => c.title === e.target.value);
+        if (selected) {
+          details.innerHTML = selected.description;
+          details.scrollIntoView({ behavior: "smooth" });
+        } else {
+          details.innerHTML = "";
+        }
+      });
+      function logout() {
+        const user = JSON.parse(localStorage.getItem("trackTitansUser"));
+        if (user) {
+          user.isLoggedIn = false;
+          localStorage.setItem("trackTitansUser", JSON.stringify(user));
+        }
+        window.location.href = "registation.html";
+      }
+    </script>
+  </body>
+</html>
